@@ -12,6 +12,8 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "npm-keyword": "^4.2.0",
+    "package-json": "^2.2.1",
     "serve-favicon": "~2.3.0",
     "request": "latest"
   }
