@@ -1,6 +1,7 @@
 public/biocatalog
 public/bioconductor
 public/biojs
+public/cytoscape
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
