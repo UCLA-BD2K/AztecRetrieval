@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var biocatalog = require('./routes/biocatalog');
 var bioconductor = require('./routes/bioconductor');
 var biojs = require('./routes/biojs');
@@ -28,7 +27,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/biocatalog', biocatalog);
 app.use('/bioconductor', bioconductor);
 app.use('/biojs', biojs);
