@@ -20,6 +20,10 @@ router.get(['/','/latest'], function(req, res, next) {
     }
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(BiocatalogServices.update())
+});
+
 router.get('/retrieve', function(req, res, next) {
     res.send(BiocatalogServices.retrieve());
 });

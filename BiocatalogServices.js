@@ -4,7 +4,10 @@
  */
 
 var fs = require("fs");
+var path = require("path");
 var request = require("request");
+
+var toolSchema = require("./models/mysql/tool");
 
 /**
  * @constructor
@@ -51,6 +54,39 @@ BiocatalogServices.latest = function () {
     }
 
     return latest;
+};
+
+/**
+ * Updates the Aztec database with the latest JSON outfile.
+ */
+BiocatalogServices.update = function () {
+    // Read JSON data
+    var json = require(path.resolve(BiocatalogServices.latest()));
+    if (json.type != TOOL_TYPE || !json.data) {
+        console.log(json.type);
+        return false;
+    }
+
+    console.log(json.data.length);
+    for (var d in json.data) {
+        var data = json.data[d];
+        console.log(data.name);
+
+        // Check for DOI
+        if (!data.publicationDOI) {
+            continue;
+        }
+
+        // Update DB
+        // Create TOOL_INFO
+        var toolInfo = toolSchema.forge({
+            NAME: data.name,
+            LOGO_LINK: data.logo,
+            DESCRIPTION: data.description,
+            SOURCE_LINK: data.sourceCodeURL,
+            PRIMARY_PUB_DOI: data.publicationDOI
+        }).save();
+    }
 };
 
 /**
