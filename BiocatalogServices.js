@@ -17,6 +17,7 @@ var OUTFILE_DIRECTORY = "public/biocatalog/";
 var OUTFILE_TEMP_DIRECTORY = OUTFILE_DIRECTORY + "temp/";
 var OUTFILE_BASE_NAME = "biocatalog_services";
 
+var TOOL_TYPE = "biocatalog";
 var URL = "http://www.biocatalogue.org/";
 var BIOCATALOG_LOGO = "https://www.biocatalogue.org/assets/logo_small-da549203f66b74dab67f592878053664.png";
 
@@ -355,7 +356,7 @@ BiocatalogServices.retrieve = function () {
                     // Write initial data
                     fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                         "{\n" +
-                        "\"type\": \"biocatalog\",\n" +
+                        "\"type\": \"" + TOOL_TYPE + "\",\n" +
                         "\"date\": \"" + date.toISOString() + "\",\n" +
                         "\"data\": [\n");
 

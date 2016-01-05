@@ -16,6 +16,7 @@ var BioJSPackages = function () {
 };
 
 // Output file
+var TOOL_TYPE = "biojs";
 var BASE_URL = "https://www.npmjs.com/package/";
 
 var OUTFILE_DIRECTORY = "public/biojs/";
@@ -73,7 +74,7 @@ BioJSPackages.retrieve = function () {
         // Write initial data
         fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
             "{\n" +
-            "\"type\": \"biojs\",\n" +
+            "\"type\": \"" + TOOL_TYPE + "\",\n" +
             "\"date\": \"" + date.toISOString() + "\",\n" +
             "\"data\": [\n");
 

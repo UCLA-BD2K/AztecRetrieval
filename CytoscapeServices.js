@@ -8,6 +8,7 @@ var dateFormat = require('dateformat');
 var fs = require("fs");
 var request = require("request");
 
+var TOOL_TYPE = "cytoscape";
 var BASE_URL = "http://apps.cytoscape.org";
 
 var OUTFILE_DIRECTORY = "public/cytoscape/";
@@ -289,7 +290,7 @@ CytoscapeServices.retrieve = function () {
                 // Write initial data
                 fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                     "{\n" +
-                    "\"type\": \"cytoscape\",\n" +
+                    "\"type\": \"" + TOOL_TYPE + "\",\n" +
                     "\"date\": \"" + date.toISOString() + "\",\n" +
                     "\"data\": [\n");
 

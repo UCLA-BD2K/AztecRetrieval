@@ -13,6 +13,7 @@ var BioconductorPackages = function () {
 
 };
 
+var TOOL_TYPE = "bioconductor";
 var VERSION = "3.1";
 var URL = "http://bioconductor.org/packages/" + VERSION + "/bioc/VIEWS";
 
@@ -81,7 +82,7 @@ BioconductorPackages.retrieve = function () {
                     // Write initial data
                     fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                         "{\n" +
-                        "\"type\": \"bioconductor\",\n" +
+                        "\"type\": \"" + TOOL_TYPE + "\",\n" +
                         "\"date\": \"" + date.toISOString() + "\",\n" +
                         "\"data\": [\n");
 

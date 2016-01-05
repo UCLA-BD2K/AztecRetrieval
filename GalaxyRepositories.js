@@ -17,6 +17,7 @@ var OUTFILE_DIRECTORY = "public/galaxy/";
 var OUTFILE_TEMP_DIRECTORY = OUTFILE_DIRECTORY + "temp/";
 var OUTFILE_BASE_NAME = "galaxy_repositories";
 
+var TOOL_TYPE = "galaxy";
 var URL = "https://toolshed.g2.bx.psu.edu/api/repositories";
 
 /**
@@ -190,7 +191,7 @@ GalaxyRepositories.retrieve = function () {
                                                     // Write initial data
                                                     fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                                                         "{\n" +
-                                                        "\"type\": \"galaxy\",\n" +
+                                                        "\"type\": \"" + TOOL_TYPE + "\",\n" +
                                                         "\"date\": \"" + date.toISOString() + "\",\n" +
                                                         "\"data\": [\n");
 
