@@ -4,7 +4,10 @@
  */
 
 var request = require("request");
+var path = require("path");
 var fs = require("fs");
+
+var toolSchema = require("./models/mysql/tool");
 
 /**
  * @constructor
@@ -438,6 +441,61 @@ BioconductorPackages.retrieve = function () {
     );
 
     return "Retrieving " + outfileName;
+};
+
+BioconductorPackages.update = function () {
+
+    // Read JSON data
+    var json = require(path.resolve(BioconductorPackages.latest()));
+    if (json.type != TOOL_TYPE || !json.data) {
+        console.log(json.type);
+        return false;
+    }
+
+    console.log(json.data.length);
+
+    for (var i in json.data) {
+        var tool = json.data[i];
+
+        console.log('name:\t' + tool.name);
+
+        // Check for DOI / name
+        //if (!tool.publicationDOI) {
+        //    continue;
+        //}
+
+        var exist = false;
+
+        if (tool.publicationDOI != null) {
+            new toolSchema({PRIMARY_PUB_DOI: tool.publicationDOI})
+                .fetch()
+                .then(function (model) {
+                    if (model != null) {
+                        exist = true;
+                    }
+                });
+        }
+        new toolSchema({NAME: tool.name})
+                .fetch()
+                .then(function (model) {
+                    if (model != null) {
+                        exist = true;
+                    }
+                });
+
+        if (!exist) {
+            // Update DB
+            // Create TOOL_INFO
+            var toolInfo = toolSchema.forge({
+                NAME: tool.name,
+                LOGO_LINK: tool.logo,
+                DESCRIPTION: tool.description,
+                SOURCE_LINK: tool.sourceCodeURL
+            }).save();
+        }
+
+    }
+
 };
 
 module.exports = BioconductorPackages;
