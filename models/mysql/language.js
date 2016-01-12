@@ -1,4 +1,6 @@
 var Bookshelf = require('../../bookshelf.js');
+Bookshelf.plugin('registry');
+
 var Tool = require('./tool.js');
 
 // define the schema for our tool model
@@ -7,7 +9,7 @@ var languageSchema = Bookshelf.Model.extend({
     tableName: 'LANGUAGE',
     idAttribute: 'LANG_ID',
     tools: function () {
-        return this.belongsToMany(Tool, 'TOOL_LANG', 'AZID', 'LANG_ID');
+        return this.belongsToMany('ToolInfo', 'TOOL_LANG', 'LANG_ID', 'AZID');
     }
 });
 
@@ -15,4 +17,4 @@ var languageSchema = Bookshelf.Model.extend({
 
 
 // create the model for tools and expose it to our app
-module.exports = languageSchema;
+module.exports = Bookshelf.model("Language", languageSchema);

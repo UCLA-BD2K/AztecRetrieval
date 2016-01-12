@@ -1,5 +1,7 @@
 var Bookshelf = require('../../bookshelf.js');
-var Link = require('./relatedLinks.js');
+Bookshelf.plugin('registry');
+
+var Links = require('./relatedLinks.js');
 var Author = require('./author.js');
 var Domain = require('./domain.js');
 var Downstream = require('./downstream.js');
@@ -25,7 +27,7 @@ var toolSchema = Bookshelf.Model.extend({
     tableName: 'TOOL_INFO',
     idAttribute: 'AZID',
     links: function () {
-        return this.hasMany(Link, 'AZID');
+        return this.hasMany('Links');
     },
     authors: function () {
         return this.belongsToMany(Author, 'TOOL_AUTHOR', 'AZID', 'AUTHOR_ID');
@@ -55,7 +57,7 @@ var toolSchema = Bookshelf.Model.extend({
         return this.belongsToMany(License, 'TOOL_LICENSE', 'AZID', 'LICENSE_ID')
     },
     platform: function () {
-        return this.belongsToMany(Platform, 'TOOL_PLATFORM', 'AZID', 'PLATFORM_ID');
+        return this.belongsToMany('Platform', 'TOOL_PLATFORM', 'AZID', 'PLATFORM_ID');
     },
     version: function () {
         return this.hasMany(Version, 'AZID');
@@ -76,7 +78,7 @@ var toolSchema = Bookshelf.Model.extend({
         return this.hasMany(Resource, 'AZID');
     },
     languages: function () {
-        return this.belongsToMany(Language, 'TOOL_LANG', 'AZID', 'LANG_ID');
+        return this.belongsToMany('Language', 'TOOL_LANG', 'AZID', 'LANG_ID');
     }
 });
 
@@ -84,4 +86,4 @@ var toolSchema = Bookshelf.Model.extend({
 
 
 // create the model for tools and expose it to our app
-module.exports = toolSchema;
+module.exports = Bookshelf.model("ToolInfo", toolSchema);
