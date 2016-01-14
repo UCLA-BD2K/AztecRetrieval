@@ -7,6 +7,9 @@ var fs = require("fs");
 var request = require("request");
 var sf_miner = require("./sf_miner/sf_miner1");
 
+var OUTFILE_DIRECTORY = "public/sourceforge/";
+var OUTFILE_BASE_NAME = "sourceforge_repositories";
+
 /**
  * @constructor
  */
