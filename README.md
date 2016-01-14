@@ -22,6 +22,7 @@ Each crawl is packaged under `data` in a JSON envelope of the following format:
     "data": [...]
 }
 ```
+The sourceforge crawler does not return JSON of the same format; it uses the newer format used in [Aztec_Curation](https://github.com/UCLA-BD2K/Aztec_Curation).
 
 ### Endpoints
 Request Type | Path
@@ -36,6 +37,8 @@ POST | `/cytoscape/retrieve`
 GET | `/cytoscape/latest`
 POST | `/galaxy/retrieve`
 GET | `/galaxy/latest`
+POST | `/sourceforge/retrieve`
+GET | `/sourceforge/latest`
 
 Future Tasks
 ---------------
