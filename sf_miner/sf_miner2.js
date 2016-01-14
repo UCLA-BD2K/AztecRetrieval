@@ -91,8 +91,13 @@ var restCallback = function (error, response, body) {
         	//	fs.mkdirSync(OUTFILE_DIRECTORY);
     		//}
 			
+			var outputData = {};
+			outputData.type = "sourceforge";
+			outputData.date = date.toISOString();
+			outputData.data = aztecEntries;
+			
 			var file = OUTFILE_DIRECTORY + "/sourceforge_repositories_" + date.toISOString().replace(/:/g, "-") + ".json";
-			fs.writeFile(file, JSON.stringify(aztecEntries, null, 1), function(err) {
+			fs.writeFile(file, JSON.stringify(outputData, null, 1), function(err) {
 				if(err) { return console.log(err); }
 
 				console.log("The file was saved as " + file);
