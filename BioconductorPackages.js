@@ -7,7 +7,17 @@ var request = require("request");
 var path = require("path");
 var fs = require("fs");
 
+
+var platformSchema = require("./models/mysql/platform");
+var languageSchema = require("./models/mysql/language");
+var relatedLinksSchema = require("./models/mysql/relatedLinks");
 var toolSchema = require("./models/mysql/tool");
+var domainSchema = require("./models/mysql/domain");
+var resourceSchema = require("./models/mysql/resource");
+var licenceSchema = require("./models/mysql/license");
+var tagSchema = require("./models/mysql/tag");
+var authorSchema = require("./models/mysql/author");
+
 
 /**
  * @constructor
@@ -454,48 +464,192 @@ BioconductorPackages.update = function () {
 
     console.log(json.data.length);
 
+
     for (var i in json.data) {
-        var tool = json.data[i];
 
-        console.log('name:\t' + tool.name);
+        (function (data) {
 
-        // Check for DOI / name
-        //if (!tool.publicationDOI) {
-        //    continue;
-        //}
-
-        var exist = false;
-
-        if (tool.publicationDOI != null) {
-            new toolSchema({PRIMARY_PUB_DOI: tool.publicationDOI})
-                .fetch()
-                .then(function (model) {
-                    if (model != null) {
-                        exist = true;
+            // Check for prexisting DOI if exists, then check for prexisting name
+            if (data.publicationDOI != null && data.publicationDOI != "") {
+                toolSchema.where({PRIMARY_PUB_DOI: data.publicationDOI}).fetch().then(function (tool) {
+                    if (!tool) {
+                        console.log("Inserting " + data.name);
+                        tool = toolSchema.forge({
+                            NAME: data.name,
+                            LOGO_LINK: data.logo,
+                            DESCRIPTION: data.description,
+                            SOURCE_LINK: data.sourceCodeURL,
+                            PRIMARY_PUB_DOI: data.publicationDOI
+                        }).save();
                     }
+                    BioconductorPackages.updateTool(tool, data);
                 });
-        }
-        new toolSchema({NAME: tool.name})
-                .fetch()
-                .then(function (model) {
-                    if (model != null) {
-                        exist = true;
+            } else {
+                toolSchema.where({NAME: data.name}).fetch().then(function (tool) {
+                    if (!tool) {
+                        console.log("Inserting " + data.name);
+                        toolSchema.forge({
+                            NAME: data.name,
+                            LOGO_LINK: data.logo,
+                            DESCRIPTION: data.description,
+                            SOURCE_LINK: data.sourceCodeURL,
+                            PRIMARY_PUB_DOI: data.publicationDOI
+                        }).save().then(function (newTool) {
+                            BioconductorPackages.updateTool(newTool, data);
+                        });
+                    } else {
+                        BioconductorPackages.updateTool(tool, data);
                     }
-                });
 
-        if (!exist) {
-            // Update DB
-            // Create TOOL_INFO
-            var toolInfo = toolSchema.forge({
-                NAME: tool.name,
-                LOGO_LINK: tool.logo,
-                DESCRIPTION: tool.description,
-                SOURCE_LINK: tool.sourceCodeURL
-            }).save();
-        }
+                });
+            }
+
+        })(json.data[0]);
 
     }
 
 };
+
+BioconductorPackages.updateTool = function (tool, data) {
+
+    console.log("Updating " + data.name);
+
+    var azid = tool.get("AZID");
+
+    // Attach language
+
+    languageSchema.where({NAME: data.language}).fetch().then(function (language) {
+        if (language) {
+            tool.languages().attach(language);
+            //tool.languages().updatePivot();
+        } else {
+            languageSchema.forge({NAME: data.language}).save().then(function (newLanguage) {
+                tool.languages().attach(newLanguage);
+            });
+        }
+    });
+
+    // Attach platforms
+
+    for (var i in data.platforms) {
+        (function (platformName) {
+            platformSchema.where({NAME: platformName}).fetch().then(function (platform) {
+                if (platform) {
+                    tool.platform().attach(platform);
+                } else {
+                    platformSchema.forge({NAME: platformName}).save().then(function (newPlatform) {
+                        tool.platform().attach(newPlatform);
+                    });
+                }
+            });
+        })(data.platforms[i]);
+    }
+
+    //Save related links
+
+    for (var linkIndex in data.linkUrls) {
+        (function (linkURL, linkDescription) {
+            if (data.linkUrls[linkIndex]) {
+                relatedLinksSchema.where({AZID: azid, URL: linkURL}).fetch().then(function (link) {
+                    if (!link) {
+                        relatedLinksSchema.forge({AZID: azid, TYPE: linkDescription, URL: linkURL}).save();
+                    }
+                });
+            }
+        })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+    }
+
+    //Save domains
+
+    for (var domainIndex in data.domains) {
+        (function (domainName) {
+            domainSchema.where({AZID: azid, DOMAIN: domainName}).fetch().then(function (domain) {
+                if (!domain) {
+                    domainSchema.forge({AZID: azid, DOMAIN: domainName}).save();
+                }
+            });
+        })(data.domains[domainIndex]);
+    }
+
+    //save tools/resource type
+
+    for (var typesIndex in data.types) {
+        (function (typeName) {
+            resourceSchema.where({AZID: azid, RESOURCE_TYPE: typeName}).fetch().then(function (type) {
+                if (!type) {
+                    resourceSchema.forge({AZID: azid, RESOURCE_TYPE: typeName}).save();
+                }
+            });
+        })(data.types[typesIndex]);
+    }
+
+    //save licences
+
+    for (var licensesIndex in data.licenses) {
+        (function (licenseName, licenseLink) {
+            if (licenseLink == '') {
+                licenseLink = null;
+            }
+            licenceSchema.where({NAME: licenseName}).fetch().then(function (license) {
+                if (license) {
+                    tool.license().attach(license);
+                } else {
+                    licenceSchema.forge({
+                        NAME: licenseName,
+                        LINK: licenseLink,
+                        OPEN: 1
+                    }).save().then(function (newLicense) {
+                        tool.license().attach(newLicense);
+                    });
+                }
+            });
+        })(data.licenses[licensesIndex], data.licenseUrls[licensesIndex]);
+    }
+
+    //save tag
+
+    for (var tagsIndex in data.tags) {
+        (function (tagName) {
+            tagSchema.where({NAME: tagName}).fetch().then(function (tag) {
+                if (tag) {
+                    tool.tags().attach(tag);
+                } else {
+                    tagSchema.forge({NAME: tagName}).save().then(function (newTag) {
+                        tool.tags().attach(newTag);
+                    });
+                }
+            });
+        })(data.tags[tagsIndex]);
+    }
+
+    //save authors
+
+    for (var authorsIndex in data.authors) {
+        (function (authorName, authorEmail) {
+            if (authorEmail == '') {
+                authorEmail = null;
+            }
+            var names = authorName.split(/[ ,]+/);
+            var first = names[0];
+            var last = names[1];
+            authorSchema.where({FIRST_NAME: first, LAST_NAME: last}).fetch().then(function (author) {
+                if (author) {
+                    tool.authors().attach(author);
+                } else {
+                    authorSchema.forge({
+                        FIRST_NAME: first,
+                        LAST_NAME: last,
+                        EMAIL: authorEmail
+                    }).save().then(function (newAuthor) {
+                        tool.authors().attach(newAuthor);
+                    });
+                }
+            });
+        })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
+    }
+
+
+};
+
 
 module.exports = BioconductorPackages;

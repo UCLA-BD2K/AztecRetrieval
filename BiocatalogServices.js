@@ -76,7 +76,7 @@ BiocatalogServices.update = function () {
             // Check for prexisting DOI if exists, then check for prexisting name
             if (data.publicationDOI != null && data.publicationDOI != "") {
                 toolSchema.where({PRIMARY_PUB_DOI: data.publicationDOI})
-                    .fetch
+                    .fetch()
                     .then(function (tool) {
                         if (!tool) {
                             console.log("Inserting " + data.name);
