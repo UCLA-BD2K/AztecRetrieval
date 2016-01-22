@@ -24,4 +24,8 @@ router.get('/retrieve', function(req, res, next) {
     res.send(BioJSPackages.retrieve());
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(BioJSPackages.update());
+});
+
 module.exports = router;

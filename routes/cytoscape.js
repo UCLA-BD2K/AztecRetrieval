@@ -24,4 +24,8 @@ router.get('/retrieve', function(req, res, next) {
     res.send(CytoscapeServices.retrieve());
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(CytoscapeServices.update());
+});
+
 module.exports = router;

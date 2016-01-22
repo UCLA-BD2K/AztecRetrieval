@@ -504,7 +504,7 @@ BioconductorPackages.update = function () {
                 });
             }
 
-        })(json.data[0]);
+        })(json.data[i]);
 
     }
 
@@ -517,135 +517,146 @@ BioconductorPackages.updateTool = function (tool, data) {
     var azid = tool.get("AZID");
 
     // Attach language
-
-    languageSchema.where({NAME: data.language}).fetch().then(function (language) {
-        if (language) {
-            tool.languages().attach(language);
-            //tool.languages().updatePivot();
-        } else {
-            languageSchema.forge({NAME: data.language}).save().then(function (newLanguage) {
-                tool.languages().attach(newLanguage);
-            });
-        }
-    });
+    if (data.language != null) {
+        languageSchema.where({NAME: data.language}).fetch().then(function (language) {
+            if (language) {
+                tool.languages().attach(language);
+                //tool.languages().updatePivot();
+            } else {
+                languageSchema.forge({NAME: data.language}).save().then(function (newLanguage) {
+                    tool.languages().attach(newLanguage);
+                });
+            }
+        });
+    }
 
     // Attach platforms
-
-    for (var i in data.platforms) {
-        (function (platformName) {
-            platformSchema.where({NAME: platformName}).fetch().then(function (platform) {
-                if (platform) {
-                    tool.platform().attach(platform);
-                } else {
-                    platformSchema.forge({NAME: platformName}).save().then(function (newPlatform) {
-                        tool.platform().attach(newPlatform);
-                    });
-                }
-            });
-        })(data.platforms[i]);
+    if (data.platforms != null) {
+        for (var i in data.platforms) {
+            (function (platformName) {
+                platformSchema.where({NAME: platformName}).fetch().then(function (platform) {
+                    if (platform) {
+                        tool.platform().attach(platform);
+                    } else {
+                        platformSchema.forge({NAME: platformName}).save().then(function (newPlatform) {
+                            tool.platform().attach(newPlatform);
+                        });
+                    }
+                });
+            })(data.platforms[i]);
+        }
     }
 
     //Save related links
-
-    for (var linkIndex in data.linkUrls) {
-        (function (linkURL, linkDescription) {
-            if (data.linkUrls[linkIndex]) {
-                relatedLinksSchema.where({AZID: azid, URL: linkURL}).fetch().then(function (link) {
-                    if (!link) {
-                        relatedLinksSchema.forge({AZID: azid, TYPE: linkDescription, URL: linkURL}).save();
-                    }
-                });
-            }
-        })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+    if (data.linkUrls != null) {
+        for (var linkIndex in data.linkUrls) {
+            (function (linkURL, linkDescription) {
+                if (data.linkUrls[linkIndex]) {
+                    relatedLinksSchema.where({AZID: azid, URL: linkURL}).fetch().then(function (link) {
+                        if (!link) {
+                            relatedLinksSchema.forge({AZID: azid, TYPE: linkDescription, URL: linkURL}).save();
+                        }
+                    });
+                }
+            })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+        }
     }
 
     //Save domains
-
-    for (var domainIndex in data.domains) {
-        (function (domainName) {
-            domainSchema.where({AZID: azid, DOMAIN: domainName}).fetch().then(function (domain) {
-                if (!domain) {
-                    domainSchema.forge({AZID: azid, DOMAIN: domainName}).save();
-                }
-            });
-        })(data.domains[domainIndex]);
+    if (data.domains != null) {
+        for (var domainIndex in data.domains) {
+            (function (domainName) {
+                domainSchema.where({AZID: azid, DOMAIN: domainName}).fetch().then(function (domain) {
+                    if (!domain) {
+                        domainSchema.forge({AZID: azid, DOMAIN: domainName}).save();
+                    }
+                });
+            })(data.domains[domainIndex]);
+        }
     }
+
 
     //save tools/resource type
-
-    for (var typesIndex in data.types) {
-        (function (typeName) {
-            resourceSchema.where({AZID: azid, RESOURCE_TYPE: typeName}).fetch().then(function (type) {
-                if (!type) {
-                    resourceSchema.forge({AZID: azid, RESOURCE_TYPE: typeName}).save();
-                }
-            });
-        })(data.types[typesIndex]);
+    if (data.types != null) {
+        for (var typesIndex in data.types) {
+            (function (typeName) {
+                resourceSchema.where({AZID: azid, RESOURCE_TYPE: typeName}).fetch().then(function (type) {
+                    if (!type) {
+                        resourceSchema.forge({AZID: azid, RESOURCE_TYPE: typeName}).save();
+                    }
+                });
+            })(data.types[typesIndex]);
+        }
     }
 
-    //save licences
 
-    for (var licensesIndex in data.licenses) {
-        (function (licenseName, licenseLink) {
-            if (licenseLink == '') {
-                licenseLink = null;
-            }
-            licenceSchema.where({NAME: licenseName}).fetch().then(function (license) {
-                if (license) {
-                    tool.license().attach(license);
-                } else {
-                    licenceSchema.forge({
-                        NAME: licenseName,
-                        LINK: licenseLink,
-                        OPEN: 1
-                    }).save().then(function (newLicense) {
-                        tool.license().attach(newLicense);
-                    });
+    //save licences
+    if (data.licenses != null) {
+        for (var licensesIndex in data.licenses) {
+            (function (licenseName, licenseLink) {
+                if (licenseLink == '') {
+                    licenseLink = null;
                 }
-            });
-        })(data.licenses[licensesIndex], data.licenseUrls[licensesIndex]);
+                licenceSchema.where({NAME: licenseName}).fetch().then(function (license) {
+                    if (license) {
+                        tool.license().attach(license);
+                    } else {
+                        licenceSchema.forge({
+                            NAME: licenseName,
+                            LINK: licenseLink,
+                            OPEN: 1
+                        }).save().then(function (newLicense) {
+                            tool.license().attach(newLicense);
+                        });
+                    }
+                });
+            })(data.licenses[licensesIndex], data.licenseUrls[licensesIndex]);
+        }
     }
 
     //save tag
 
-    for (var tagsIndex in data.tags) {
-        (function (tagName) {
-            tagSchema.where({NAME: tagName}).fetch().then(function (tag) {
-                if (tag) {
-                    tool.tags().attach(tag);
-                } else {
-                    tagSchema.forge({NAME: tagName}).save().then(function (newTag) {
-                        tool.tags().attach(newTag);
-                    });
-                }
-            });
-        })(data.tags[tagsIndex]);
+    if (data.tags != null) {
+        for (var tagsIndex in data.tags) {
+            (function (tagName) {
+                tagSchema.where({NAME: tagName}).fetch().then(function (tag) {
+                    if (tag) {
+                        tool.tags().attach(tag);
+                    } else {
+                        tagSchema.forge({NAME: tagName}).save().then(function (newTag) {
+                            tool.tags().attach(newTag);
+                        });
+                    }
+                });
+            })(data.tags[tagsIndex]);
+        }
     }
 
     //save authors
-
-    for (var authorsIndex in data.authors) {
-        (function (authorName, authorEmail) {
-            if (authorEmail == '') {
-                authorEmail = null;
-            }
-            var names = authorName.split(/[ ,]+/);
-            var first = names[0];
-            var last = names[1];
-            authorSchema.where({FIRST_NAME: first, LAST_NAME: last}).fetch().then(function (author) {
-                if (author) {
-                    tool.authors().attach(author);
-                } else {
-                    authorSchema.forge({
-                        FIRST_NAME: first,
-                        LAST_NAME: last,
-                        EMAIL: authorEmail
-                    }).save().then(function (newAuthor) {
-                        tool.authors().attach(newAuthor);
-                    });
+    if (data.authors != null) {
+        for (var authorsIndex in data.authors) {
+            (function (authorName, authorEmail) {
+                if (authorEmail == '') {
+                    authorEmail = null;
                 }
-            });
-        })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
+                var names = authorName.split(/[ ,]+/);
+                var first = names[0];
+                var last = names[1];
+                authorSchema.where({FIRST_NAME: first, LAST_NAME: last}).fetch().then(function (author) {
+                    if (author) {
+                        tool.authors().attach(author);
+                    } else {
+                        authorSchema.forge({
+                            FIRST_NAME: first,
+                            LAST_NAME: last,
+                            EMAIL: authorEmail
+                        }).save().then(function (newAuthor) {
+                            tool.authors().attach(newAuthor);
+                        });
+                    }
+                });
+            })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
+        }
     }
 
 
