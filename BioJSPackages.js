@@ -7,6 +7,18 @@
 var fs = require("fs");
 var npmKeyword = require('npm-keyword');
 var packageJson = require("package-json");
+var path = require("path");
+
+var platformSchema = require("./models/mysql/platform");
+var languageSchema = require("./models/mysql/language");
+var relatedLinksSchema = require("./models/mysql/relatedLinks");
+var toolSchema = require("./models/mysql/tool");
+var domainSchema = require("./models/mysql/domain");
+var resourceSchema = require("./models/mysql/resource");
+var licenceSchema = require("./models/mysql/license");
+var tagSchema = require("./models/mysql/tag");
+var authorSchema = require("./models/mysql/author");
+
 
 /**
  * @constructor
@@ -16,6 +28,7 @@ var BioJSPackages = function () {
 };
 
 // Output file
+var TOOL_TYPE = "biojs";
 var BASE_URL = "https://www.npmjs.com/package/";
 
 var OUTFILE_DIRECTORY = "public/biojs/";
@@ -73,7 +86,7 @@ BioJSPackages.retrieve = function () {
         // Write initial data
         fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
             "{\n" +
-            "\"type\": \"biojs\",\n" +
+            "\"type\": \"" + TOOL_TYPE + "\",\n" +
             "\"date\": \"" + date.toISOString() + "\",\n" +
             "\"data\": [\n");
 
@@ -237,6 +250,214 @@ BioJSPackages.retrieve = function () {
     });
 
     return "Retrieving " + outfileName;
+};
+
+BioJSPackages.update = function () {
+
+    // Read JSON data
+    var json = require(path.resolve(BioJSPackages.latest()));
+    if (json.type != TOOL_TYPE || !json.data) {
+        console.log(json.type);
+        return false;
+    }
+
+    console.log(json.data.length);
+
+
+    for (var i in json.data) {
+
+        (function (data) {
+
+            // Check for prexisting DOI if exists, then check for prexisting name
+            if (data.publicationDOI != null && data.publicationDOI != "") {
+                toolSchema.where({PRIMARY_PUB_DOI: data.publicationDOI}).fetch().then(function (tool) {
+                    if (!tool) {
+                        console.log("Inserting " + data.name);
+                        tool = toolSchema.forge({
+                            NAME: data.name,
+                            LOGO_LINK: data.logo,
+                            DESCRIPTION: data.description,
+                            SOURCE_LINK: data.sourceCodeURL,
+                            PRIMARY_PUB_DOI: data.publicationDOI
+                        }).save();
+                    }
+                    BioJSPackages.updateTool(tool, data);
+                });
+            } else {
+                toolSchema.where({NAME: data.name}).fetch().then(function (tool) {
+                    if (!tool) {
+                        console.log("Inserting " + data.name);
+                        toolSchema.forge({
+                            NAME: data.name,
+                            LOGO_LINK: data.logo,
+                            DESCRIPTION: data.description,
+                            SOURCE_LINK: data.sourceCodeURL,
+                            PRIMARY_PUB_DOI: data.publicationDOI
+                        }).save().then(function (newTool) {
+                            BioJSPackages.updateTool(newTool, data);
+                        });
+                    } else {
+                        BioJSPackages.updateTool(tool, data);
+                    }
+
+                });
+            }
+
+        })(json.data[i]);
+
+    }
+};
+
+BioJSPackages.updateTool = function (tool, data) {
+
+    console.log("Updating " + data.name);
+
+    var azid = tool.get("AZID");
+
+    // Attach language
+    if (data.language != null) {
+        languageSchema.where({NAME: data.language}).fetch().then(function (language) {
+            if (language) {
+                tool.languages().attach(language);
+                //tool.languages().updatePivot();
+            } else {
+                languageSchema.forge({NAME: data.language}).save().then(function (newLanguage) {
+                    tool.languages().attach(newLanguage);
+                });
+            }
+        });
+    }
+
+    // Attach platforms
+    if (data.platforms != null) {
+        for (var i in data.platforms) {
+            (function (platformName) {
+                platformSchema.where({NAME: platformName}).fetch().then(function (platform) {
+                    if (platform) {
+                        tool.platform().attach(platform);
+                    } else {
+                        platformSchema.forge({NAME: platformName}).save().then(function (newPlatform) {
+                            tool.platform().attach(newPlatform);
+                        });
+                    }
+                });
+            })(data.platforms[i]);
+        }
+    }
+
+    //Save related links
+    if (data.linkUrls != null) {
+        for (var linkIndex in data.linkUrls) {
+            (function (linkURL, linkDescription) {
+                if (data.linkUrls[linkIndex]) {
+                    relatedLinksSchema.where({AZID: azid, URL: linkURL}).fetch().then(function (link) {
+                        if (!link) {
+                            relatedLinksSchema.forge({AZID: azid, TYPE: linkDescription, URL: linkURL}).save();
+                        }
+                    });
+                }
+            })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+        }
+    }
+
+    //Save domains
+    if (data.domains != null) {
+        for (var domainIndex in data.domains) {
+            (function (domainName) {
+                domainSchema.where({AZID: azid, DOMAIN: domainName}).fetch().then(function (domain) {
+                    if (!domain) {
+                        domainSchema.forge({AZID: azid, DOMAIN: domainName}).save();
+                    }
+                });
+            })(data.domains[domainIndex]);
+        }
+    }
+
+
+    //save tools/resource type
+    if (data.types != null) {
+        for (var typesIndex in data.types) {
+            (function (typeName) {
+                resourceSchema.where({AZID: azid, RESOURCE_TYPE: typeName}).fetch().then(function (type) {
+                    if (!type) {
+                        resourceSchema.forge({AZID: azid, RESOURCE_TYPE: typeName}).save();
+                    }
+                });
+            })(data.types[typesIndex]);
+        }
+    }
+
+
+    //save licences
+    if (data.licenses != null) {
+        for (var licensesIndex in data.licenses) {
+            (function (licenseName, licenseLink) {
+                if (licenseLink == '') {
+                    licenseLink = null;
+                }
+                licenceSchema.where({NAME: licenseName}).fetch().then(function (license) {
+                    if (license) {
+                        tool.license().attach(license);
+                    } else {
+                        licenceSchema.forge({
+                            NAME: licenseName,
+                            LINK: licenseLink,
+                            OPEN: 1
+                        }).save().then(function (newLicense) {
+                            tool.license().attach(newLicense);
+                        });
+                    }
+                });
+            })(data.licenses[licensesIndex], data.licenseUrls[licensesIndex]);
+        }
+    }
+
+    //save tag
+
+    if (data.tags != null) {
+        for (var tagsIndex in data.tags) {
+            (function (tagName) {
+                tagSchema.where({NAME: tagName}).fetch().then(function (tag) {
+                    if (tag) {
+                        tool.tags().attach(tag);
+                    } else {
+                        tagSchema.forge({NAME: tagName}).save().then(function (newTag) {
+                            tool.tags().attach(newTag);
+                        });
+                    }
+                });
+            })(data.tags[tagsIndex]);
+        }
+    }
+
+    //save authors
+    if (data.authors != null) {
+        for (var authorsIndex in data.authors) {
+            (function (authorName, authorEmail) {
+                if (authorEmail == '') {
+                    authorEmail = null;
+                }
+                var names = authorName.split(/[ ,]+/);
+                var first = names[0];
+                var last = names[1];
+                authorSchema.where({FIRST_NAME: first, LAST_NAME: last}).fetch().then(function (author) {
+                    if (author) {
+                        tool.authors().attach(author);
+                    } else {
+                        authorSchema.forge({
+                            FIRST_NAME: first,
+                            LAST_NAME: last,
+                            EMAIL: authorEmail
+                        }).save().then(function (newAuthor) {
+                            tool.authors().attach(newAuthor);
+                        });
+                    }
+                });
+            })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
+        }
+    }
+
+
 };
 
 module.exports = BioJSPackages;

@@ -24,4 +24,8 @@ router.get('/retrieve', function(req, res, next) {
     res.send(BioconductorPackages.retrieve());
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(BioconductorPackages.update());
+});
+
 module.exports = router;

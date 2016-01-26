@@ -24,4 +24,8 @@ router.get('/retrieve', function(req, res, next) {
     res.send(GalaxyRepositories.retrieve());
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(GalaxyRepositories.update());
+});
+
 module.exports = router;
