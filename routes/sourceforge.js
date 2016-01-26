@@ -24,4 +24,8 @@ router.get('/retrieve', function(req, res, next) {
     res.send(SourceforgeRepositories.retrieve());
 });
 
+router.get('/update', function(req, res, next) {
+    res.send(SourceforgeRepositories.update());
+});
+
 module.exports = router;
