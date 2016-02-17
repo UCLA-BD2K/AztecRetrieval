@@ -10,7 +10,6 @@ var biocatalog = require('./routes/biocatalog');
 var bioconductor = require('./routes/bioconductor');
 var biojs = require('./routes/biojs');
 var cytoscape = require('./routes/cytoscape');
-var galaxy = require('./routes/galaxy');
 var sourceforge = require('./routes/sourceforge');
 
 var app = express();
@@ -32,7 +31,6 @@ app.use('/biocatalog', biocatalog);
 app.use('/bioconductor', bioconductor);
 app.use('/biojs', biojs);
 app.use('/cytoscape', cytoscape);
-app.use('/galaxy', galaxy);
 app.use('/sourceforge', sourceforge);
 
 // catch 404 and forward to error handler
