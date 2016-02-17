@@ -1,19 +1,12 @@
 var Bookshelf = require('../../bookshelf.js');
-var Tool = require('./tool.js');
+Bookshelf.plugin('registry');
 
-// define the schema for our tool model
-var tagSchema = Bookshelf.Model.extend({
-
+var Tag = Bookshelf.Model.extend({
     tableName: 'TAG',
     idAttribute: 'TAG_ID',
     tools: function () {
-        return this.belongsToMany(Tool, 'TOOL_TAG', 'AZID', 'TAG_ID');
+        return this.belongsToMany('ToolInfo', 'TOOL_TAG', 'TAG_ID', 'AZID');
     }
-
 });
 
-// methods ======================
-
-
-// create the model for tools and expose it to our app
-module.exports = tagSchema;
+module.exports = Bookshelf.model('Tag', Tag);

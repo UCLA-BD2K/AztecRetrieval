@@ -1,18 +1,12 @@
 var Bookshelf = require('../../bookshelf.js');
-var Tool = require('./tool.js');
+Bookshelf.plugin('registry');
 
-// define the schema for our tool model
-var resourceSchema = Bookshelf.Model.extend({
-
-    tableName: 'TOOL_RESOURCE',
+var Resource = Bookshelf.Model.extend({
+    tableName: 'RESOURCE',
+    idAttribute: 'RESOURCE_ID',
     tool: function () {
-        return this.hasMany(Tool, 'TR_ID');
+        return this.belongsToMany('ToolInfo', 'TOOL_RESOURCE', 'RESOURCE_ID', 'AZID');
     }
-
 });
 
-// methods ======================
-
-
-// create the model for tools and expose it to our app
-module.exports = resourceSchema;
+module.exports = Bookshelf.model('Resource', Resource);

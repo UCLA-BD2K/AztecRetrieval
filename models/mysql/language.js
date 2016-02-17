@@ -1,11 +1,7 @@
 var Bookshelf = require('../../bookshelf.js');
 Bookshelf.plugin('registry');
 
-var Tool = require('./tool.js');
-
-// define the schema for our tool model
 var languageSchema = Bookshelf.Model.extend({
-
     tableName: 'LANGUAGE',
     idAttribute: 'LANG_ID',
     tools: function () {
@@ -13,8 +9,4 @@ var languageSchema = Bookshelf.Model.extend({
     }
 });
 
-// methods ======================
-
-
-// create the model for tools and expose it to our app
-module.exports = Bookshelf.model("Language", languageSchema);
+module.exports = Bookshelf.model('Language', languageSchema);

@@ -1,17 +1,11 @@
 var Bookshelf = require('../../bookshelf.js');
-var Tool = require('./tool.js');
+Bookshelf.plugin('registry');
 
-// define the schema for our tool model
-var domainSchema = Bookshelf.Model.extend({
-
+var Domain = Bookshelf.Model.extend({
     tableName: 'TOOL_DOMAINS',
     tools: function () {
-        return this.hasMany(Tool, 'TD_ID');
+        return this.hasMany('ToolInfo');
     }
 });
 
-// methods ======================
-
-
-// create the model for tools and expose it to our app
-module.exports = domainSchema;
+module.exports = Bookshelf.model('Domain', Domain);
