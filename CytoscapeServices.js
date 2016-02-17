@@ -19,7 +19,7 @@ var licenceSchema = require("./models/mysql/license");
 var tagSchema = require("./models/mysql/tag");
 var authorSchema = require("./models/mysql/author");
 
-var TOOL_TYPE = "cytoscape";
+var RESOURCE_TYPE = "cytoscape";
 var BASE_URL = "http://apps.cytoscape.org";
 
 var OUTFILE_DIRECTORY = "public/cytoscape/";
@@ -105,13 +105,14 @@ CytoscapeServices.retrieve = function () {
                             if (!error2 && response.statusCode === 200) {
 
                                 var app = {};  // Use this to store the app information
-                                app.id = i;
 
                                 var app_body2 = cheerio.load(body2); // Parsing html
                                 var name_obj = app_body2('h2').attr('id', 'app-name');
                                 if (name_obj.length != 0) {
                                     // Getting name and logo information
-                                    app.name = name_obj.html().trim();	// App name
+                                    var name = name_obj.html().trim();
+                                    app.resourceID = name; // Use app name as resource ID
+                                    app.name = name;	// App name
                                     app.description = name_obj.next().html(); // App description
                                     app.logo = BASE_URL + cheerio.load(name_obj.parent().prev().html())('img')
                                             .attr('src'); // App logo
@@ -301,7 +302,7 @@ CytoscapeServices.retrieve = function () {
                 // Write initial data
                 fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                     "{\n" +
-                    "\"type\": \"" + TOOL_TYPE + "\",\n" +
+                    "\"type\": \"" + RESOURCE_TYPE + "\",\n" +
                     "\"date\": \"" + date.toISOString() + "\",\n" +
                     "\"data\": [\n");
 
@@ -318,7 +319,7 @@ CytoscapeServices.update = function () {
 
     // Read JSON data
     var json = require(path.resolve(CytoscapeServices.latest()));
-    if (json.type != TOOL_TYPE || !json.data) {
+    if (json.type != RESOURCE_TYPE || !json.data) {
         console.log(json.type);
         return false;
     }

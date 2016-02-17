@@ -23,7 +23,7 @@ var OUTFILE_DIRECTORY = "public/biocatalog/";
 var OUTFILE_TEMP_DIRECTORY = OUTFILE_DIRECTORY + "temp/";
 var OUTFILE_BASE_NAME = "biocatalog_services";
 
-var TOOL_TYPE = "biocatalog";
+var RESOURCE_TYPE = "biocatalog";
 var URL = "http://www.biocatalogue.org/";
 var BIOCATALOG_LOGO = "https://www.biocatalogue.org/assets/logo_small-da549203f66b74dab67f592878053664.png";
 
@@ -65,7 +65,7 @@ BiocatalogServices.latest = function () {
 BiocatalogServices.update = function () {
     // Read JSON data
     var json = require(path.resolve(BiocatalogServices.latest()));
-    if (json.type != TOOL_TYPE || !json.data) {
+    if (json.type != RESOURCE_TYPE || !json.data) {
         console.log("Wrong type: " + json.type);
         return false;
     }
@@ -173,7 +173,6 @@ BiocatalogServices.retrieve = function () {
     // Generate new timestamped outfile name
     var date = new Date();
     var outfileName = OUTFILE_BASE_NAME + "_" + date.toISOString().replace(/:/g, "-") + ".json";
-    var toolCount = 0;
 
     // Retrieve the first page
     request(
@@ -184,11 +183,9 @@ BiocatalogServices.retrieve = function () {
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 var pages = body["services"]["pages"];
-                console.log("Pages: " + pages);
 
                 // Retrieve all pages
                 var retrieve_pages = function (i) {
-                    console.log("Page: " + i);
                     request(
                         {
                             url: URL + "/services.json?per_page=" + TOOLS_PER_PAGE + "&page=" + i,
@@ -200,10 +197,10 @@ BiocatalogServices.retrieve = function () {
 
                                 // Retrieve resource page for tools
                                 var retrieveTools = function (j) {
-                                    toolCount++;
-                                    console.log("Tool " + j + "\t(" + toolCount + ")");
-
                                     var resourceURL = results[j]["resource"];
+                                    var resourceID = parseInt(resourceURL.substr(resourceURL.lastIndexOf("/") + 1));
+
+                                    console.log(resourceURL);
                                     request(
                                         {
                                             url: resourceURL + "/summary.json",
@@ -214,9 +211,7 @@ BiocatalogServices.retrieve = function () {
                                                 if (body3["service"]["name"] != "WeatherWS") {
                                                     var service = {};
 
-                                                    // Write TID
-                                                    service.tid = toolCount;
-
+                                                    service.resourceID = resourceID;
                                                     service.name = body3["service"]["name"];
                                                     var description = body3["service"]["description"];
 
@@ -460,7 +455,7 @@ BiocatalogServices.retrieve = function () {
                     // Write initial data
                     fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                         "{\n" +
-                        "\"type\": \"" + TOOL_TYPE + "\",\n" +
+                        "\"type\": \"" + RESOURCE_TYPE + "\",\n" +
                         "\"date\": \"" + date.toISOString() + "\",\n" +
                         "\"data\": [\n");
 

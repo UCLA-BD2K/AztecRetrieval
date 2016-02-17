@@ -26,7 +26,7 @@ var BioconductorPackages = function () {
 
 };
 
-var TOOL_TYPE = "bioconductor";
+var RESOURCE_TYPE = "bioconductor";
 var VERSION = "3.1";
 var URL = "http://bioconductor.org/packages/" + VERSION + "/bioc/VIEWS";
 
@@ -95,7 +95,7 @@ BioconductorPackages.retrieve = function () {
                     // Write initial data
                     fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
                         "{\n" +
-                        "\"type\": \"" + TOOL_TYPE + "\",\n" +
+                        "\"type\": \"" + RESOURCE_TYPE + "\",\n" +
                         "\"date\": \"" + date.toISOString() + "\",\n" +
                         "\"data\": [\n");
 
@@ -103,7 +103,6 @@ BioconductorPackages.retrieve = function () {
                         console.log("Package " + i);
 
                         var pkg = {};
-                        pkg.id = i;
                         pkg.linkDescriptions = [];
                         pkg.linkUrls = [];
                         pkg.platforms = [];
@@ -128,10 +127,16 @@ BioconductorPackages.retrieve = function () {
                         // Iterate through each line
                         var attribute_key = "";
                         for (var k = 0; k < package_info.length; k++) {
-                            // Name
+                            // Resource ID
                             if (package_info[k].match(new RegExp("^Package:*", "i"))) {
+                                attribute_key = "resourceID";
+                                pkg.resourceID = package_info[k].match(new RegExp("^Package:* (.*)", "i"))[1];
+                            }
+
+                            // Name
+                            else if (package_info[k].match(new RegExp("^Title:*", "i"))) {
                                 attribute_key = "name";
-                                pkg.name = package_info[k].match(new RegExp("^Package:* (.*)", "i"))[1];
+                                pkg.name = package_info[k].match(new RegExp("^Title:* (.*)", "i"))[1];
 
                                 // Homepage URL
                                 pkg.linkDescriptions.push("homepage");
@@ -457,7 +462,7 @@ BioconductorPackages.update = function () {
 
     // Read JSON data
     var json = require(path.resolve(BioconductorPackages.latest()));
-    if (json.type != TOOL_TYPE || !json.data) {
+    if (json.type != RESOURCE_TYPE || !json.data) {
         console.log(json.type);
         return false;
     }

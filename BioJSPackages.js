@@ -28,7 +28,7 @@ var BioJSPackages = function () {
 };
 
 // Output file
-var TOOL_TYPE = "biojs";
+var RESOURCE_TYPE = "biojs";
 var BASE_URL = "https://www.npmjs.com/package/";
 
 var OUTFILE_DIRECTORY = "public/biojs/";
@@ -86,7 +86,7 @@ BioJSPackages.retrieve = function () {
         // Write initial data
         fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
             "{\n" +
-            "\"type\": \"" + TOOL_TYPE + "\",\n" +
+            "\"type\": \"" + RESOURCE_TYPE + "\",\n" +
             "\"date\": \"" + date.toISOString() + "\",\n" +
             "\"data\": [\n");
 
@@ -99,6 +99,7 @@ BioJSPackages.retrieve = function () {
             // Retrieve json format
             packageJson(pkg_name, "latest").then(function (jsonPackage) {
                 var pkg = {};
+                pkg.resourceID = jsonPackage.name; // Use name as ID
                 pkg.name = jsonPackage.name;
                 pkg.versionNum = jsonPackage.version;
                 pkg.description = jsonPackage.description;
@@ -256,7 +257,7 @@ BioJSPackages.update = function () {
 
     // Read JSON data
     var json = require(path.resolve(BioJSPackages.latest()));
-    if (json.type != TOOL_TYPE || !json.data) {
+    if (json.type != RESOURCE_TYPE || !json.data) {
         console.log(json.type);
         return false;
     }
@@ -299,12 +300,9 @@ BioJSPackages.update = function () {
                     } else {
                         BioJSPackages.updateTool(tool, data);
                     }
-
                 });
             }
-
         })(json.data[i]);
-
     }
 };
 
