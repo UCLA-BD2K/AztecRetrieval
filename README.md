@@ -34,8 +34,6 @@ POST | `/biojs/retrieve`
 GET | `/biojs/latest`
 POST | `/cytoscape/retrieve`
 GET | `/cytoscape/latest`
-POST | `/galaxy/retrieve`
-GET | `/galaxy/latest`
 POST | `/sourceforge/retrieve`
 GET | `/sourceforge/latest`
 
