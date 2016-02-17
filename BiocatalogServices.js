@@ -7,11 +7,6 @@ var fs = require("fs");
 var path = require("path");
 var request = require("request");
 
-var platformSchema = require("./models/mysql/platform");
-var languageSchema = require("./models/mysql/language");
-var relatedLinksSchema = require("./models/mysql/relatedLinks");
-var toolSchema = require("./models/mysql/tool");
-
 /**
  * @constructor
  */
@@ -57,104 +52,6 @@ BiocatalogServices.latest = function () {
     }
 
     return latest;
-};
-
-/**
- * Updates the Aztec database with the latest JSON outfile.
- */
-BiocatalogServices.update = function () {
-    // Read JSON data
-    var json = require(path.resolve(BiocatalogServices.latest()));
-    if (json.type != RESOURCE_TYPE || !json.data) {
-        console.log("Wrong type: " + json.type);
-        return false;
-    }
-
-    console.log(json.data.length);
-    for (var dataIndex in json.data) {
-        (function (data) {
-            // Check for prexisting DOI if exists, then check for prexisting name
-            if (data.publicationDOI != null && data.publicationDOI != "") {
-                toolSchema.where({PRIMARY_PUB_DOI: data.publicationDOI})
-                    .fetch()
-                    .then(function (tool) {
-                        if (!tool) {
-                            console.log("Inserting " + data.name);
-                            tool = toolSchema.forge({
-                                NAME: data.name,
-                                LOGO_LINK: data.logo,
-                                DESCRIPTION: data.description,
-                                SOURCE_LINK: data.sourceCodeURL,
-                                PRIMARY_PUB_DOI: data.publicationDOI
-                            }).save();
-                        }
-                        BiocatalogServices.updateTool(tool, data);
-                    });
-            } else {
-                toolSchema.where({NAME: data.name})
-                    .fetch()
-                    .then(function (tool) {
-                        if (!tool) {
-                            console.log("Inserting " + data.name);
-                            tool = toolSchema.forge({
-                                NAME: data.name,
-                                LOGO_LINK: data.logo,
-                                DESCRIPTION: data.description,
-                                SOURCE_LINK: data.sourceCodeURL,
-                                PRIMARY_PUB_DOI: data.publicationDOI
-                            }).save();
-                        }
-                        BiocatalogServices.updateTool(tool, data);
-                    });
-            }
-        })(json.data[dataIndex]);
-    }
-
-    return "Success";
-};
-
-BiocatalogServices.updateTool = function (tool, data) {
-    console.log("Updating " + data.name);
-    var azid = tool.get("AZID");
-    // Attach language
-    languageSchema.where({NAME: data.language}).fetch().then(function (language) {
-        if (language) {
-            tool.languages().attach(language);
-        } else {
-            languageSchema.forge({NAME: data.language}).save().then(function (newLanguage) {
-                tool.languages().attach(newLanguage);
-            });
-        }
-    });
-
-    // Attach platforms
-    for (var platformIndex in data.platforms) {
-        var platformName = data.platforms[platformIndex];
-        platformSchema.where("NAME", platformName).fetch().then(function (platform) {
-            if (platform) {
-                tool.platform().attach(platform);
-            } else {
-                platformSchema.forge({NAME: platformName}).save().then(function (newPlatform) {
-                    tool.platform().attach(newPlatform);
-                });
-            }
-        });
-    }
-
-    // Save related links
-    for (var linkIndex in data.linkUrls) {
-        if (data.linkUrls[linkIndex]) {
-            var linkDescription = data.linkDescriptions[linkIndex];
-            var linkURL = data.linkUrls[linkIndex];
-
-            relatedLinksSchema.where({AZID: azid, URL: linkURL}).fetch().then(
-                function (link) {
-                    if (!link) {
-                        relatedLinksSchema.forge({AZID: azid, TYPE: linkDescription, URL: linkURL}).save();
-                    }
-                });
-        }
-    }
 };
 
 /**
@@ -470,6 +367,12 @@ BiocatalogServices.retrieve = function () {
             }
         }
     );
+};
+
+/**
+ * Updates the Aztec database.
+ */
+BiocatalogServices.update = function () {
 };
 
 module.exports = BiocatalogServices;
