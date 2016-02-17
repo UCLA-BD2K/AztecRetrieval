@@ -57,7 +57,7 @@ BioJSPackages.latest = function () {
             var curr_time = fs.statSync(current).mtime.getTime();
             var latest_time = fs.statSync(latest).mtime.getTime();
             if (curr_time > latest_time) {
-                latest[i] = current;
+                latest = current;
             }
         }
     }
