@@ -18,6 +18,15 @@ var Resource = require("./models/mysql/resource");
 var Tag = require("./models/mysql/tag");
 var Tool = require("./models/mysql/tool");
 
+var M_tool = require('./models/mongo/toolMisc.js');
+var M_author = require('./models/mongo/author.js');
+var M_funding = require('./models/mongo/funding.js');
+var M_link= require('./models/mongo/link.js');
+var M_maintainer= require('./models/mongo/maintainer.js');
+var M_missing_inst = require('./models/mongo/missing_inst.js');
+var M_publication= require('./models/mongo/publication.js');
+var M_version = require("./models/mongo/version.js");
+
 var RESOURCE_TYPE = "cytoscape";
 var BASE_URL = "http://apps.cytoscape.org";
 
@@ -511,6 +520,81 @@ CytoscapeServices.update = function () {
             }
         };
 
+        var addMongo = function (m_tool, data) {
+            //save authors
+            if (data.authors != null) {
+                for (var authorsIndex in data.authors) {
+                    (function (authorName, authorEmail) {
+                        if (authorEmail == '') {
+                            authorEmail = null;
+                        }
+                        var names = authorName.split(/[ ,]+/);
+                        var first = names[0];
+                        var last = names[1];
+
+                        var m_author = new M_author;
+                        m_author.first_name = first;
+                        m_author.last_name = last;
+                        m_author.author_email = authorEmail;
+                        m_tool.authors.push(m_author);
+
+                    })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
+                }
+            }
+
+            //maintainers
+            if (data.maintainers != null) {
+                for (var maintainerIndex in data.maintainers) {
+                    (function (maintainerName, maintainerEmail) {
+                        if (maintainerEmail == '') {
+                            maintainerEmail = null;
+                        }
+                        var names = maintainerName.split(/[ ,]+/);
+                        var first = names[0];
+                        var last = names[1];
+
+                        var m_maintainer = new M_maintainer;
+                        m_maintainer.first_name = first;
+                        m_maintainer.last_name = last;
+                        m_maintainer.maintainer_email = maintainerEmail;
+                        m_tool.maintainers.push(m_maintainer);
+
+                    })(data.maintainers[maintainerIndex], data.maintainerEmails[maintainerIndex]);
+                }
+            }
+
+            //Bioconductor has no institution information
+
+            //save version
+            if (data.versionNum != null) {
+                var m_version = new M_version;
+                m_version.version_number = data.versionNum;
+                m_tool.versions.push(m_version);
+            }
+
+            //Bioconductor has no funding information
+
+            //Related links
+            if (data.linkUrls != null) {
+                for (var linkIndex in data.linkUrls) {
+                    (function (linkURL, linkDescription) {
+                        var m_link = new M_link;
+                        m_link.link_name = linkDescription;
+                        m_link.link_url = linkURL;
+                        m_tool.links.push(m_link);
+                    })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+                }
+            }
+
+            //Bioconductor has no publication information
+
+            m_tool.save(function (err) {
+                if (err) {
+                    console.log("mongo error");
+                }
+            });
+        };
+
         // Check for prexisting resource
         var resourceID = data.resourceID;
         if (resourceType != null && resourceID != null) {
@@ -527,10 +611,14 @@ CytoscapeServices.update = function () {
                             DESCRIPTION: data.description,
                             SOURCE_LINK: data.sourceCodeURL,
                             PRIMARY_PUB_DOI: data.publicationDOI
-                        }).save()
-                            .then(function (newTool) {
-                                updateTool(newTool, data);
+                        }).save().then(function (newTool) {
+                            M_tool({
+                                azid: newTool.get("AZID")
+                            }).save().then(function (m_tool) {
+                                addMongo(m_tool, data)
                             });
+                            updateTool(newTool, data);
+                        });
                     } else {
                         // Update prexisting resource
                         updateTool(tool, data);
