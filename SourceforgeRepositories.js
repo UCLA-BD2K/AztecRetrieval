@@ -17,6 +17,15 @@ var Resource = require("./models/mysql/resource");
 var Tag = require("./models/mysql/tag");
 var Tool = require("./models/mysql/tool");
 
+var M_tool = require('./models/mongo/toolMisc.js');
+var M_author = require('./models/mongo/author.js');
+var M_funding = require('./models/mongo/funding.js');
+var M_link= require('./models/mongo/link.js');
+var M_maintainer= require('./models/mongo/maintainer.js');
+var M_missing_inst = require('./models/mongo/missing_inst.js');
+var M_publication= require('./models/mongo/publication.js');
+var M_version = require("./models/mongo/version.js");
+
 var OUTFILE_DIRECTORY = "public/sourceforge/";
 var OUTFILE_TEMP_DIRECTORY = OUTFILE_DIRECTORY + "temp/";
 var OUTFILE_BASE_NAME = "sourceforge_repositories";
@@ -116,12 +125,12 @@ SourceforgeRepositories.update = function () {
 
     Promise.all(json.data.map(function (data) {
         // For each data entry
-        console.log("Processing " + data.name);
+        console.log("Processing " + data.res_name);
 
         // Helper function to update each tool
         // TODO: Relations are likely to be kept if attributes change. Investigate pruning invalid relations on update.
         var updateTool = function (tool, data) {
-            console.log("Updating " + data.name);
+            console.log("Updating " + data.res_name);
             var azid = tool.get("AZID");
 
             // Domains (MySQL)
@@ -164,18 +173,18 @@ SourceforgeRepositories.update = function () {
             }
 
             // Language (MySQL)
-            if (data.language != null) {
-                var language = Language.forge({NAME: data.language});
-                language.save()
-                    .catch(function (err) {
-                        // Suppress duplicate errors
-                        if (err.code != "ER_DUP_ENTRY") {
-                            console.log(err);
-                        }
-                    });
+            if (data.dev.dev_lang != null) {
+                Promise.all(data.dev.dev_lang.map((function (langName) {
+                    var language = Language.forge({NAME: langName});
+                    language.save()
+                        .catch(function (err) {
+                            //Suppress duplicate errors
+                            if (err.code != "ER_DUP_ENTRY") {
+                                console.log(err);
+                            }
+                        });
 
-                language.fetch()
-                    .then(function (result) {
+                    language.fetch().then(function (result) {
                         tool.languages().attach(result)
                             .catch(function (err) {
                                 // Suppress duplicate errors for preexisting relations
@@ -184,6 +193,7 @@ SourceforgeRepositories.update = function () {
                                 }
                             });
                     });
+                })));
             }
 
             // Licenses (MySQL)
@@ -199,7 +209,7 @@ SourceforgeRepositories.update = function () {
                             if (licenseLink != null) {
                                 licenseName = licenseLink;
                             } else {
-                                console.log("Invalid license for " + data.name);
+                                console.log("Invalid license for " + data.res_name);
                                 return null;
                             }
                         }
@@ -218,11 +228,18 @@ SourceforgeRepositories.update = function () {
                 }
             }
 
-            // TODO: Maintainers (Mongo)
-
             // Platforms (MySQL)
-            if (data.platforms != null) {
-                Promise.all(data.platforms.map((function (platformName) {
+            if (data.dev.dev_platform != null) {
+                Promise.all(data.dev.dev_platform.map((function (platformName) {
+                    if (platformName == 'OS Portable (Source code to work with many OS platforms)')
+                        platformName = 'OS Portable';
+                    if (platformName == 'OS Independent (Written in an interpreted language)')
+                        platformName = 'OS Independent';
+                    if (platformName == 'All BSD Platforms (FreeBSD/NetBSD/OpenBSD/Apple Mac OS X)')
+                        platformName = 'All BSD Platforms';
+                    if (platformName = 'Modern (Vendor-Supported) Desktop Operating Systems')
+                        platformName = 'Linux';
+
                     var platform = Platform.forge({NAME: platformName});
                     platform.save()
                         .catch(function (err) {
@@ -244,8 +261,6 @@ SourceforgeRepositories.update = function () {
                         });
                 })));
             }
-
-            // TODO: Related links (Mongo)
 
             // Types (MySQL)
             if (data.types != null) {
@@ -274,8 +289,8 @@ SourceforgeRepositories.update = function () {
 
             // Tags (MySQL)
             if (data.tags != null) {
-                // TODO: Filter for repeat tags
-                Promise.all(data.tags.map((function (tagName) {
+                Promise.all(data.tags.map((function (tagObject) {
+                    tagName = tagObject.text;
                     var tag = Tag.forge({NAME: tagName});
                     tag.save()
                         .catch(function (err) {
@@ -299,26 +314,79 @@ SourceforgeRepositories.update = function () {
             }
         };
 
+        var addMongo = function (m_tool, data) {
+            //save authors
+            if (data.authors != null) {
+                for (var authorsIndex in data.authors) {
+                    (function (authorName) {
+                        if (authorEmail == '') {
+                            authorEmail = null;
+                        }
+                        var names = authorName.split(/[ ,]+/);
+                        var first = names[0];
+                        var last = names[1];
+
+                        var m_author = new M_author;
+                        m_author.first_name = first;
+                        m_author.last_name = last;
+                        m_author.author_email = null;
+                        m_tool.authors.push(m_author);
+
+                    })(data.authors[authorsIndex].author_name);
+                }
+            }
+
+            //Sourceforge has no maintainer information
+
+            //Sourceforge has no version information
+
+            //Sourceforge has no funding information
+
+            //Related links
+            if (data.links != null) {
+                for (var linkIndex in data.links) {
+                    (function (linkDescription, linkURL) {
+                        var m_link = new M_link;
+                        m_link.link_name = linkDescription;
+                        m_link.link_url = linkURL;
+                        m_tool.links.push(m_link);
+                    })(data.links[linkIndex].link_name, data.links[linkIndex].link_url);
+                }
+            }
+
+            //Sourceforge has no publication information
+
+            m_tool.save(function (err) {
+                if (err) {
+                    console.log("mongo error");
+                }
+            });
+        };
+
         // Check for prexisting resource
         var resourceID = data.resourceID;
-        if (resourceType != null && resourceID != null) {
-            Tool.where({SOURCE: resourceType, SOURCE_ID: resourceID})
+        if (resourceType != null && data.res_name != null) {
+            Tool.where({SOURCE: resourceType, NAME: data.res_name})
                 .fetch()
                 .then(function (tool) {
                     if (tool == null) {
-                        console.log("Creating " + resourceType + "." + resourceID);
+                        console.log("Creating " + resourceType + "." + data.res_name);
+                        console.log(data.res_name);
                         new Tool({
                             SOURCE: resourceType,
-                            SOURCE_ID: resourceID,
-                            NAME: data.name,
-                            LOGO_LINK: data.logo,
-                            DESCRIPTION: data.description,
-                            SOURCE_LINK: data.sourceCodeURL,
+                            NAME: data.res_name,
+                            LOGO_LINK: data.res_logo,
+                            DESCRIPTION: data.res_desc,
+                            SOURCE_LINK: data.dev.res_code_url,
                             PRIMARY_PUB_DOI: data.publicationDOI
-                        }).save()
-                            .then(function (newTool) {
-                                updateTool(newTool, data);
+                        }).save().then(function (newTool) {
+                            M_tool({
+                                azid: newTool.get("AZID")
+                            }).save().then(function (m_tool) {
+                                addMongo(m_tool, data)
                             });
+                            updateTool(newTool, data);
+                        });
                     } else {
                         // Update prexisting resource
                         updateTool(tool, data);

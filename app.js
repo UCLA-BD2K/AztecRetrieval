@@ -33,6 +33,10 @@ app.use('/biojs', biojs);
 app.use('/cytoscape', cytoscape);
 app.use('/sourceforge', sourceforge);
 
+var mongoose = require('mongoose');
+var configMongo = require('./config/mongo.js');
+mongoose.connect(configMongo.url); // connect to our database
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
