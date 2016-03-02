@@ -1,4 +1,4 @@
-var Bookshelf = require('../../bookshelf.js');
+var Bookshelf = require('../../config/bookshelf.js');
 Bookshelf.plugin('registry');
 
 var Tag = Bookshelf.Model.extend({
