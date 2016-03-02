@@ -6,7 +6,7 @@ var CytoscapeServices = require('../CytoscapeServices.js');
 var router = express.Router();
 
 router.get(['/','/latest'], function(req, res, next) {
-    var latest = CytoscapeServices.latest();
+    var latest = new CytoscapeServices().latest();
     if (latest == null) {
         res.json({});
     } else {
@@ -21,11 +21,11 @@ router.get(['/','/latest'], function(req, res, next) {
 });
 
 router.get('/retrieve', function(req, res, next) {
-    res.send(CytoscapeServices.retrieve());
+    res.send(new CytoscapeServices().retrieve());
 });
 
 router.get('/update', function(req, res, next) {
-    res.send(CytoscapeServices.update());
+    res.send(new CytoscapeServices().update());
 });
 
 module.exports = router;

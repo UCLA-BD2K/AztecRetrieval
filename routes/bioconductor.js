@@ -6,7 +6,7 @@ var BioconductorPackages = require('../BioconductorPackages.js');
 var router = express.Router();
 
 router.get(['/','/latest'], function(req, res, next) {
-    var latest = BioconductorPackages.latest();
+    var latest = new BioconductorPackages().latest();
     if (latest == null) {
         res.json({});
     } else {
@@ -21,11 +21,11 @@ router.get(['/','/latest'], function(req, res, next) {
 });
 
 router.get('/retrieve', function(req, res, next) {
-    res.send(BioconductorPackages.retrieve());
+    res.send(new BioconductorPackages().retrieve());
 });
 
 router.get('/update', function(req, res, next) {
-    res.send(BioconductorPackages.update());
+    res.send(new BioconductorPackages().update());
 });
 
 module.exports = router;

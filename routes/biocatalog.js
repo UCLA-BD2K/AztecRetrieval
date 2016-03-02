@@ -6,7 +6,7 @@ var BiocatalogServices = require('../BiocatalogServices.js');
 var router = express.Router();
 
 router.get(['/','/latest'], function(req, res, next) {
-    var latest = BiocatalogServices.latest();
+    var latest = new BiocatalogServices().latest();
     if (latest == null) {
         res.json({});
     } else {
@@ -21,11 +21,11 @@ router.get(['/','/latest'], function(req, res, next) {
 });
 
 router.get('/update', function(req, res, next) {
-    res.send(BiocatalogServices.update())
+    res.send(new BiocatalogServices().update())
 });
 
 router.get('/retrieve', function(req, res, next) {
-    res.send(BiocatalogServices.retrieve());
+    res.send(new BiocatalogServices().retrieve());
 });
 
 module.exports = router;

@@ -6,7 +6,7 @@ var BioJSPackages = require('../BioJSPackages.js');
 var router = express.Router();
 
 router.get(['/','/latest'], function(req, res, next) {
-    var latest = BioJSPackages.latest();
+    var latest = new BioJSPackages().latest();
     if (latest == null) {
         res.json({});
     } else {
@@ -21,11 +21,11 @@ router.get(['/','/latest'], function(req, res, next) {
 });
 
 router.get('/retrieve', function(req, res, next) {
-    res.send(BioJSPackages.retrieve());
+    res.send(new BioJSPackages().retrieve());
 });
 
 router.get('/update', function(req, res, next) {
-    res.send(BioJSPackages.update());
+    res.send(new BioJSPackages().update());
 });
 
 module.exports = router;
