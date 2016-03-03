@@ -4,396 +4,194 @@
  */
 
 var fs = require("fs");
+var HashMap = require('hashmap');
 var request = require("request");
-var sf_miner = require("./sf_miner/sf_miner1");
 var path = require("path");
 
-var Domain = require("./models/mysql/domain");
-var Institution = require("./models/mysql/institution");
-var Platform = require("./models/mysql/platform");
-var Language = require("./models/mysql/language");
-var License = require("./models/mysql/license");
-var Resource = require("./models/mysql/resource");
-var Tag = require("./models/mysql/tag");
-var Tool = require("./models/mysql/tool");
+var Retriever = require("./Retriever");
 
-var M_tool = require('./models/mongo/toolMisc.js');
-var M_author = require('./models/mongo/author.js');
-var M_funding = require('./models/mongo/funding.js');
-var M_link= require('./models/mongo/link.js');
-var M_maintainer= require('./models/mongo/maintainer.js');
-var M_missing_inst = require('./models/mongo/missing_inst.js');
-var M_publication= require('./models/mongo/publication.js');
-var M_version = require("./models/mongo/version.js");
-
-var OUTFILE_DIRECTORY = "public/sourceforge/";
-var OUTFILE_TEMP_DIRECTORY = OUTFILE_DIRECTORY + "temp/";
-var OUTFILE_BASE_NAME = "sourceforge_repositories";
-
-var RESOURCE_TYPE = "sourceforge";
-
-/**
- * @constructor
- */
 var SourceforgeRepositories = function () {
+    Retriever.call(this, "sourceforge");
 };
 
-// Write to file
-var writeToFile = function () {
-    // Write initial data
-    fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName,
-        "{\n" +
-        "\"type\": \"" + RESOURCE_TYPE + "\",\n" +
-        "\"date\": \"" + date.toISOString() + "\",\n" +
-        "\"data\": [\n");
-
-    // Write data
-    fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName, results);
-
-    // Write closing brackets and braces
-    fs.appendFileSync(OUTFILE_TEMP_DIRECTORY + outfileName, "\n]\n}\n");
-
-    // Move file out of temp directory when complete
-    fs.renameSync(OUTFILE_TEMP_DIRECTORY + outfileName,
-        OUTFILE_DIRECTORY + outfileName);
-    console.log("Complete: " + outfileName);
-};
+SourceforgeRepositories.prototype = Object.create(Retriever.prototype);
+SourceforgeRepositories.constructor = SourceforgeRepositories;
 
 /**
- * Returns the latest outfile.
- * @returns {string|String}
+ * Reads json file of sourceforge project names and downloads all information from the Sourceforge REST API.
+ * Converts metadata to Aztec format and saves as json file.
  */
-SourceforgeRepositories.latest = function () {
-    var latest = null;
-    var files = fs.readdirSync(OUTFILE_DIRECTORY);
+SourceforgeRepositories.prototype.retrieve = function () {
+    var outfile = this.getNewFile();
+    var base = this; // Declare for reference within closure scopes
 
-    for (var i = 0; i < files.length; i++) {
-        // Check relevant files only
-        if (files[i].slice(0, OUTFILE_BASE_NAME.length) != OUTFILE_BASE_NAME) {
-            continue;
-        }
+    // Sourceforge categories to crawl
+    var CATEGORIES = ['bioinformatics', 'medical', 'molecular-science'];
+    // Blacklisted software TODO: Add to a database
+    var BLACKLIST = ['lra', 'evolutiongame', 'gamer', 'agatca', 'caixadepandora', 'gameaccess', 'drinkandtrack',
+        'lifeflight', 'gardenplot'];
 
-        // Update latest file
-        var current = OUTFILE_DIRECTORY + files[i];
-        if (latest == null) {
-            latest = current;
-        } else {
-            var curr_time = fs.statSync(current).mtime.getTime();
-            var latest_time = fs.statSync(latest).mtime.getTime();
-            if (curr_time > latest_time) {
-                latest = current;
-            }
-        }
-    }
+    var projectMap = new HashMap(); // Prevent duplicate projects
 
-    return latest;
-};
+    var categoryIndex = 0;
+    var pageIndex = 1;
+    var totalPages = 0;
+    var searchCategories = function () {
+        category = CATEGORIES[categoryIndex];
+        request({
+                url: 'http://sourceforge.net/directory/science-engineering/' + category + '/?page=' + pageIndex
+            },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    // Determine the total number of pages for the category
+                    if (pageIndex == 1) {
+                        console.log("Reading pages for " + category);
+                        var regex0 = /<p id="result_count">\s+Showing page [0-9]+ of ([0-9]+).\s<\/p>/g;
+                        totalPages = regex0.exec(body)[1];
+                        console.log('Pages detected: ' + totalPages);
+                    }
 
-SourceforgeRepositories.retrieve = function () {
-    // Create directories if necessary
-    if (!fs.existsSync(OUTFILE_DIRECTORY)) {
-        fs.mkdirSync(OUTFILE_DIRECTORY);
-    }
+                    var regex1 = /<header><a href="\/projects\/([^\.]+)\/\?source=directory" itemprop="url" title="Find out more about .+"><span itemprop="name">(.+)<\/span><\/a><\/header>/g;
 
-    if (!fs.existsSync(OUTFILE_TEMP_DIRECTORY)) {
-        fs.mkdirSync(OUTFILE_TEMP_DIRECTORY);
-    }
+                    // Count the number of projects found on the page
+                    var count = body.match(regex1).length;
+                    console.log(count + ' (Page ' + pageIndex + ' / ' + totalPages + ')');
 
-    // Generate new timestamped outfile name
-    var date = new Date();
-    var outfileName = OUTFILE_BASE_NAME + "_" + date.toISOString().replace(/:/g, "-") + ".json";
+                    // Gather projects
+                    for (var i = 0; i < count; i++) {
+                        var project = {};
 
-    var category_hash = {};
-    var results = "";
+                        // First capture group is machine-readable name, second capture group is human-readable name
+                        // We are ignoring all items with a '.' in the machine-readable name because these are imported
+                        // from BerliOS and do not resolve with the REST API
+                        var scan = regex1.exec(body);
+                        project.human_readable_name = scan[2];
+                        project.machine_readable_name = scan[1];
+                        projectMap.set(project.machine_readable_name, project);
+                    }
 
-    // Run sf_miner1 and sf_miner2
-    sf_miner.runRemotely();
-
-};
-
-/**
- * Updates the Aztec database.
- */
-SourceforgeRepositories.update = function () {
-    // Read JSON data
-    var json = require(path.resolve(this.latest()));
-    var resourceType = json.type;
-    if (resourceType != RESOURCE_TYPE || !json.data) {
-        console.log("Wrong type: " + json.type);
-        return false;
-    }
-
-    Promise.all(json.data.map(function (data) {
-        // For each data entry
-        console.log("Processing " + data.res_name);
-
-        // Helper function to update each tool
-        // TODO: Relations are likely to be kept if attributes change. Investigate pruning invalid relations on update.
-        var updateTool = function (tool, data) {
-            console.log("Updating " + data.res_name);
-            var azid = tool.get("AZID");
-
-            // Domains (MySQL)
-            if (data.domains != null) {
-                Promise.all(data.domains.map((function (domainName) {
-                    Domain.where({AZID: azid, DOMAIN: domainName}).fetch()
-                        .then(function (domain) {
-                            if (domain == null) {
-                                domain = new Domain({AZID: azid, DOMAIN: domainName}).save();
+                    pageIndex++;
+                    if (pageIndex <= totalPages) {
+                        // Recurse
+                        searchCategories();
+                    } else {
+                        categoryIndex++;
+                        if (categoryIndex < CATEGORIES.length) {
+                            pageIndex = 1;
+                            searchCategories();
+                        } else {
+                            // All categories searched
+                            // Remove all blacklisted software
+                            for (var blacklisted in BLACKLIST) {
+                                projectMap.remove(blacklisted);
                             }
 
-                            return domain;
-                        })
-                })));
-            }
+                            var tools = projectMap.values(); // Identified projects
+                            numProjects = tools.length;
 
-            // TODO: Institutions (Mongo+MySQL)
-            if (data.institutions != null) {
-                Promise.all(data.institutions.map((function (institutionName) {
-                    var institution = Institution.forge({NAME: institutionName});
-                    institution.save()
-                        .catch(function (err) {
-                            // Suppress duplicate errors
-                            if (err.code != "ER_DUP_ENTRY") {
-                                console.log(err);
-                            }
-                        });
-
-                    institution.fetch()
-                        .then(function (result) {
-                            tool.institutions().attach(result)
-                                .catch(function (err) {
-                                    // Suppress duplicate errors for preexisting relations
-                                    if (err.code != "ER_DUP_ENTRY") {
-                                        console.log(err);
-                                    }
-                                });
-                        });
-                })));
-            }
-
-            // Language (MySQL)
-            if (data.dev.dev_lang != null) {
-                Promise.all(data.dev.dev_lang.map((function (langName) {
-                    var language = Language.forge({NAME: langName});
-                    language.save()
-                        .catch(function (err) {
-                            //Suppress duplicate errors
-                            if (err.code != "ER_DUP_ENTRY") {
-                                console.log(err);
-                            }
-                        });
-
-                    language.fetch().then(function (result) {
-                        tool.languages().attach(result)
-                            .catch(function (err) {
-                                // Suppress duplicate errors for preexisting relations
-                                if (err.code != "ER_DUP_ENTRY") {
-                                    console.log(err);
-                                }
-                            });
-                    });
-                })));
-            }
-
-            // Licenses (MySQL)
-            if (data.licenses != null) {
-                for (var licenseIndex in data.licenses) {
-                    (function (licenseName, licenseLink) {
-                        if (licenseLink == "") {
-                            licenseLink = null;
-                        }
-
-                        // Use link as name if necessary
-                        if (licenseName == null || licenseName == "") {
-                            if (licenseLink != null) {
-                                licenseName = licenseLink;
-                            } else {
-                                console.log("Invalid license for " + data.res_name);
-                                return null;
+                            // Iterate over each project
+                            for (var i = 0; i < numProjects; i++) {
+                                getProject(tools[i].machine_readable_name);
                             }
                         }
-
-                        License.where({AZID: azid, NAME: licenseName}).fetch()
-                            .then(function (license) {
-                                if (license == null) {
-                                    new License({
-                                        AZID: azid,
-                                        NAME: licenseName,
-                                        LINK: licenseLink
-                                    }).save();
-                                }
-                            });
-                    })(data.licenses[licenseIndex], data.licenseUrls[licenseIndex]);
-                }
-            }
-
-            // Platforms (MySQL)
-            if (data.dev.dev_platform != null) {
-                Promise.all(data.dev.dev_platform.map((function (platformName) {
-                    if (platformName == 'OS Portable (Source code to work with many OS platforms)')
-                        platformName = 'OS Portable';
-                    if (platformName == 'OS Independent (Written in an interpreted language)')
-                        platformName = 'OS Independent';
-                    if (platformName == 'All BSD Platforms (FreeBSD/NetBSD/OpenBSD/Apple Mac OS X)')
-                        platformName = 'All BSD Platforms';
-                    if (platformName = 'Modern (Vendor-Supported) Desktop Operating Systems')
-                        platformName = 'Linux';
-
-                    var platform = Platform.forge({NAME: platformName});
-                    platform.save()
-                        .catch(function (err) {
-                            // Suppress duplicate errors
-                            if (err.code != "ER_DUP_ENTRY") {
-                                console.log(err);
-                            }
-                        });
-
-                    platform.fetch()
-                        .then(function (result) {
-                            tool.platforms().attach(result)
-                                .catch(function (err) {
-                                    // Suppress duplicate errors for preexisting relations
-                                    if (err.code != "ER_DUP_ENTRY") {
-                                        console.log(err);
-                                    }
-                                });
-                        });
-                })));
-            }
-
-            // Types (MySQL)
-            if (data.types != null) {
-                Promise.all(data.types.map((function (resourceType) {
-                    var resource = Resource.forge({RESOURCE_TYPE: resourceType});
-                    resource.save()
-                        .catch(function (err) {
-                            // Suppress duplicate errors
-                            if (err.code != "ER_DUP_ENTRY") {
-                                console.log(err);
-                            }
-                        });
-
-                    resource.fetch()
-                        .then(function (result) {
-                            tool.resources().attach(result)
-                                .catch(function (err) {
-                                    // Suppress duplicate errors for preexisting relations
-                                    if (err.code != "ER_DUP_ENTRY") {
-                                        console.log(err);
-                                    }
-                                });
-                        });
-                })));
-            }
-
-            // Tags (MySQL)
-            if (data.tags != null) {
-                Promise.all(data.tags.map((function (tagObject) {
-                    tagName = tagObject.text;
-                    var tag = Tag.forge({NAME: tagName});
-                    tag.save()
-                        .catch(function (err) {
-                            // Suppress duplicate errors
-                            if (err.code != "ER_DUP_ENTRY") {
-                                console.log(err);
-                            }
-                        });
-
-                    tag.fetch()
-                        .then(function (result) {
-                            tool.tags().attach(result)
-                                .catch(function (err) {
-                                    // Suppress duplicate errors for preexisting relations
-                                    if (err.code != "ER_DUP_ENTRY") {
-                                        console.log(err);
-                                    }
-                                });
-                        });
-                })));
-            }
-        };
-
-        var addMongo = function (m_tool, data) {
-            //save authors
-            if (data.authors != null) {
-                for (var authorsIndex in data.authors) {
-                    (function (authorName) {
-                        if (authorEmail == '') {
-                            authorEmail = null;
-                        }
-                        var names = authorName.split(/[ ,]+/);
-                        var first = names[0];
-                        var last = names[1];
-
-                        var m_author = new M_author;
-                        m_author.first_name = first;
-                        m_author.last_name = last;
-                        m_author.author_email = null;
-                        m_tool.authors.push(m_author);
-
-                    })(data.authors[authorsIndex].author_name);
-                }
-            }
-
-            //Sourceforge has no maintainer information
-
-            //Sourceforge has no version information
-
-            //Sourceforge has no funding information
-
-            //Related links
-            if (data.links != null) {
-                for (var linkIndex in data.links) {
-                    (function (linkDescription, linkURL) {
-                        var m_link = new M_link;
-                        m_link.link_name = linkDescription;
-                        m_link.link_url = linkURL;
-                        m_tool.links.push(m_link);
-                    })(data.links[linkIndex].link_name, data.links[linkIndex].link_url);
-                }
-            }
-
-            //Sourceforge has no publication information
-
-            m_tool.save(function (err) {
-                if (err) {
-                    console.log("mongo error");
+                    }
                 }
             });
-        };
+    };
 
-        // Check for prexisting resource
-        var resourceID = data.resourceID;
-        if (resourceType != null && data.res_name != null) {
-            Tool.where({SOURCE: resourceType, NAME: data.res_name})
-                .fetch()
-                .then(function (tool) {
-                    if (tool == null) {
-                        console.log("Creating " + resourceType + "." + data.res_name);
-                        console.log(data.res_name);
-                        new Tool({
-                            SOURCE: resourceType,
-                            NAME: data.res_name,
-                            LOGO_LINK: data.res_logo,
-                            DESCRIPTION: data.res_desc,
-                            SOURCE_LINK: data.dev.res_code_url,
-                            PRIMARY_PUB_DOI: data.publicationDOI
-                        }).save().then(function (newTool) {
-                            M_tool({
-                                azid: newTool.get("AZID")
-                            }).save().then(function (m_tool) {
-                                addMongo(m_tool, data)
-                            });
-                            updateTool(newTool, data);
-                        });
+    // Start recursion
+    searchCategories();
+
+    var restCount = 0;
+    var numProjects = 0;
+    var aztecEntries = [];
+    var getProject = function (projectName) {
+        request({
+                url: 'https://sourceforge.net/rest/p/' + projectName,
+                encoding: 'utf-8'
+            },
+            function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+
+                    var raw = JSON.parse(body);
+
+                    var tool = {};
+                    tool.resourceID = raw.name;
+                    tool.name = raw.name;
+                    if (raw.icon_url != null)
+                        tool.res_logo = raw.icon_url;
+                    tool.description = raw.short_description;
+
+                    if (raw.external_homepage != null)
+                        tool.links = [{"link_name": "Homepage", "link_url": raw.external_homepage}];
+
+                    tool.sourceCodeURL = raw.url;
+                    tool.language = [];
+                    for (var i = 0; i < raw.categories.language.length; i++)
+                        tool.language.push(raw.categories.language[i].fullname);
+                    tool.platforms = [];
+                    for (var i = 0; i < raw.categories.environment.length; i++)
+                        tool.platforms.push(raw.categories.environment[i].fullname);
+                    for (var i = 0; i < raw.categories.os.length; i++)
+                        tool.platforms.push(raw.categories.os[i].fullname);
+
+                    tool.authors = [];
+                    for (var i = 0; i < raw.developers.length; i++)
+                        tool.authors.push({"author_name": raw.developers[i].name});
+
+                    tool.license = {};
+                    tool.license.license_type = "Open Source";
+                    if (raw.categories.license.length > 0)
+                        tool.license.license = raw.categories.license[0].fullname;
+                    tool.tags = [];
+                    for (var i = 0; i < raw.categories.topic.length; i++)
+                        tool.tags.push(raw.categories.topic[i].fullname);
+
+                    if (raw.moved_to_url != "") {
+                        tool.sourceCodeURL = raw.moved_to_url;
                     } else {
-                        // Update prexisting resource
-                        updateTool(tool, data);
+                        // Check manually for tools that have moved to Github without updating the moved_to_url field
+                        var githubRegex = /github.com\/[-\w]+\/[-\w]+/g;
+                        if (raw.short_description.match(githubRegex)) {
+                            tool.sourceCodeURL = raw.short_description.match(githubRegex)[0];
+                        }
                     }
-                });
-        }
-    }));
+
+                    aztecEntries.push(tool);
+
+                    restCount++;
+                    if (restCount % 50 == 0 || restCount == numProjects) {
+                        console.log(restCount + ' out of ' + numProjects);
+                    }
+
+                    if (restCount == numProjects) {
+                        // All projects completed, write to file
+                        var outputData = {};
+                        outputData.type = base.RESOURCE_TYPE;
+                        outputData.date = new Date().toISOString();
+                        outputData.data = aztecEntries;
+
+                        fs.writeFile(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(outputData, null, 1), function (err) {
+                            if (err) {
+                                return console.log(err);
+                            }
+
+                            fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
+                            console.log("Complete: " + outfile);
+                        });
+                    }
+
+                } else {
+                    console.log("error");
+                    console.log("error " + response.statusCode);
+                    console.log(response.client._httpMessage._header);
+                }
+
+                return ""
+            })
+    };
+
+    return "Retrieving: " + outfile;
 };
 
 module.exports = SourceforgeRepositories;

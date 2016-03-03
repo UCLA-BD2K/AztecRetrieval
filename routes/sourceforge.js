@@ -6,7 +6,7 @@ var SourceforgeRepositories = require('../SourceforgeRepositories.js');
 var router = express.Router();
 
 router.get(['/', '/latest'], function (req, res, next) {
-    var latest = SourceforgeRepositories.latest();
+    var latest = new SourceforgeRepositories().latest();
     if (latest == null) {
         res.json({});
     } else {
@@ -21,11 +21,11 @@ router.get(['/', '/latest'], function (req, res, next) {
 });
 
 router.get('/retrieve', function (req, res, next) {
-    res.send(SourceforgeRepositories.retrieve());
+    res.send(new SourceforgeRepositories().retrieve());
 });
 
 router.get('/update', function (req, res, next) {
-    res.send(SourceforgeRepositories.update());
+    res.send(new SourceforgeRepositories().update());
 });
 
 module.exports = router;

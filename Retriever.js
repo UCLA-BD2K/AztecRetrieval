@@ -120,25 +120,37 @@ Retriever.prototype.update = function () {
 
             // Language (MySQL)
             if (data.language != null) {
-                var language = Language.forge({NAME: data.language});
-                language.save()
-                    .catch(function (err) {
-                        // Suppress duplicate errors
-                        if (err.code != "ER_DUP_ENTRY") {
-                            console.log(err);
-                        }
-                    });
+                // Convert single strings to an array if necessary
+                var languages = [data.language];
+                if (Object.prototype.toString.call(data.language) === "[object Array]") {
+                    languages = data.language;
+                }
 
-                language.fetch()
-                    .then(function (result) {
-                        tool.languages().attach(result)
-                            .catch(function (err) {
-                                // Suppress duplicate errors for preexisting relations
-                                if (err.code != "ER_DUP_ENTRY") {
-                                    console.log(err);
-                                }
-                            });
-                    });
+                if (languages.length > 0) {
+                    Promise.all(languages.map((function (languageName) {
+                        if (languageName != null && languageName != "") {
+                            var language = Language.forge({NAME: languageName});
+                            language.save()
+                                .catch(function (err) {
+                                    // Suppress duplicate errors
+                                    if (err.code != "ER_DUP_ENTRY") {
+                                        console.log(err);
+                                    }
+                                });
+
+                            language.fetch()
+                                .then(function (result) {
+                                    tool.languages().attach(result)
+                                        .catch(function (err) {
+                                            // Suppress duplicate errors for preexisting relations
+                                            if (err.code != "ER_DUP_ENTRY") {
+                                                console.log(err);
+                                            }
+                                        });
+                                });
+                        }
+                    })));
+                }
             }
 
             // Licenses (MySQL)
@@ -178,6 +190,16 @@ Retriever.prototype.update = function () {
             // Platforms (MySQL)
             if (data.platforms != null) {
                 Promise.all(data.platforms.map((function (platformName) {
+                    if (platformName == 'OS Portable (Source code to work with many OS platforms)') {
+                        platformName = 'OS Portable';
+                    } else if (platformName == 'OS Independent (Written in an interpreted language)') {
+                        platformName = 'OS Independent';
+                    } else if (platformName == 'All BSD Platforms (FreeBSD/NetBSD/OpenBSD/Apple Mac OS X)') {
+                        platformName = 'All BSD Platforms';
+                    } else if (platformName = 'Modern (Vendor-Supported) Desktop Operating Systems') {
+                        platformName = 'Linux';
+                    }
+
                     var platform = Platform.forge({NAME: platformName});
                     platform.save()
                         .catch(function (err) {
