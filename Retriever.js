@@ -70,14 +70,43 @@ Retriever.prototype.update = function () {
     }
 
     Promise.all(json.data.map(function (data) {
-        // For each data entry
-        console.log("Processing " + data.name);
-
         // Helper function to update each tool
         // TODO: Relations are likely to be kept if attributes change. Investigate pruning invalid relations on update.
-        var updateTool = function (tool, data) {
-            console.log("Updating " + data.name);
+        var updateTool = function (tool, resourceType, data) {
+            console.log("Updating " + resourceType + "." + data.name);
             var azid = tool.get("AZID");
+
+            // Create Mongo object
+            var mongoTool = M_tool({
+                _id: azid,
+                azid: azid
+            });
+
+            // Authors (Mongo)
+            if (data.authors != null) {
+                for (var authorsIndex in data.authors) {
+                    var authorName = data.authors[authorsIndex];
+
+                    var authorEmail = null;
+                    if (data.authorEmails != null) {
+                        authorEmail = data.authorEmails[authorsIndex];
+
+                        if (authorEmail == '') {
+                            authorEmail = null;
+                        }
+                    }
+
+                    var names = authorName.split(/[ ,]+/);
+                    var first = names[0];
+                    var last = names[1];
+
+                    var m_author = new M_author;
+                    m_author.first_name = first;
+                    m_author.last_name = last;
+                    m_author.author_email = authorEmail;
+                    mongoTool.authors.push(m_author);
+                }
+            }
 
             // Domains (MySQL)
             if (data.domains != null) {
@@ -185,7 +214,26 @@ Retriever.prototype.update = function () {
                 }
             }
 
-            // TODO: Maintainers (Mongo)
+            // Maintainers (Mongo)
+            if (data.maintainers != null) {
+                for (var maintainerIndex in data.maintainers) {
+                    (function (maintainerName, maintainerEmail) {
+                        if (maintainerEmail == '') {
+                            maintainerEmail = null;
+                        }
+                        var names = maintainerName.split(/[ ,]+/);
+                        var first = names[0];
+                        var last = names[1];
+
+                        var m_maintainer = new M_maintainer;
+                        m_maintainer.first_name = first;
+                        m_maintainer.last_name = last;
+                        m_maintainer.maintainer_email = maintainerEmail;
+                        mongoTool.maintainers.push(m_maintainer);
+
+                    })(data.maintainers[maintainerIndex], data.maintainerEmails[maintainerIndex]);
+                }
+            }
 
             // Platforms (MySQL)
             if (data.platforms != null) {
@@ -222,7 +270,17 @@ Retriever.prototype.update = function () {
                 })));
             }
 
-            // TODO: Related links (Mongo)
+            // Related links (Mongo)
+            if (data.linkUrls != null) {
+                for (var linkIndex in data.linkUrls) {
+                    (function (linkURL, linkDescription) {
+                        var m_link = new M_link;
+                        m_link.link_name = linkDescription;
+                        m_link.link_url = linkURL;
+                        mongoTool.links.push(m_link);
+                    })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
+                }
+            }
 
             // Types (MySQL)
             if (data.types != null) {
@@ -274,75 +332,23 @@ Retriever.prototype.update = function () {
                         });
                 })));
             }
-        };
 
-        var addMongo = function (m_tool, data) {
-            // Authors
-            if (data.authors != null) {
-                for (var authorsIndex in data.authors) {
-                    (function (authorName, authorEmail) {
-                        if (authorEmail == '') {
-                            authorEmail = null;
-                        }
-                        var names = authorName.split(/[ ,]+/);
-                        var first = names[0];
-                        var last = names[1];
-
-                        var m_author = new M_author;
-                        m_author.first_name = first;
-                        m_author.last_name = last;
-                        m_author.author_email = authorEmail;
-                        m_tool.authors.push(m_author);
-
-                    })(data.authors[authorsIndex], data.authorEmails[authorsIndex]);
-                }
-            }
-
-            // Maintainers
-            if (data.maintainers != null) {
-                for (var maintainerIndex in data.maintainers) {
-                    (function (maintainerName, maintainerEmail) {
-                        if (maintainerEmail == '') {
-                            maintainerEmail = null;
-                        }
-                        var names = maintainerName.split(/[ ,]+/);
-                        var first = names[0];
-                        var last = names[1];
-
-                        var m_maintainer = new M_maintainer;
-                        m_maintainer.first_name = first;
-                        m_maintainer.last_name = last;
-                        m_maintainer.maintainer_email = maintainerEmail;
-                        m_tool.maintainers.push(m_maintainer);
-
-                    })(data.maintainers[maintainerIndex], data.maintainerEmails[maintainerIndex]);
-                }
-            }
-
-            // Save version
+            // Version
             if (data.versionNum != null) {
                 var m_version = new M_version;
                 m_version.version_number = data.versionNum;
-                m_tool.versions.push(m_version);
+                mongoTool.versions.push(m_version);
             }
 
-            // Related links
-            if (data.linkUrls != null) {
-                for (var linkIndex in data.linkUrls) {
-                    (function (linkURL, linkDescription) {
-                        var m_link = new M_link;
-                        m_link.link_name = linkDescription;
-                        m_link.link_url = linkURL;
-                        m_tool.links.push(m_link);
-                    })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
-                }
-            }
-
-            m_tool.save(function (err) {
+            // Upsert Mongo tool
+            //mongoTool.find({_id: azid}, mongoTool, {upsert: true}, function(err) {
+            //    console.log(err);
+            //});
+            M_tool.findOneAndUpdate({'azid': azid}, mongoTool, {upsert: true}, function (err, doc) {
                 if (err) {
-                    console.log("mongo error");
+                    return (console.log(err));
                 }
-            });
+            })
         };
 
         // Check for prexisting resource
@@ -362,16 +368,11 @@ Retriever.prototype.update = function () {
                             SOURCE_LINK: data.sourceCodeURL,
                             PRIMARY_PUB_DOI: data.publicationDOI
                         }).save().then(function (newTool) {
-                            M_tool({
-                                azid: newTool.get("AZID")
-                            }).save().then(function (m_tool) {
-                                addMongo(m_tool, data)
-                            });
-                            updateTool(newTool, data);
+                            updateTool(newTool, resourceType, data);
                         });
                     } else {
                         // Update prexisting resource
-                        updateTool(tool, data);
+                        updateTool(tool, resourceType, data);
                     }
                 });
         }
