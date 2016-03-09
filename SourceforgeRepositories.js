@@ -137,7 +137,7 @@ SourceforgeRepositories.prototype.retrieve = function () {
 
                     tool.authors = [];
                     for (var i = 0; i < raw.developers.length; i++)
-                        tool.authors.push({"author_name": raw.developers[i].name});
+                        tool.authors.push(raw.developers[i].name);
 
                     tool.license = {};
                     tool.license.license_type = "Open Source";
