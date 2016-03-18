@@ -21,6 +21,8 @@ var M_link = require('./models/mongo/link.js');
 var M_maintainer = require('./models/mongo/maintainer.js');
 var M_version = require("./models/mongo/version.js");
 
+var solrClient = require("./config/solr.js");
+
 var Retriever = function (resourceType) {
     this.RESOURCE_TYPE = resourceType;
     this.OUTFILE_DIRECTORY = "public/" + resourceType + "/";
@@ -82,7 +84,15 @@ Retriever.prototype.update = function () {
                 azid: azid
             });
 
-            // Authors (Mongo)
+            // Create Solr document
+            var solrDoc = {
+                id: azid,
+                name: data.name,
+                description: data.description,
+                publicationDOI: data.publicationDOI,
+            };
+
+            // Authors (Mongo+Solr)
             if (data.authors != null) {
                 for (var authorsIndex in data.authors) {
                     var authorName = data.authors[authorsIndex];
@@ -106,6 +116,8 @@ Retriever.prototype.update = function () {
                     m_author.author_email = authorEmail;
                     mongoTool.authors.push(m_author);
                 }
+
+                solrDoc.authors.push(data.authors);
             }
 
             // Domains (MySQL)
@@ -122,7 +134,7 @@ Retriever.prototype.update = function () {
                 })));
             }
 
-            // TODO: Institutions (Mongo+MySQL)
+            // TODO: Institutions (Mongo+MySQL+Solr)
             if (data.institutions != null) {
                 Promise.all(data.institutions.map((function (institutionName) {
                     var institution = Institution.forge({NAME: institutionName});
@@ -145,9 +157,11 @@ Retriever.prototype.update = function () {
                                 });
                         });
                 })));
+
+                solrDoc.institutions = data.institutions;
             }
 
-            // Language (MySQL)
+            // Language (MySQL+Solr)
             if (data.language != null) {
                 // Convert single strings to an array if necessary
                 var languages = [data.language];
@@ -179,10 +193,12 @@ Retriever.prototype.update = function () {
                                 });
                         }
                     })));
+
+                    solrDoc.language = languages[0]; // TODO: Verify Solr multivalue
                 }
             }
 
-            // Licenses (MySQL)
+            // Licenses (MySQL+Solr)
             if (data.licenses != null) {
                 for (var licenseIndex in data.licenses) {
                     (function (licenseName, licenseLink) {
@@ -212,9 +228,11 @@ Retriever.prototype.update = function () {
                             });
                     })(data.licenses[licenseIndex], data.licenseUrls[licenseIndex]);
                 }
+
+                solrDoc.licenses = data.licenses;
             }
 
-            // Maintainers (Mongo)
+            // Maintainers (Mongo+Solr)
             if (data.maintainers != null) {
                 for (var maintainerIndex in data.maintainers) {
                     (function (maintainerName, maintainerEmail) {
@@ -233,6 +251,8 @@ Retriever.prototype.update = function () {
 
                     })(data.maintainers[maintainerIndex], data.maintainerEmails[maintainerIndex]);
                 }
+
+                solrDoc.maintainers = data.maintainers;
             }
 
             // Platforms (MySQL)
@@ -331,6 +351,8 @@ Retriever.prototype.update = function () {
                                 });
                         });
                 })));
+
+                solrDoc.tags = data.tags;
             }
 
             // Version
@@ -341,14 +363,18 @@ Retriever.prototype.update = function () {
             }
 
             // Upsert Mongo tool
-            //mongoTool.find({_id: azid}, mongoTool, {upsert: true}, function(err) {
-            //    console.log(err);
-            //});
             M_tool.findOneAndUpdate({'azid': azid}, mongoTool, {upsert: true}, function (err, doc) {
                 if (err) {
                     return (console.log(err));
                 }
-            })
+            });
+
+            // Update Solr
+            solrClient.add(solrDoc, function (err, obj) {
+                if (err) {
+                    console.log(err);
+                }
+            });
         };
 
         // Check for prexisting resource
