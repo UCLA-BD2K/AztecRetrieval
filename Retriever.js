@@ -15,7 +15,7 @@ var Resource = require("./models/mysql/resource");
 var Tag = require("./models/mysql/tag");
 var Tool = require("./models/mysql/tool");
 
-var M_tool = require('./models/mongo/toolMisc.js');
+var M_tool = require('./models/mongo/tool.js');
 var M_author = require('./models/mongo/author.js');
 var M_link = require('./models/mongo/link.js');
 var M_maintainer = require('./models/mongo/maintainer.js');
