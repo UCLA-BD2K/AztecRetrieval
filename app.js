@@ -27,6 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/update', routes);
 app.use('/biocatalog', biocatalog);
 app.use('/bioconductor', bioconductor);
 app.use('/biojs', biojs);
