@@ -23,7 +23,7 @@ BioJSPackages.constructor = BioJSPackages;
 /**
  * Retrieves packages from npmjs.com using npm-keyword and stores as a JSON file in OUTFILE_DIRECTORY.
  */
-BioJSPackages.prototype.retrieve = function () {
+BioJSPackages.prototype.retrieve = function (callback) {
     var BASE_URL = "https://www.npmjs.com/package/";
 
     var outfile = this.getNewFile();
@@ -183,6 +183,9 @@ BioJSPackages.prototype.retrieve = function () {
                     // Move file out of temp directory when complete
                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
                     console.log("Complete: " + outfile);
+
+                    // Execute callback
+                    callback(null, outfile);
                 }
             });
         }

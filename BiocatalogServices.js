@@ -18,7 +18,7 @@ BiocatalogServices.constructor = BiocatalogServices;
 /**
  * Retrieves web services from biocatalogue.org and stores as a JSON file in OUTFILE_DIRECTORY.
  */
-BiocatalogServices.prototype.retrieve = function () {
+BiocatalogServices.prototype.retrieve = function (callback) {
     var URL = "http://www.biocatalogue.org/";
     var BIOCATALOG_LOGO = "https://www.biocatalogue.org/assets/logo_small-da549203f66b74dab67f592878053664.png";
     var TOOLS_PER_PAGE = 100;
@@ -302,6 +302,9 @@ BiocatalogServices.prototype.retrieve = function () {
                                                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile,
                                                         base.OUTFILE_DIRECTORY + outfile);
                                                     console.log("Complete: " + outfile);
+
+                                                    // Execute callback
+                                                    callback(null, outfile);
                                                 }
                                             }
                                         }

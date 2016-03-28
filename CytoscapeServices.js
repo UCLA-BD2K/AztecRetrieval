@@ -26,7 +26,7 @@ CytoscapeServices.constructor = CytoscapeServices;
  *      sort 01_cytoscape_temp.json | uniq > 01_cytoscape_widgets.json
  * This script is not stable, it may have different result sets at different runs
  */
-CytoscapeServices.prototype.retrieve = function () {
+CytoscapeServices.prototype.retrieve = function (callback) {
     var BASE_URL = "http://apps.cytoscape.org";
 
     var outfile = this.getNewFile();
@@ -230,6 +230,9 @@ CytoscapeServices.prototype.retrieve = function () {
                                             base.OUTFILE_DIRECTORY + outfile);
                                         console.log("Skipped " + skipped + " services");
                                         console.log("Complete: " + outfile);
+
+                                        // Execute callback
+                                        callback(null, outfile);
                                     }
                                 } else {
                                     console.log(i + "\t\tBad name object\t\t" + name_obj);

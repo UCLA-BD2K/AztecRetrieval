@@ -21,7 +21,7 @@ BioconductorPackages.constructor = BioconductorPackages;
 /**
  * Retrieves packages from bioconductor.org and stores as a JSON file in OUTFILE_DIRECTORY.
  */
-BioconductorPackages.prototype.retrieve = function () {
+BioconductorPackages.prototype.retrieve = function (callback) {
     var VERSION = "3.1";
     var URL = "http://bioconductor.org/packages/" + VERSION + "/bioc/VIEWS";
 
@@ -386,6 +386,9 @@ BioconductorPackages.prototype.retrieve = function () {
                     // Move file out of temp directory when complete
                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
                     console.log("Complete: " + outfile);
+
+                    // Execute callback
+                    callback(null, outfile);
                 } else {
                     return "No packages";
                 }

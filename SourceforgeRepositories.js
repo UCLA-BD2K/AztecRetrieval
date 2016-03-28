@@ -21,7 +21,7 @@ SourceforgeRepositories.constructor = SourceforgeRepositories;
  * Reads json file of sourceforge project names and downloads all information from the Sourceforge REST API.
  * Converts metadata to Aztec format and saves as json file.
  */
-SourceforgeRepositories.prototype.retrieve = function () {
+SourceforgeRepositories.prototype.retrieve = function (callback) {
     var outfile = this.getNewFile();
     var base = this; // Declare for reference within closure scopes
 
@@ -178,6 +178,9 @@ SourceforgeRepositories.prototype.retrieve = function () {
 
                             fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
                             console.log("Complete: " + outfile);
+
+                            // Execute callback
+                            callback(null, outfile);
                         });
                     }
 
