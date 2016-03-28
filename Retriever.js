@@ -30,6 +30,25 @@ var Retriever = function (resourceType) {
 };
 
 /**
+ * Retrieves tools.
+ */
+Retriever.prototype.retrieve = function (callback) {
+    return callback(new Error("Retriever.retrieve() not implemented"));
+};
+
+/**
+ * Retrieves and updates the database.
+ */
+Retriever.prototype.retrieveAndUpdate = function () {
+    var retriever = this;
+    this.retrieve(function (err, data) {
+        if (!err) {
+            retriever.update();
+        }
+    });
+};
+
+/**
  * Returns the latest crawl file.
  * @returns {string|String}
  */
