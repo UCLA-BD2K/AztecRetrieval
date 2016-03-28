@@ -25,7 +25,11 @@ router.get('/retrieve', function(req, res, next) {
 });
 
 router.get('/update', function(req, res, next) {
-    res.send(new CytoscapeServices().update());
+    res.send(new CytoscapeServices().update())
+});
+
+router.get('/retrieveAndUpdate', function(req, res, next) {
+    res.send(new CytoscapeServices().retrieveAndUpdate());
 });
 
 module.exports = router;

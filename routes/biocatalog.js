@@ -20,12 +20,16 @@ router.get(['/','/latest'], function(req, res, next) {
     }
 });
 
+router.get('/retrieve', function(req, res, next) {
+    res.send(new BiocatalogServices().retrieve());
+});
+
 router.get('/update', function(req, res, next) {
     res.send(new BiocatalogServices().update())
 });
 
-router.get('/retrieve', function(req, res, next) {
-    res.send(new BiocatalogServices().retrieve());
+router.get('/retrieveAndUpdate', function(req, res, next) {
+    res.send(new BiocatalogServices().retrieveAndUpdate());
 });
 
 module.exports = router;
