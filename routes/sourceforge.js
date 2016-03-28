@@ -20,15 +20,15 @@ router.get(['/', '/latest'], function (req, res, next) {
     }
 });
 
-router.get('/retrieve', function(req, res, next) {
+router.get('/retrieve', function (req, res, next) {
     res.send(new SourceforgeRepositories().retrieve());
 });
 
-router.get('/update', function(req, res, next) {
+router.get('/update', function (req, res, next) {
     res.send(new SourceforgeRepositories().update())
 });
 
-router.get('/retrieveAndUpdate', function(req, res, next) {
+router.get('/retrieveAndUpdate', function (req, res, next) {
     res.send(new SourceforgeRepositories().retrieveAndUpdate());
 });
 

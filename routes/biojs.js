@@ -5,12 +5,12 @@ var BioJSPackages = require('../BioJSPackages.js');
 
 var router = express.Router();
 
-router.get(['/','/latest'], function(req, res, next) {
+router.get(['/', '/latest'], function (req, res, next) {
     var latest = new BioJSPackages().latest();
     if (latest == null) {
         res.json({});
     } else {
-        fs.readFile(path.resolve(latest), "utf-8", function(err, data) {
+        fs.readFile(path.resolve(latest), "utf-8", function (err, data) {
             if (err) {
                 return console.log(err);
             }
@@ -20,15 +20,15 @@ router.get(['/','/latest'], function(req, res, next) {
     }
 });
 
-router.get('/retrieve', function(req, res, next) {
+router.get('/retrieve', function (req, res, next) {
     res.send(new BioJSPackages().retrieve());
 });
 
-router.get('/update', function(req, res, next) {
+router.get('/update', function (req, res, next) {
     res.send(new BioJSPackages().update())
 });
 
-router.get('/retrieveAndUpdate', function(req, res, next) {
+router.get('/retrieveAndUpdate', function (req, res, next) {
     res.send(new BioJSPackages().retrieveAndUpdate());
 });
 
