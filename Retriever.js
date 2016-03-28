@@ -117,7 +117,7 @@ Retriever.prototype.update = function () {
                     mongoTool.authors.push(m_author);
                 }
 
-                solrDoc.authors.push(data.authors);
+                solrDoc.authors = data.authors;
             }
 
             // Domains (MySQL)
