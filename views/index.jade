@@ -1,5 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Bookshelf Status: #{bookshelfStatus}
+    p Mongo Status: #{mongoStatus}
+    p Solr Status: #{solrStatus}
+    hr
+    p Available actions:
+    ul#actions
+        li
+            a(href="./update") Retrieve and update ALL
+        li
+            a(href="./biocatalog/retrieveAndUpdate") Retrieve and update Biocatalog
+        li
+            a(href="./bioconductor/retrieveAndUpdate") Retrieve and update Bio
+        li
+            a(href="./biojs/retrieveAndUpdate") Retrieve and update BioJS
+        li
+            a(href="./cytoscape/retrieveAndUpdate") Retrieve and update Cytoscape
+        li
+            a(href="./sourceforge/retrieveAndUpdate") Retrieve and update Sourceforge
