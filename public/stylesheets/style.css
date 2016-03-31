@@ -6,3 +6,11 @@ body {
 a {
   color: #00B7FF;
 }
+
+#connReady {
+  color: #26a339;
+}
+
+#connErr {
+  color: #f00;
+}

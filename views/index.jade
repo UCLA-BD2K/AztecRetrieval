@@ -2,9 +2,21 @@ extends layout
 
 block content
     h1= title
-    p Bookshelf Status: #{bookshelfStatus}
-    p Mongo Status: #{mongoStatus}
-    p Solr Status: #{solrStatus}
+    p Bookshelf Status:
+        if bookshelfStatus == "READY"
+            #connReady READY
+        else
+            #connErr NOT READY
+    p Mongo Status:
+        if mongoStatus == "READY"
+            #connReady READY
+        else
+            #connErr NOT READY
+    p Solr Status:
+        if solrStatus == "READY"
+            #connReady READY
+        else
+            #connErr NOT READY
     hr
     p Available actions:
     ul#actions
