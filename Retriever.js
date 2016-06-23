@@ -12,6 +12,7 @@ var Platform = require("./models/mysql/platform");
 var Language = require("./models/mysql/language");
 var License = require("./models/mysql/license");
 var Resource = require("./models/mysql/resource");
+var ResourceMap = require("./models/mysql/resource_map");
 var Tag = require("./models/mysql/tag");
 var Tool = require("./models/mysql/tool");
 
@@ -84,13 +85,13 @@ Retriever.prototype.latest = function () {
 Retriever.prototype.update = function () {
     // Read JSON data
     var json = require(path.resolve(this.latest()));
-    var resourceType = json.type;
-    if (resourceType != this.RESOURCE_TYPE || !json.data) {
-        console.log("Wrong type: " + json.type);
+    var resourceType = typeof json;
+    if (resourceType != "object" || !json) {
+        console.log("Wrong type: " + resourceType);
         return false;
     }
 
-    Promise.all(json.data.map(function (data) {
+    Promise.all(json.map(function (data) {
         // Helper function to update each tool
         // TODO: Relations are likely to be kept if attributes change. Investigate pruning invalid relations on update.
         var updateTool = function (tool, resourceType, data) {
@@ -99,17 +100,36 @@ Retriever.prototype.update = function () {
 
             // Create Mongo object
             var mongoTool = M_tool({
-                _id: azid,
                 azid: azid
             });
 
             // Create Solr document
-            var solrDoc = {
-                id: azid,
-                name: data.name,
-                description: data.description,
-                publicationDOI: data.publicationDOI,
-            };
+            // var solrDoc = {
+            //     id: azid,
+            //     name: data.name,
+            //     description: data.description,
+            //     linkDescriptions: data.linkDescriptions,
+            //     linkUrls: data.linkUrls,
+            //     platforms: data.platforms,
+            //     domains: data.domains,
+            //     types: data.types,
+            //     source: data.source,
+            //     sourceID: data.sourceID,
+            //     sourceCodeURL: data.sourceCodeURL,
+            //     licenses: data.licenses,
+            //     tags: data.tags,
+            //     authors: data.authors,
+            //     languages: data.languages,
+            //     version: data.version,
+            //     publicationDOI: data.publicationDOI,
+            //     authorEmails: data.authorEmails,
+            //     maintainers: data.maintainers,
+            //     maintainerEmails: data.maintainerEmails,
+            //     institutions: data.institutions,
+            //     dependencies: data.dependencies,
+            //     dateUpdated: (new Date())
+            // };
+
 
             // Authors (Mongo+Solr)
             if (data.authors != null) {
@@ -132,11 +152,10 @@ Retriever.prototype.update = function () {
                     var m_author = new M_author;
                     m_author.first_name = first;
                     m_author.last_name = last;
-                    m_author.author_email = authorEmail;
+                    m_author.email = authorEmail;
                     mongoTool.authors.push(m_author);
                 }
 
-                solrDoc.authors = data.authors;
             }
 
             // Domains (MySQL)
@@ -156,7 +175,7 @@ Retriever.prototype.update = function () {
             // TODO: Institutions (Mongo+MySQL+Solr)
             if (data.institutions != null) {
                 Promise.all(data.institutions.map((function (institutionName) {
-                    var institution = Institution.forge({NAME: institutionName});
+                    var institution = Institution.forge({INST_NAME: institutionName});
                     institution.save()
                         .catch(function (err) {
                             // Suppress duplicate errors
@@ -177,7 +196,6 @@ Retriever.prototype.update = function () {
                         });
                 })));
 
-                solrDoc.institutions = data.institutions;
             }
 
             // Language (MySQL+Solr)
@@ -213,7 +231,6 @@ Retriever.prototype.update = function () {
                         }
                     })));
 
-                    solrDoc.language = languages[0]; // TODO: Verify Solr multivalue
                 }
             }
 
@@ -248,7 +265,6 @@ Retriever.prototype.update = function () {
                     })(data.licenses[licenseIndex], data.licenseUrls[licenseIndex]);
                 }
 
-                solrDoc.licenses = data.licenses;
             }
 
             // Maintainers (Mongo+Solr)
@@ -265,13 +281,12 @@ Retriever.prototype.update = function () {
                         var m_maintainer = new M_maintainer;
                         m_maintainer.first_name = first;
                         m_maintainer.last_name = last;
-                        m_maintainer.maintainer_email = maintainerEmail;
+                        m_maintainer.email = maintainerEmail;
                         mongoTool.maintainers.push(m_maintainer);
 
                     })(data.maintainers[maintainerIndex], data.maintainerEmails[maintainerIndex]);
                 }
 
-                solrDoc.maintainers = data.maintainers;
             }
 
             // Platforms (MySQL)
@@ -314,8 +329,8 @@ Retriever.prototype.update = function () {
                 for (var linkIndex in data.linkUrls) {
                     (function (linkURL, linkDescription) {
                         var m_link = new M_link;
-                        m_link.link_name = linkDescription;
-                        m_link.link_url = linkURL;
+                        m_link.name = linkDescription;
+                        m_link.url = linkURL;
                         mongoTool.links.push(m_link);
                     })(data.linkUrls[linkIndex], data.linkDescriptions[linkIndex]);
                 }
@@ -335,13 +350,19 @@ Retriever.prototype.update = function () {
 
                     resource.fetch()
                         .then(function (result) {
-                            tool.resources().attach(result)
-                                .catch(function (err) {
-                                    // Suppress duplicate errors for preexisting relations
-                                    if (err.code != "ER_DUP_ENTRY") {
-                                        console.log(err);
-                                    }
-                                });
+                          if(result!=null){
+                            var resourceMap = {};
+                            resourceMap.AZID = azid;
+                            resourceMap.RESOURCE_TYPE = result.attributes.RESOURCE_TYPE;
+                            ResourceMap.forge(resourceMap)
+                              .save()
+                              .catch(function (err) {
+                                  // Suppress duplicate errors for preexisting relations
+                                  if (err.code != "ER_DUP_ENTRY") {
+                                      console.log(err);
+                                  }
+                              });
+                          }
                         });
                 })));
             }
@@ -371,42 +392,45 @@ Retriever.prototype.update = function () {
                         });
                 })));
 
-                solrDoc.tags = data.tags;
             }
 
             // Version
             if (data.versionNum != null) {
                 var m_version = new M_version;
-                m_version.version_number = data.versionNum;
+                m_version.version = data.versionNum;
                 mongoTool.versions.push(m_version);
             }
 
             // Upsert Mongo tool
-            M_tool.findOneAndUpdate({'azid': azid}, mongoTool, {upsert: true}, function (err, doc) {
+            // console.log('Mongo');
+            // mongoTool.save(function(err){
+            //   console.log(err);
+            // });
+            var toolToUpdate = {};
+            toolToUpdate = Object.assign(toolToUpdate, mongoTool._doc);
+            delete toolToUpdate._id;
+
+            M_tool.findOneAndUpdate({'azid': azid}, toolToUpdate, {upsert: true}, function (err, doc) {
+              // console.log('Updated mongo:', doc);
                 if (err) {
                     return (console.log(err));
                 }
             });
 
-            // Update Solr
-            solrClient.add(solrDoc, function (err, obj) {
-                if (err) {
-                    console.log(err);
-                }
-            });
+
         };
 
         // Check for prexisting resource
-        var resourceID = data.resourceID;
-        if (resourceType != null && resourceID != null) {
-            Tool.where({SOURCE: resourceType, SOURCE_ID: resourceID})
+        var sourceID = data.sourceID;
+        if (resourceType != null && sourceID != null) {
+            Tool.where({SOURCE: resourceType, SOURCE_ID: sourceID})
                 .fetch()
                 .then(function (tool) {
                     if (tool == null) {
-                        console.log("Creating " + resourceType + "." + resourceID);
+                        console.log("Creating " + resourceType + "." + sourceID);
                         new Tool({
                             SOURCE: resourceType,
-                            SOURCE_ID: resourceID,
+                            SOURCE_ID: sourceID,
                             NAME: data.name,
                             LOGO_LINK: data.logo,
                             DESCRIPTION: data.description,
@@ -417,6 +441,18 @@ Retriever.prototype.update = function () {
                         });
                     } else {
                         // Update prexisting resource
+                            new Tool({
+                              AZID: tool.attributes.AZID,
+                              NAME: data.name,
+                              LOGO_LINK: data.logo,
+                              DESCRIPTION: data.description,
+                              SOURCE_LINK: data.sourceCodeURL,
+                              PRIMARY_PUB_DOI: data.publicationDOI,
+                              LAST_UPDATED: (new Date())
+                            }).save().then(function (updatedTool){
+                              if(updatedTool)
+                                console.log('Successfully updated: ', updatedTool.attributes.AZID);
+                            });
                         updateTool(tool, resourceType, data);
                     }
                 });
@@ -441,12 +477,6 @@ Retriever.prototype.getNewFile = function () {
     var date = new Date();
     var outfile = this.RESOURCE_TYPE + "_" + date.toISOString().replace(/:/g, "-") + ".json";
 
-    // Write initial data
-    fs.appendFileSync(this.OUTFILE_TEMP_DIRECTORY + outfile,
-        "{\n" +
-        "\"type\": \"" + this.RESOURCE_TYPE + "\",\n" +
-        "\"date\": \"" + date.toISOString() + "\",\n" +
-        "\"data\": [\n");
 
     return outfile;
 };

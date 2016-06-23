@@ -116,7 +116,7 @@ SourceforgeRepositories.prototype.retrieve = function (callback) {
                     var raw = JSON.parse(body);
 
                     var tool = {};
-                    tool.resourceID = raw.name;
+                    tool.sourceID = raw.name;
                     tool.name = raw.name;
                     if (raw.icon_url != null)
                         tool.res_logo = raw.icon_url;
@@ -126,9 +126,9 @@ SourceforgeRepositories.prototype.retrieve = function (callback) {
                         tool.links = [{"link_name": "Homepage", "link_url": raw.external_homepage}];
 
                     tool.sourceCodeURL = raw.url;
-                    tool.language = [];
+                    tool.languages = [];
                     for (var i = 0; i < raw.categories.language.length; i++)
-                        tool.language.push(raw.categories.language[i].fullname);
+                        tool.languages.push(raw.categories.language[i].fullname);
                     tool.platforms = [];
                     for (var i = 0; i < raw.categories.environment.length; i++)
                         tool.platforms.push(raw.categories.environment[i].fullname);
@@ -166,12 +166,9 @@ SourceforgeRepositories.prototype.retrieve = function (callback) {
 
                     if (restCount == numProjects) {
                         // All projects completed, write to file
-                        var outputData = {};
-                        outputData.type = base.RESOURCE_TYPE;
-                        outputData.date = new Date().toISOString();
-                        outputData.data = aztecEntries;
 
-                        fs.writeFile(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(outputData, null, 1), function (err) {
+
+                        fs.writeFile(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(aztecEntries, null, 1), function (err) {
                             if (err) {
                                 return console.log(err);
                             }
@@ -180,7 +177,7 @@ SourceforgeRepositories.prototype.retrieve = function (callback) {
                             console.log("Complete: " + outfile);
 
                             // Execute callback
-                            callback(null, outfile);
+                            // callback(null, outfile);
                         });
                     }
 

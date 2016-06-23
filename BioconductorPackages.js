@@ -24,9 +24,9 @@ BioconductorPackages.constructor = BioconductorPackages;
 BioconductorPackages.prototype.retrieve = function (callback) {
     var VERSION = "3.1";
     var URL = "http://bioconductor.org/packages/" + VERSION + "/bioc/VIEWS";
-
     var outfile = this.getNewFile();
     var base = this; // Declare for reference within closure scopes
+    var entries = [];
     request(
         {
             url: URL,
@@ -34,7 +34,6 @@ BioconductorPackages.prototype.retrieve = function (callback) {
         },
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
-
                 // Split into individual packages
                 var all_packages = body.split("\n\n");
                 if (all_packages.length > 0) {
@@ -47,8 +46,7 @@ BioconductorPackages.prototype.retrieve = function (callback) {
                         pkg.platforms = [];
                         pkg.domains = [];
                         pkg.types = ["Tool"];
-                        pkg.language = "R";
-                        pkg.logo = "http://bioconductor.org/images/logo_bioconductor.gif";
+                        pkg.languages = ["R"];
                         pkg.source = "BioConductor";
 
                         var authorsTxt = "";
@@ -68,8 +66,8 @@ BioconductorPackages.prototype.retrieve = function (callback) {
                         for (var k = 0; k < package_info.length; k++) {
                             // Resource ID
                             if (package_info[k].match(new RegExp("^Package:*", "i"))) {
-                                attribute_key = "resourceID";
-                                pkg.resourceID = package_info[k].match(new RegExp("^Package:* (.*)", "i"))[1];
+                                attribute_key = "sourceID";
+                                pkg.sourceID = package_info[k].match(new RegExp("^Package:* (.*)", "i"))[1];
                             }
 
                             // Name
@@ -85,7 +83,7 @@ BioconductorPackages.prototype.retrieve = function (callback) {
                             // Version number
                             else if (package_info[k].match(new RegExp("^Version:*", "i"))) {
                                 attribute_key = "versionNum";
-                                pkg.versionNum = package_info[k].match(new RegExp("^Version:* (.*)", "i"))[1];
+                                pkg.version = package_info[k].match(new RegExp("^Version:* (.*)", "i"))[1];
                             }
 
                             // Dependency
@@ -247,8 +245,7 @@ BioconductorPackages.prototype.retrieve = function (callback) {
                         for (var l = 0; l < pkg.licenses.length; l++) {
                             pkg.licenseUrls.push("");
                         }
-                        pkg.tags = tags.split(", ");
-
+                        pkg.tags = tags.split(",").map(function(t){ return t.trim();});
                         // Authors
                         pkg.authors = [];
                         pkg.authorEmails = [];
@@ -259,7 +256,7 @@ BioconductorPackages.prototype.retrieve = function (callback) {
 
                             if (author_with_emails) {
                                 pkg.authors.push(author_with_emails[1]);
-                                pkg.authorEmails.push(author_with_emails[2] + ">");
+                                pkg.authorEmails.push(author_with_emails[2].substring(1));
                             } else if (author_wo_emails) {
                                 pkg.authors.push(author_wo_emails[1] + author_wo_emails[2]);
                                 pkg.authorEmails.push("");
@@ -276,7 +273,7 @@ BioconductorPackages.prototype.retrieve = function (callback) {
 
                             if (maintainer_with_emails) {
                                 pkg.maintainers.push(maintainer_with_emails[1]);
-                                pkg.maintainerEmails.push(maintainer_with_emails[2] + ">");
+                                pkg.maintainerEmails.push(maintainer_with_emails[2].substring(1));
                             }
                             else if (maintainer_wo_emails) {
                                 pkg.maintainers.push(maintainer_wo_emails[1] + maintainer_wo_emails[2]);
@@ -369,26 +366,21 @@ BioconductorPackages.prototype.retrieve = function (callback) {
                             pkg.tags.splice(biomedical_index, 1);
                         }
 
-                        // Append to file
+                        // Append to list
                         if (pkg.name != null) {
-                            // Write separator if necessary
-                            if (i > 0) {
-                                fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, ",\n");
-                            }
-
-                            fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(pkg));
+                            entries.push(pkg);
                         }
                     }
 
                     // Write closing brackets and braces
-                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, "\n]\n}\n");
+                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(entries));
 
                     // Move file out of temp directory when complete
                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
                     console.log("Complete: " + outfile);
 
                     // Execute callback
-                    callback(null, outfile);
+                    // callback(null, outfile);
                 } else {
                     return "No packages";
                 }

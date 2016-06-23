@@ -6,7 +6,7 @@
 var solr = require('solr-client');
 
 // Create a client
-var client = solr.createClient("192.168.99.100", "32768", "BD2K", "/solr");
+var client = solr.createClient("192.168.99.100", "8983", "BD2K", "/solr");
 
 // Switch on "auto commit", by default `client.autoCommit = false`
 client.autoCommit = true;

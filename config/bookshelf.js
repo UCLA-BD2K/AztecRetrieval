@@ -9,10 +9,10 @@ var knex = require('knex')({
     client:'mysql',
     connection: {
         host    : '192.168.99.100',
-        port    : '32768',
+        port    : '3306',
         user    : 'developer',
         password: 'ucla2015',
-        database: 'AZ_Curation',
+        database: 'AZ_Crawl',
         charset : 'utf8'
     }
 });

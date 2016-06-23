@@ -34,6 +34,7 @@ CytoscapeServices.prototype.retrieve = function (callback) {
     var skipped = 0;
 
     var base = this; // Declare for reference within closure scopes
+    var entries = [];
     request(
         {
             url: BASE_URL + "/apps/wall",
@@ -60,7 +61,7 @@ CytoscapeServices.prototype.retrieve = function (callback) {
                                 if (name_obj.length != 0) {
                                     // Getting name and logo information
                                     var name = name_obj.html().trim();
-                                    app.resourceID = name; // Use app name as resource ID
+                                    app.sourceID = name; // Use app name as resource ID
                                     app.name = name;	// App name
                                     app.description = name_obj.next().html(); // App description
                                     app.logo = BASE_URL + cheerio.load(name_obj.parent().prev().html())('img')
@@ -112,9 +113,9 @@ CytoscapeServices.prototype.retrieve = function (callback) {
                                     while (version_obj.text() != "") {
                                         var version_text = version_obj.text().trim();
                                         if (version_text.match(new RegExp("^Version", "i"))) {
-                                            app.versionNum = version_text.substr(8);
+                                            app.version = [version_text.substr(8)];
                                         } else if (version_text.match(new RegExp("^Released", "i"))) {
-                                            app.versionDate = dateFormat(version_text.substr(9), "yyyy-mm-dd");
+                                            app.versionDate = [dateFormat(version_text.substr(9), "yyyy-mm-dd")];
                                         } else if (version_text.match(new RegExp("^Works with", "i"))) {
                                             app.dependencies.push(version_text.substr(11));
                                         } else if (version_text.match(new RegExp("^License", "i"))) {
@@ -210,20 +211,15 @@ CytoscapeServices.prototype.retrieve = function (callback) {
                                     }
 
                                     // Write separator if necessary
-                                    if (complete > 0) {
-                                        fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, ",\n");
-                                    }
+                                    entries.push(app);
 
-                                    // Write JSON to outfile
-                                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile,
-                                        JSON.stringify(app));
 
                                     complete++;
 
                                     // Data complete, write to file
                                     if (complete == (containers.length - skipped)) {
                                         // Write closing brackets and braces
-                                        fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, "\n]\n}\n");
+                                        fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(entries));
 
                                         // Move file out of temp directory when complete
                                         fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile,
@@ -232,7 +228,7 @@ CytoscapeServices.prototype.retrieve = function (callback) {
                                         console.log("Complete: " + outfile);
 
                                         // Execute callback
-                                        callback(null, outfile);
+                                        // callback(null, outfile);
                                     }
                                 } else {
                                     console.log(i + "\t\tBad name object\t\t" + name_obj);

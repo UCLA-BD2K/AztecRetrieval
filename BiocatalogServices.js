@@ -39,6 +39,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
     // Retrieve the first page
     var outfile = this.getNewFile();
     var base = this; // Declare for reference within closure scopes
+    var entries = [];
     request(
         {
             url: URL + "/services.json?per_page=" + TOOLS_PER_PAGE,
@@ -96,7 +97,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
                                                     service.source = "BioCatalogue";
 
                                                     // Language
-                                                    service.language = "HTML";
+                                                    service.languages = ["HTML"];
 
                                                     // Platform
                                                     service.platforms = body3["service"]["service_technology_types"];
@@ -118,7 +119,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
                                                         var publication_doi = publication[0].match(doi_re);
 
                                                         if (publication_doi) {
-                                                            service.publicationDOI = publication_doi[1];
+                                                            service.publicationDOI = publication_doi;
                                                         }
                                                     }
 
@@ -277,13 +278,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
                                                     }
 
                                                     // Write JSON to outfile
-                                                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile,
-                                                        JSON.stringify(service));
-
-                                                    // Write separator if tools or pages remain
-                                                    if (j < results.length - 1 || i < pages) {
-                                                        fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, ",\n");
-                                                    }
+                                                    entries.push(service);
                                                 }
                                             }
 
@@ -296,7 +291,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
                                                     retrieve_pages(i + 1);
                                                 } else {
                                                     // Write closing brackets and braces
-                                                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, "\n]\n}\n");
+                                                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(entries));
 
                                                     // Move file out of temp directory when complete
                                                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile,
@@ -304,7 +299,7 @@ BiocatalogServices.prototype.retrieve = function (callback) {
                                                     console.log("Complete: " + outfile);
 
                                                     // Execute callback
-                                                    callback(null, outfile);
+                                                    // callback(null, outfile);
                                                 }
                                             }
                                         }

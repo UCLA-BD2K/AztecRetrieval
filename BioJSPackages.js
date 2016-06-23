@@ -38,9 +38,9 @@ BioJSPackages.prototype.retrieve = function (callback) {
             // Retrieve json format
             packageJson(pkg_name, "latest").then(function (jsonPackage) {
                 var pkg = {};
-                pkg.resourceID = jsonPackage.name; // Use name as ID
+                pkg.sourceID = jsonPackage.name; // Use name as ID
                 pkg.name = jsonPackage.name;
-                pkg.versionNum = jsonPackage.version;
+                pkg.version = [jsonPackage.version];
                 pkg.description = jsonPackage.description;
 
                 if ("author" in jsonPackage) {
@@ -53,7 +53,7 @@ BioJSPackages.prototype.retrieve = function (callback) {
                 pkg.linkUrls = [BASE_URL + jsonPackage.name, jsonPackage.homepage, jsonPackage.bugs.url];
                 pkg.types = ["Widget"];
                 pkg.platforms = ["Web UI"];
-                pkg.language = "JavaScript";
+                pkg.languages = ["JavaScript"];
                 pkg.logo = "http://biojs.net/img/logo.png";
 
                 pkg.licenses = [];
@@ -168,24 +168,16 @@ BioJSPackages.prototype.retrieve = function (callback) {
 
                 // Write to file when last package has been retrieved
                 if (data.length == biojsPackages.length) {
-                    for (var dataIndex = 0; dataIndex < data.length; dataIndex++) {
-                        // Write separator if necessary
-                        if (dataIndex > 0) {
-                            fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, ",\n");
-                        }
-
-                        fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(data[dataIndex]));
-                    }
 
                     // Write closing brackets and braces
-                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, "\n]\n}\n");
+                    fs.appendFileSync(base.OUTFILE_TEMP_DIRECTORY + outfile, JSON.stringify(data));
 
                     // Move file out of temp directory when complete
                     fs.renameSync(base.OUTFILE_TEMP_DIRECTORY + outfile, base.OUTFILE_DIRECTORY + outfile);
                     console.log("Complete: " + outfile);
 
                     // Execute callback
-                    callback(null, outfile);
+                    // callback(null, outfile);
                 }
             });
         }

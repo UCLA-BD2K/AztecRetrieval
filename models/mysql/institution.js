@@ -5,9 +5,9 @@ var Tool = require('./tool.js');
 
 var Institution = Bookshelf.Model.extend({
     tableName: 'INSTITUTION',
-    idAttribute: 'INST_ID',
+    idAttribute: 'INST_NAME',
     tools: function () {
-        return this.belongsToMany(Tool, 'TOOL_INSTITUTION', 'INST_ID', 'AZID');
+        return this.belongsToMany(Tool, 'TOOL_INSTITUTION', 'INST_NAME', 'AZID');
     }
 });
 
