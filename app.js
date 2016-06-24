@@ -11,6 +11,7 @@ var bioconductor = require('./routes/bioconductor');
 var biojs = require('./routes/biojs');
 var cytoscape = require('./routes/cytoscape');
 var sourceforge = require('./routes/sourceforge');
+var oldAztec = require('./routes/oldAztec');
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use('/bioconductor', bioconductor);
 app.use('/biojs', biojs);
 app.use('/cytoscape', cytoscape);
 app.use('/sourceforge', sourceforge);
+app.use('/aztec', oldAztec);
 
 var mongoose = require('mongoose');
 var configMongo = require('./config/mongo.js');

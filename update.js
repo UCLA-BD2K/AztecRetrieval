@@ -14,7 +14,6 @@ var SourceforgeRepositories = require('./SourceforgeRepositories.js');
 (function () {
     var updater = {};
     exports.update = updater.update = function () {
-        new BiocatalogServices().retrieveAndUpdate();
         new BioconductorPackages().retrieveAndUpdate();
         new BioJSPackages().retrieveAndUpdate();
         new CytoscapeServices().retrieveAndUpdate();

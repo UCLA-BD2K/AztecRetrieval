@@ -116,6 +116,7 @@ SourceforgeRepositories.prototype.retrieve = function (callback) {
                     var raw = JSON.parse(body);
 
                     var tool = {};
+                    tool.source = "sourceforge";
                     tool.sourceID = raw.name;
                     tool.name = raw.name;
                     if (raw.icon_url != null)

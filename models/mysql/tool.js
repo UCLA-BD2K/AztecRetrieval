@@ -6,6 +6,7 @@ var Tag = require('./tag.js');
 var Resource = require('./resource_map.js');
 var Language = require('./language.js');
 var Institution = require('./institution.js');
+var User = require('./user.js');
 
 var Tool = Bookshelf.Model.extend({
     tableName: 'TOOL_INFO',
@@ -28,7 +29,10 @@ var Tool = Bookshelf.Model.extend({
     },
     tags: function () {
         return this.belongsToMany('Tag', 'TOOL_TAG', 'AZID', 'TAG_ID');
-    }
+    },
+    users: function () {
+        return this.hasMany(User, 'AZID');
+    },
 });
 
 module.exports = Bookshelf.model('ToolInfo', Tool);

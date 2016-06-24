@@ -26,7 +26,7 @@ ToolController.prototype._show = function(self, req, res) {
             AZID: id
         })
         .fetchAll({
-            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions']
+            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions', 'users']
         })
         .then(function(thisTool) {
             M_tool.findOne({
