@@ -153,6 +153,15 @@ ToolUtils.prototype._mysql2rest = function(self, json) {
     }
   }
 
+  if (json['users'] != undefined) {
+    if(json['users'].length>0){
+      resource['owners'] = [];
+      json['users'].forEach(function(plat) {
+        resource['owners'].push(plat['USER']);
+      });
+    }
+  }
+
   if (json['version'] != undefined) {
     if(json['version'].length>0){
       resource['versions'] = [];
@@ -695,7 +704,7 @@ ToolUtils.prototype._mysql2solr = function(self, json) {
   solrDoc['publicationDOI'] = [];
   if (json['publications'] != undefined) {
     json['publications'].forEach(function(pub) {
-        solrDoc['publicationDOI'].push(pub);
+        solrDoc['publicationDOI'].push(pub.pub_doi);
     });
   }
   solrDoc['linkUrls'] = [];
@@ -732,9 +741,38 @@ ToolUtils.prototype._mysql2solr = function(self, json) {
         solrDoc['versionDate'].push(ver['date']);
     });
   }
-  solrDoc['licenses'] = json['licenses'];
 
-  solrDoc['funding'] = json['funding'];
+  if (json['users'] != undefined) {
+    if(json['users'].length>0){
+      solrDoc['owners'] = [];
+      json['users'].forEach(function(user) {
+        solrDoc['owners'].push(user['USER']);
+      });
+    }
+  }
+
+  solrDoc['licenses'] = json['licenses'];
+  if (json['licenses'] != undefined) {
+    if(json['licenses'].length>0){
+      solrDoc['licenses'] = [];
+      json['licenses'].forEach(function(license) {
+        var lic = license.NAME || license.LICENSE_TYPE;
+        solrDoc['licenses'].push(lic);
+      });
+    }
+  }
+
+  if (json['funding'] != undefined) {
+    if(json['funding'].length>0){
+      solrDoc['funding'] = [];
+      json['funding'].forEach(function(fund) {
+        var funding = "";
+        funding+=fund.agency||fund.new_agency;
+        funding+=" "+fund.grant||"";
+        solrDoc['funding'].push(funding);
+      });
+    }
+  }
 
 
   return solrDoc;

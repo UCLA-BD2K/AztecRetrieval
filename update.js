@@ -4,8 +4,8 @@
  */
 
 var BiocatalogServices = require('./BiocatalogServices.js');
-var BioconductorPackages = require('./BioconductorPackages.js');
-var BioJSPackages = require('./BioJSPackages.js');
+var BioconductorPackages = require('./models/BioconductorPackages.js');
+var BioJSPackages = require('./models/BioJSPackages.js');
 var CytoscapeServices = require('./CytoscapeServices.js');
 var SourceforgeRepositories = require('./SourceforgeRepositories.js');
 

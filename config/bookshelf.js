@@ -12,7 +12,7 @@ var knex = require('knex')({
         port    : '3306',
         user    : 'developer',
         password: 'ucla2015',
-        database: 'AZ_Crawl',
+        database: 'AZ_Curation',
         charset : 'utf8'
     }
 });

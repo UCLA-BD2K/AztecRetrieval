@@ -14,7 +14,11 @@ var Retriever = require("./Retriever");
  * @constructor
  */
 var CytoscapeServices = function () {
+  var self = this;
+
     Retriever.call(this, "cytoscape");
+
+    this.retrieve = function(callback){ return this._retrieve(self, callback); };
 };
 
 CytoscapeServices.prototype = Object.create(Retriever.prototype);
@@ -26,7 +30,7 @@ CytoscapeServices.constructor = CytoscapeServices;
  *      sort 01_cytoscape_temp.json | uniq > 01_cytoscape_widgets.json
  * This script is not stable, it may have different result sets at different runs
  */
-CytoscapeServices.prototype.retrieve = function (callback) {
+CytoscapeServices.prototype._retrieve = function (self, callback) {
     var BASE_URL = "http://apps.cytoscape.org";
 
     var outfile = this.getNewFile();
@@ -64,8 +68,7 @@ CytoscapeServices.prototype.retrieve = function (callback) {
                                     app.sourceID = name; // Use app name as resource ID
                                     app.name = name;	// App name
                                     app.description = name_obj.next().html(); // App description
-                                    app.logo = BASE_URL + cheerio.load(name_obj.parent().prev().html())('img')
-                                            .attr('src'); // App logo
+
                                     app.source = "Cytoscape";
                                     app.types = ["Widget"];
 

@@ -17,6 +17,6 @@ var toolSchema = mongoose.Schema({
     funding: [Funding.schema],
     missing_inst: [MissingInst.schema]
 
-}, {collection: 'crawled'});
+}, {collection: 'tools'});
 
 module.exports = mongoose.model('Tool', toolSchema);

@@ -1,3 +1,4 @@
+var fs = require("fs");
 var ToolInfo = require('../models/mysql/tool.js');
 var M_tool = require('../models/mongo/tool.js');
 var util = require('../utilities/toolUtils.js');
@@ -5,18 +6,17 @@ var solrClient = require("../config/solr.js");
 
 function ToolController() {
     var self = this;
+    this.OUTFILE_DIRECTORY = "public/solr/";
     this.show = function(req, res) {
         return self._show(self, req, res);
     };
     this.showAll = function(req, res) {
         return self._showAll(self, req, res);
     };
-    this.insertAll2Solr = function(req, res) {
-        return self._insertAll2Solr(self, req, res);
+    this.toSolrFile = function(req, res) {
+      return self._toSolrFile(self, req, res);
     };
-    this.insertTool2Solr = function(req, res) {
-        return self._insertTool2Solr(self, req, res);
-    };
+
 }
 
 ToolController.prototype._show = function(self, req, res) {
@@ -26,7 +26,7 @@ ToolController.prototype._show = function(self, req, res) {
             AZID: id
         })
         .fetchAll({
-            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions']
+            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions', 'users', 'licenses']
         })
         .then(function(thisTool) {
             M_tool.findOne({
@@ -42,10 +42,9 @@ ToolController.prototype._show = function(self, req, res) {
 
                 var returnTool = thisTool.toJSON()[0];
 
-                //console.log('tool',thisTool.toJSON());
+                console.log('tool',thisTool.toJSON());
 
                 if (misc != undefined && misc != null) {
-                    console.log('misc', misc);
 
                     returnTool.authors = misc.authors;
                     returnTool.maintainers = misc.maintainers;
@@ -59,7 +58,7 @@ ToolController.prototype._show = function(self, req, res) {
                         returnTool.institutions.push(inst);
                     });
                 }
-                var result = util.mysql2rest(returnTool);
+                var result = util.mysql2solr(returnTool);
                 return res.send(result);
             });
         })
@@ -133,166 +132,6 @@ ToolController.prototype._showAll = function(self, req, res) {
         });
 };
 
-ToolController.prototype._insertAll2Solr = function(self, req, res) {
-    var response;
-    M_tool.count({}, function(err, count) {
-        if (err) {
-            response = {
-                status: 'error',
-                error: JSON.stringify(err)
-            };
-            console.log(err);
-            return res.send(response);
-        }
-        for (var id = 1; id <= count; id++) {
-            ToolInfo.forge()
-                .where({
-                    AZID: id
-                })
-                .fetchAll({
-                    withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions']
-                })
-                .then(function(thisTool) {
-                    M_tool.findOne({
-                        azid: id
-                    }, function(err, misc) {
-                        if (err || thisTool.length == 0) {
-                            console.log(id, err);
-                        } else {
-
-                            var returnTool = thisTool.toJSON()[0];
-
-                            //console.log('tool',thisTool.toJSON());
-
-                            if (misc != undefined && misc != null) {
-
-                                returnTool.authors = misc.authors;
-                                returnTool.maintainers = misc.maintainers;
-                                returnTool.links = misc.links;
-                                returnTool.funding = misc.funding;
-                                returnTool.version = misc.versions;
-                                returnTool.publications = misc.publications;
-                                if (returnTool.institutions == undefined || returnTool.institutions == null)
-                                    returnTool.institutions = [];
-                                misc.missing_inst.forEach(function(inst) {
-                                    returnTool.institutions.push(inst);
-                                });
-                            }
-                            var result = util.mysql2solr(returnTool);
-                            solrClient.add(result, function(err, obj) {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    console.log("Inserting", result.id);
-                                }
-                            });
-                        }
-                    });
-                })
-                .catch(function(err) {
-                    console.log(err);
-                    response = {
-                        status: 'error',
-                        error: JSON.stringify(err)
-                    }
-                    return res.send(response);
-                });
-        }
-        console.log("Updating Solr");
-        response = {
-            status: 'success',
-            message: "Updating Solr"
-        }
-        return res.send(response);
-    });
-
-};
-
-ToolController.prototype._insertTool2Solr = function(self, req, res) {
-    var id = req.params.id;
-    var response;
-
-    ToolInfo.forge()
-        .where({
-            AZID: id
-        })
-        .fetchAll({
-            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions']
-        })
-        .then(function(thisTool) {
-            M_tool.findOne({
-                azid: id
-            }, function(err, misc) {
-                if (err || thisTool.length == 0) {
-                    console.log(id, err);
-                    response = {
-                        status: 'error',
-                        message: "Tool not found"
-                    };
-                    return res.json(response);
-                } else {
-
-                    var returnTool = thisTool.toJSON()[0];
-
-                    //console.log('tool',thisTool.toJSON());
-
-                    if (misc != undefined && misc != null) {
-
-                        returnTool.authors = misc.authors;
-                        returnTool.maintainers = misc.maintainers;
-                        returnTool.links = misc.links;
-                        returnTool.funding = misc.funding;
-                        returnTool.version = misc.versions;
-                        returnTool.publications = misc.publications;
-                        if (returnTool.institutions == undefined || returnTool.institutions == null)
-                            returnTool.institutions = [];
-                        misc.missing_inst.forEach(function(inst) {
-                            returnTool.institutions.push(inst);
-                        });
-                    }
-                    var result = util.mysql2solr(returnTool);
-                    solrClient.add(result, function(err, obj) {
-                        if (err) {
-                            console.log(err);
-                            response = {
-                                status: 'error',
-                                message: "Error updating Solr"
-                            };
-                            return res.json(response);
-                        } else {
-                            console.log("Inserting", result.id);
-                            solrClient.commit(function(err, result) {
-                                if (err) {
-                                    response = {
-                                        status: 'error',
-                                        message: "Error committing to Solr"
-                                    };
-                                    return res.json(response);
-                                }
-                                if (result) {
-                                    response = {
-                                        status: 'success',
-                                        message: "Successfully inserted tool"
-                                    };
-                                    return res.json(response);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        })
-        .catch(function(err) {
-            console.log(err);
-            response = {
-                status: 'error',
-                error: JSON.stringify(err)
-            }
-            return res.send(response);
-        });
-    console.log("Updating Solr", id);
-
-};
 
 ToolController.prototype._commit = function(self, req, res) {
   solrClient.commit(function(err, result) {
@@ -313,6 +152,96 @@ ToolController.prototype._commit = function(self, req, res) {
       }
   });
 };
+
+ToolController.prototype._toSolrFile = function(self, req, res) {
+  // Create directories if necessary
+  if (!fs.existsSync(self.OUTFILE_DIRECTORY)) {
+      fs.mkdirSync(self.OUTFILE_DIRECTORY);
+  }
+
+  // Generate new timestamped output file
+  var date = new Date();
+  var entries = [];
+
+  ToolInfo.count().then(function(total){
+    if(!total){
+      var response = {
+          status: 'error',
+          error: 'Count error'
+      }
+      return res.send(response);
+    }
+    var callback = function(message){
+      entries.push(message);
+    };
+
+    var promises = [];
+    for(var i = 1; i <= total; i++){
+        promises.push(getTool(i, util.mysql2solr));
+    }
+    Promise.all(promises).then(function(data){
+      fs.appendFileSync(self.OUTFILE_DIRECTORY + "solr_"+date.toISOString().replace(/:/g, "-") + ".json", JSON.stringify(data, null, 1));
+      //console.log(data);
+      return res.send({total: total});
+    }).catch(function(err){
+      return res.send(err);
+    });
+
+  });
+};
+
+function getTool(id, format){
+  return new Promise(function(resolve, reject){
+    ToolInfo.forge()
+        .where({
+            AZID: id
+        })
+        .fetchAll({
+            withRelated: ['domains', 'platforms', 'tags', 'resources', 'languages', 'institutions', 'users', 'licenses']
+        })
+        .then(function(thisTool) {
+            M_tool.findOne({
+                azid: id
+            }, function(err, misc) {
+                if (err || thisTool.length == 0) {
+                    var response = {
+                        status: 'error',
+                        error: id + ' not found'
+                    }
+                    return reject(Error(response));
+                }
+
+                var returnTool = thisTool.toJSON()[0];
+
+                if (misc != undefined && misc != null) {
+
+                    returnTool.authors = misc.authors;
+                    returnTool.maintainers = misc.maintainers;
+                    returnTool.links = misc.links;
+                    returnTool.funding = misc.funding;
+                    returnTool.version = misc.versions;
+                    returnTool.publications = misc.publications;
+                    if (returnTool.institutions == undefined || returnTool.institutions == null)
+                        returnTool.institutions = [];
+                    misc.missing_inst.forEach(function(inst) {
+                        returnTool.institutions.push(inst);
+                    });
+                }
+                var result = format(returnTool);
+                return resolve(result);
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+            var response = {
+                status: 'error',
+                error: JSON.stringify(err)
+            }
+            return reject(Error(response));
+        });
+
+      });
+}
 
 
 module.exports = new ToolController();

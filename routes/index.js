@@ -1,33 +1,35 @@
+/**
+ * index.js [Router]
+ * author: Vincent Kyi <vincekyi@gmail.com>
+ *
+ * Main router file: This file contains all the routes (URLs) for this web applicatoin
+ */
+
+// Dependencies
 var express = require('express');
+var updater = require('../update');
+var HomeController = require('../controllers/home-controller');
+var ToolController = require('../controllers/tool-controller');
+var CrawlController = require('../controllers/crawl-controller');
+
+
+// Router object
 var router = express.Router();
-var updater = require('../update.js');
-var mongoose = require('mongoose');
-var toolController = require('../controllers/tool-controller.js');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    // Verify database connections
-    var bookshelfStatus = "UNKNOWN"; // TODO: Get Bookshelf status
-    var mongoStatus = mongoose.connection.readyState ? "READY" : "CONNECTION FAILED";
-    var solrStatus = "UNKNOWN"; // TODO: Get Solr status
-
-    res.render('index', {
-        title: 'Aztec Retrieval',
-        bookshelfStatus: bookshelfStatus,
-        mongoStatus: mongoStatus,
-        solrStatus: solrStatus});
-});
+router.get('/', HomeController.home);
 
 router.get('/update', function (req, res, next) {
     updater.update();
     res.send("Updating all resources.");
 });
 
-router.get('/tool/:id', toolController.show);
 
-router.get('/tool', toolController.showAll);
+// RESTful API: Tool
+router.get('/tool/:id', ToolController.show);
+router.get('/tool', ToolController.showAll);
+router.get('/solrFile', ToolController.toSolrFile);
+router.get('/biojs', CrawlController.retrieve);
 
-router.get('/update/solr', toolController.insertAll2Solr);
-router.get('/update/solr/:id', toolController.insertTool2Solr);
 
 module.exports = router;

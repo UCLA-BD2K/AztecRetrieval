@@ -1,11 +1,16 @@
 /**
- * Retriever superclass.
- * Created by Alan Kha on 3/2/2016.
+ * Retriever.js [Retriever superclass]
+ * author: Alan Kha on 3/2/2016.
+ * updated by: Vincent Kyi <vincekyi@gmail.com>
+ *
+ * Retrieve super class used to extract metadata from sources and insert into MySQL database.
  */
 
+// Dependencies
 var fs = require("fs");
 var path = require("path");
 
+// MySQL models
 var Domain = require("./models/mysql/domain");
 var Institution = require("./models/mysql/institution");
 var Platform = require("./models/mysql/platform");
@@ -14,88 +19,134 @@ var License = require("./models/mysql/license");
 var Resource = require("./models/mysql/resource");
 var ResourceMap = require("./models/mysql/resource_map");
 var Tag = require("./models/mysql/tag");
+var User = require("./models/mysql/user");
 var Tool = require("./models/mysql/tool");
 
-var M_tool = require('./models/mongo/tool.js');
-var M_author = require('./models/mongo/author.js');
-var M_link = require('./models/mongo/link.js');
-var M_maintainer = require('./models/mongo/maintainer.js');
-var M_version = require("./models/mongo/version.js");
+// Mongo models
+var M_tool = require('./models/mongo/tool');
+var M_author = require('./models/mongo/author');
+var M_link = require('./models/mongo/link');
+var M_maintainer = require('./models/mongo/maintainer');
+var M_version = require('./models/mongo/version');
 
-var solrClient = require("./config/solr.js");
+var solrClient = require('./config/solr');
 
-var Retriever = function (resourceType) {
+/**
+ * Retriever [Model for retrieving and updating MySQL database. Acts as superclass]
+ * @constructor
+ * @param {String} resourceType [The name of the registry in which information is being extracted.]
+ */
+function Retriever(resourceType) {
+    var self = this;
+
+    // member variables
     this.RESOURCE_TYPE = resourceType;
     this.OUTFILE_DIRECTORY = "public/" + resourceType + "/";
     this.OUTFILE_TEMP_DIRECTORY = this.OUTFILE_DIRECTORY + "temp/";
+
+
+    // member functions
+    this.retrieveAndUpdate = function(callback){ return self._retrieveAndUpdate(self, callback); };
+    this.latest = function(){ return self._latest(self); };
+    this.update = function(callback){ return self._update(self, callback); };
+    this.getNewFile = function(){ return self._getNewFile(self); };
 };
 
 /**
- * Retrieves tools.
+ * Retriever.retrieve
+ * [The "virtual" function that must be implemented by the subclass. This function should extract metadata from the source.]
+ * @param  {Object} self [Reference to Retriever object]
+ * @param  {Function} callback [ A callback function that takes in 2 paramters:
+ *                             		1 An error object
+ *                               	2 The result message (string or object) ]
+ * @return {Function}            [The callback function]
  */
-Retriever.prototype.retrieve = function (callback) {
-    return callback(new Error("Retriever.retrieve() not implemented"));
+Retriever.prototype.retrieve = function(callback) {
+    // by default, return error
+    return callback(new Error("Retriever.retrieve() not implemented"), null);
 };
 
 /**
- * Retrieves and updates the database.
+ * Retriever._retrieveAndUpdate
+ * [This function retrieves the metadata from the source and updates the metadata to the MySQL database]
+ * @param  {Object} self [Reference to Retriever object]
+ * @param  {Function} callback [ A callback function that takes in 2 paramters:
+ *                             		1 An error object
+ *                               	2 The result message (string or object) ]
+ * @return {Function}            [The callback function]
  */
-Retriever.prototype.retrieveAndUpdate = function () {
-    var retriever = this;
-    this.retrieve(function (err, data) {
+Retriever.prototype.retrieveAndUpdate = function(self, callback) {
+    self.retrieve(function(err, data) {
         if (!err) {
-            retriever.update();
+            return self.update(callback);
+        }
+        else{
+          return callback(new Error("Retrieval error"), null);
         }
     });
 };
 
 /**
- * Returns the latest crawl file.
- * @returns {string|String}
+ * Retriever._latest
+ *
+ * [This function retrieves the metadata file that is the most up-to-date based on the file's creation time.]
+ * @param  {Object} self [Reference to Retriever object]
+ * @return {String} [Path to the new file generated]
  */
-Retriever.prototype.latest = function () {
-    var latest = null;
-    var files = fs.readdirSync(this.OUTFILE_DIRECTORY);
+Retriever.prototype.latest = function(self) {
+    var latest_file = null;
+    var files = fs.readdirSync(self.OUTFILE_DIRECTORY);
 
     for (var i = 0; i < files.length; i++) {
         // Check relevant files only
-        if (files[i].slice(0, this.RESOURCE_TYPE.length) != this.RESOURCE_TYPE) {
+        if (files[i].slice(0, self.RESOURCE_TYPE.length) != self.RESOURCE_TYPE) {
             continue;
         }
 
         // Update latest file
-        var current = this.OUTFILE_DIRECTORY + files[i];
-        if (latest == null) {
-            latest = current;
+        var current = self.OUTFILE_DIRECTORY + files[i];
+        if (latest_file == null) {
+            latest_file = current;
         } else {
             var curr_time = fs.statSync(current).mtime.getTime();
             var latest_time = fs.statSync(latest).mtime.getTime();
+            // get the latest file based on creation time
             if (curr_time > latest_time) {
-                latest = current;
+                latest_file = current;
             }
         }
     }
 
-    return latest;
+    return latest_file;
 };
 
 /**
- * Updates the Aztec databases.
+ * [This function updates the MySQL database using the latest file retrieved from the registry.]
+ * @param  {Object} self [Reference to Retriever object]
+ * @param  {Function} callback [Callback function that runs after the update. Takes in 2 paramters:
+ *                             		1 An error object
+ *                               	2 The result message (string or object) ]
+ * @return {Function}            [The callback function]
  */
-Retriever.prototype.update = function () {
+Retriever.prototype._update = function(self, callback) {
     // Read JSON data
     var json = require(path.resolve(this.latest()));
+    if(!json){
+      return callback(new Error("Cannot find metadata JSON file for "+self.RESOURCE_TYPE), null);
+    }
+    // type checking for the file
     var resourceType = typeof json;
-    if (resourceType != "object" || !json) {
-        console.log("Wrong type: " + resourceType);
-        return false;
+    if (resourceType != "object") {
+        return callback(new Error("Invalid type for metadata JSON file for "+self.RESOURCE_TYPE), null);
     }
 
-    Promise.all(json.map(function (data) {
+    // iterate through each resource in metadata JSON file
+    Promise.all(json.map(function(data) {
+
         // Helper function to update each tool
         // TODO: Relations are likely to be kept if attributes change. Investigate pruning invalid relations on update.
-        var updateTool = function (tool, resourceType, data) {
-            console.log("Updating " + resourceType + "." + data.name);
+        var updateTool = function(tool, data) {
+            console.log("Updating " + self.RESOURCE_TYPE + "." + data.name);
             var azid = tool.get("AZID");
 
             // Create Mongo object
@@ -103,52 +154,31 @@ Retriever.prototype.update = function () {
                 azid: azid
             });
 
-            // Create Solr document
-            // var solrDoc = {
-            //     id: azid,
-            //     name: data.name,
-            //     description: data.description,
-            //     linkDescriptions: data.linkDescriptions,
-            //     linkUrls: data.linkUrls,
-            //     platforms: data.platforms,
-            //     domains: data.domains,
-            //     types: data.types,
-            //     source: data.source,
-            //     sourceID: data.sourceID,
-            //     sourceCodeURL: data.sourceCodeURL,
-            //     licenses: data.licenses,
-            //     tags: data.tags,
-            //     authors: data.authors,
-            //     languages: data.languages,
-            //     version: data.version,
-            //     publicationDOI: data.publicationDOI,
-            //     authorEmails: data.authorEmails,
-            //     maintainers: data.maintainers,
-            //     maintainerEmails: data.maintainerEmails,
-            //     institutions: data.institutions,
-            //     dependencies: data.dependencies,
-            //     dateUpdated: (new Date())
-            // };
 
 
-            // Authors (Mongo+Solr)
+            // Authors (Mongo)
             if (data.authors != null) {
                 for (var authorsIndex in data.authors) {
-                    var authorName = data.authors[authorsIndex];
-
+                    // extract email
                     var authorEmail = null;
                     if (data.authorEmails != null) {
                         authorEmail = data.authorEmails[authorsIndex];
-
                         if (authorEmail == '') {
                             authorEmail = null;
                         }
                     }
 
-                    var names = authorName.split(/[ ,]+/);
-                    var first = names[0];
-                    var last = names[1];
+                    // extract author name
+                    var authorName = data.authors[authorsIndex];
+                    var first = null,
+                        last = null;
+                    if (authorName != null) {
+                        var names = authorName.split(/[ ,]+/);
+                        first = names[0];
+                        last = names[1];
+                    }
 
+                    // create Mongo model for author
                     var m_author = new M_author;
                     m_author.first_name = first;
                     m_author.last_name = last;
@@ -160,34 +190,41 @@ Retriever.prototype.update = function () {
 
             // Domains (MySQL)
             if (data.domains != null) {
-                Promise.all(data.domains.map((function (domainName) {
-                    Domain.where({AZID: azid, DOMAIN: domainName}).fetch()
-                        .then(function (domain) {
+                Promise.all(data.domains.map((function(domainName) {
+                    Domain.where({
+                            AZID: azid,
+                            DOMAIN: domainName
+                        }).fetch()
+                        .then(function(domain) {
                             if (domain == null) {
-                                domain = new Domain({AZID: azid, DOMAIN: domainName}).save();
+                                domain = new Domain({
+                                    AZID: azid,
+                                    DOMAIN: domainName
+                                }).save();
                             }
-
-                            return domain;
                         })
                 })));
             }
 
-            // TODO: Institutions (Mongo+MySQL+Solr)
+            // Institutions (MySQL)
             if (data.institutions != null) {
-                Promise.all(data.institutions.map((function (institutionName) {
-                    var institution = Institution.forge({INST_NAME: institutionName});
+                Promise.all(data.institutions.map((function(institutionName) {
+                    var institution = Institution.forge({
+                        INST_NAME: institutionName
+                    });
+                    // add new institutions to MySQL database
                     institution.save()
-                        .catch(function (err) {
+                        .catch(function(err) {
                             // Suppress duplicate errors
                             if (err.code != "ER_DUP_ENTRY") {
                                 console.log(err);
                             }
                         });
-
+                    // attach insitutions to tool model
                     institution.fetch()
-                        .then(function (result) {
+                        .then(function(result) {
                             tool.institutions().attach(result)
-                                .catch(function (err) {
+                                .catch(function(err) {
                                     // Suppress duplicate errors for preexisting relations
                                     if (err.code != "ER_DUP_ENTRY") {
                                         console.log(err);
@@ -198,30 +235,32 @@ Retriever.prototype.update = function () {
 
             }
 
-            // Language (MySQL+Solr)
+            // Language (MySQL)
             if (data.language != null) {
                 // Convert single strings to an array if necessary
                 var languages = [data.language];
                 if (Object.prototype.toString.call(data.language) === "[object Array]") {
                     languages = data.language;
                 }
-
+                // add new lanaguages to MySQL database
                 if (languages.length > 0) {
-                    Promise.all(languages.map((function (languageName) {
+                    Promise.all(languages.map((function(languageName) {
                         if (languageName != null && languageName != "") {
-                            var language = Language.forge({NAME: languageName});
+                            var language = Language.forge({
+                                NAME: languageName
+                            });
                             language.save()
-                                .catch(function (err) {
+                                .catch(function(err) {
                                     // Suppress duplicate errors
                                     if (err.code != "ER_DUP_ENTRY") {
                                         console.log(err);
                                     }
                                 });
-
+                            // attach languages to tool model
                             language.fetch()
-                                .then(function (result) {
+                                .then(function(result) {
                                     tool.languages().attach(result)
-                                        .catch(function (err) {
+                                        .catch(function(err) {
                                             // Suppress duplicate errors for preexisting relations
                                             if (err.code != "ER_DUP_ENTRY") {
                                                 console.log(err);
@@ -234,43 +273,37 @@ Retriever.prototype.update = function () {
                 }
             }
 
-            // Licenses (MySQL+Solr)
+            // Licenses (MySQL)
             if (data.licenses != null) {
                 for (var licenseIndex in data.licenses) {
-                    (function (licenseName, licenseLink) {
-                        if (licenseLink == "") {
-                            licenseLink = null;
-                        }
-
+                    (function(licenseName) {
                         // Use link as name if necessary
                         if (licenseName == null || licenseName == "") {
-                            if (licenseLink != null) {
-                                licenseName = licenseLink;
-                            } else {
-                                console.log("Invalid license for " + data.name);
-                                return null;
-                            }
+                            console.log("Invalid license for " + data.name);
+                            return null;
                         }
 
-                        License.where({AZID: azid, NAME: licenseName}).fetch()
-                            .then(function (license) {
+                        License.where({
+                                AZID: azid,
+                                NAME: licenseName
+                            }).fetch()
+                            .then(function(license) {
                                 if (license == null) {
                                     new License({
                                         AZID: azid,
                                         NAME: licenseName,
-                                        LINK: licenseLink
                                     }).save();
                                 }
                             });
-                    })(data.licenses[licenseIndex], data.licenseUrls[licenseIndex]);
+                    })(data.licenses[licenseIndex]);
                 }
 
             }
 
-            // Maintainers (Mongo+Solr)
+            // Maintainers (Mongo)
             if (data.maintainers != null) {
                 for (var maintainerIndex in data.maintainers) {
-                    (function (maintainerName, maintainerEmail) {
+                    (function(maintainerName, maintainerEmail) {
                         if (maintainerEmail == '') {
                             maintainerEmail = null;
                         }
@@ -291,7 +324,7 @@ Retriever.prototype.update = function () {
 
             // Platforms (MySQL)
             if (data.platforms != null) {
-                Promise.all(data.platforms.map((function (platformName) {
+                Promise.all(data.platforms.map((function(platformName) {
                     if (platformName == 'OS Portable (Source code to work with many OS platforms)') {
                         platformName = 'OS Portable';
                     } else if (platformName == 'OS Independent (Written in an interpreted language)') {
@@ -302,9 +335,11 @@ Retriever.prototype.update = function () {
                         platformName = 'Linux';
                     }
 
-                    var platform = Platform.forge({NAME: platformName});
+                    var platform = Platform.forge({
+                        NAME: platformName
+                    });
                     platform.save()
-                        .catch(function (err) {
+                        .catch(function(err) {
                             // Suppress duplicate errors
                             if (err.code != "ER_DUP_ENTRY") {
                                 console.log(err);
@@ -312,9 +347,9 @@ Retriever.prototype.update = function () {
                         });
 
                     platform.fetch()
-                        .then(function (result) {
+                        .then(function(result) {
                             tool.platforms().attach(result)
-                                .catch(function (err) {
+                                .catch(function(err) {
                                     // Suppress duplicate errors for preexisting relations
                                     if (err.code != "ER_DUP_ENTRY") {
                                         console.log(err);
@@ -327,7 +362,7 @@ Retriever.prototype.update = function () {
             // Related links (Mongo)
             if (data.linkUrls != null) {
                 for (var linkIndex in data.linkUrls) {
-                    (function (linkURL, linkDescription) {
+                    (function(linkURL, linkDescription) {
                         var m_link = new M_link;
                         m_link.name = linkDescription;
                         m_link.url = linkURL;
@@ -338,10 +373,12 @@ Retriever.prototype.update = function () {
 
             // Types (MySQL)
             if (data.types != null) {
-                Promise.all(data.types.map((function (resourceType) {
-                    var resource = Resource.forge({RESOURCE_TYPE: resourceType});
+                Promise.all(data.types.map((function(resourceType) {
+                    var resource = Resource.forge({
+                        RESOURCE_TYPE: resourceType
+                    });
                     resource.save()
-                        .catch(function (err) {
+                        .catch(function(err) {
                             // Suppress duplicate errors
                             if (err.code != "ER_DUP_ENTRY") {
                                 console.log(err);
@@ -349,20 +386,37 @@ Retriever.prototype.update = function () {
                         });
 
                     resource.fetch()
-                        .then(function (result) {
-                          if(result!=null){
-                            var resourceMap = {};
-                            resourceMap.AZID = azid;
-                            resourceMap.RESOURCE_TYPE = result.attributes.RESOURCE_TYPE;
-                            ResourceMap.forge(resourceMap)
-                              .save()
-                              .catch(function (err) {
-                                  // Suppress duplicate errors for preexisting relations
-                                  if (err.code != "ER_DUP_ENTRY") {
-                                      console.log(err);
-                                  }
-                              });
-                          }
+                        .then(function(result) {
+                            if (result != null) {
+                                var resourceMap = {};
+                                resourceMap.AZID = azid;
+                                resourceMap.RESOURCE_TYPE = result.attributes.RESOURCE_TYPE;
+                                ResourceMap.forge(resourceMap)
+                                    .save()
+                                    .catch(function(err) {
+                                        // Suppress duplicate errors for preexisting relations
+                                        if (err.code != "ER_DUP_ENTRY") {
+                                            console.log(err);
+                                        }
+                                    });
+                            }
+                        });
+                })));
+            }
+
+            // Users (MySQL)
+            if (data.owners != null) {
+                Promise.all(data.owners.map((function(owner) {
+                    var tool_user = User.forge({
+                        AZID: azid,
+                        USER: owner
+                    });
+                    tool_user.save()
+                        .catch(function(err) {
+                            // Suppress duplicate errors
+                            if (err.code != "ER_DUP_ENTRY") {
+                                console.log(err);
+                            }
                         });
                 })));
             }
@@ -370,20 +424,23 @@ Retriever.prototype.update = function () {
             // Tags (MySQL)
             if (data.tags != null) {
                 // TODO: Filter for repeat tags
-                Promise.all(data.tags.map((function (tagName) {
-                    var tag = Tag.forge({NAME: tagName});
+                Promise.all(data.tags.map((function(tagName) {
+                    var tag = Tag.forge({
+                        NAME: tagName
+                    });
+                    // add new tags to MySQL database
                     tag.save()
-                        .catch(function (err) {
+                        .catch(function(err) {
                             // Suppress duplicate errors
                             if (err.code != "ER_DUP_ENTRY") {
                                 console.log(err);
                             }
                         });
-
+                    // attach tags to tool model
                     tag.fetch()
-                        .then(function (result) {
+                        .then(function(result) {
                             tool.tags().attach(result)
-                                .catch(function (err) {
+                                .catch(function(err) {
                                     // Suppress duplicate errors for preexisting relations
                                     if (err.code != "ER_DUP_ENTRY") {
                                         console.log(err);
@@ -394,88 +451,112 @@ Retriever.prototype.update = function () {
 
             }
 
-            // Version
+            // Version (Mongo)
             if (data.versionNum != null) {
                 var m_version = new M_version;
                 m_version.version = data.versionNum;
+                m_version.date = data.versionDate;
                 mongoTool.versions.push(m_version);
             }
 
-            // Upsert Mongo tool
-            // console.log('Mongo');
-            // mongoTool.save(function(err){
-            //   console.log(err);
-            // });
+            // insert/update tool in Mongo
             var toolToUpdate = {};
             toolToUpdate = Object.assign(toolToUpdate, mongoTool._doc);
-            delete toolToUpdate._id;
+            toolToUpdate._id = null;
 
-            M_tool.findOneAndUpdate({'azid': azid}, toolToUpdate, {upsert: true}, function (err, doc) {
-              // console.log('Updated mongo:', doc);
+            M_tool.findOneAndUpdate({
+                'azid': azid
+            }, toolToUpdate, {
+                upsert: true
+            }, function(err, doc) {
                 if (err) {
-                    return (console.log(err));
+                  console.log(err);
                 }
             });
-
-
-        };
+        }; // end helper function
 
         // Check for prexisting resource
-        var sourceID = data.sourceID;
-        if (resourceType != null && sourceID != null) {
-            Tool.where({SOURCE: resourceType, SOURCE_ID: sourceID})
+        var source = data.source;
+        var sourceID = data.sourceID; //resourceID for cytoscape
+
+        if (source != null && sourceID != null) {
+            Tool.where({
+                    SOURCE: source,
+                    SOURCE_ID: sourceID
+                })
                 .fetch()
-                .then(function (tool) {
+                .then(function(tool) {
                     if (tool == null) {
-                        console.log("Creating " + resourceType + "." + sourceID);
+                        console.log("Creating " + self.RESOURCE_TYPE + "." + sourceID);
                         new Tool({
-                            SOURCE: resourceType,
+                            SOURCE: source,
                             SOURCE_ID: sourceID,
                             NAME: data.name,
                             LOGO_LINK: data.logo,
                             DESCRIPTION: data.description,
                             SOURCE_LINK: data.sourceCodeURL,
-                            PRIMARY_PUB_DOI: data.publicationDOI
-                        }).save().then(function (newTool) {
-                            updateTool(newTool, resourceType, data);
+                            PRIMARY_PUB_DOI: data.publicationDOI,
+                            TOOL_DOI: data.toolDOI || null
+                        }).save().then(function(newTool) {
+                            updateTool(newTool, data);
                         });
                     } else {
                         // Update prexisting resource
-                            new Tool({
-                              AZID: tool.attributes.AZID,
-                              NAME: data.name,
-                              LOGO_LINK: data.logo,
-                              DESCRIPTION: data.description,
-                              SOURCE_LINK: data.sourceCodeURL,
-                              PRIMARY_PUB_DOI: data.publicationDOI,
-                              LAST_UPDATED: (new Date())
-                            }).save().then(function (updatedTool){
-                              if(updatedTool)
+                        new Tool({
+                            AZID: tool.attributes.AZID,
+                            NAME: data.name,
+                            LOGO_LINK: data.logo,
+                            DESCRIPTION: data.description,
+                            SOURCE_LINK: data.sourceCodeURL,
+                            PRIMARY_PUB_DOI: data.publicationDOI,
+                            TOOL_DOI: data.toolDOI || null,
+                            LAST_UPDATED: (new Date())
+                        }).save().then(function(updatedTool) {
+                            if (updatedTool)
                                 console.log('Successfully updated: ', updatedTool.attributes.AZID);
-                            });
-                        updateTool(tool, resourceType, data);
+                        });
+                        updateTool(tool, data);
                     }
                 });
+        } else if (source == 'USER INPUT') {
+            new Tool({
+                SOURCE: source,
+                SOURCE_ID: sourceID,
+                NAME: data.name,
+                LOGO_LINK: data.logo,
+                DESCRIPTION: data.description,
+                SOURCE_LINK: data.sourceCodeURL,
+                PRIMARY_PUB_DOI: data.publicationDOI,
+                TOOL_DOI: data.toolDOI || null
+            }).save().then(function(newTool) {
+                updateTool(newTool, resourceType, data);
+            });
         }
-    }));
+    })).then(function(){
+      return callback(null, "Update complete.");
+    }) // end of Promise
+
 };
 
 /**
- * Returns a new timestamped file name.
+ * Retriever.getNewFile
+ * [This function returns a new timestamped file name.]
+ * @param  {Object} self [Reference to Retriever object]
+ * @return {String}      [The name of the new file]
  */
-Retriever.prototype.getNewFile = function () {
+Retriever.prototype._getNewFile = function(self) {
     // Create directories if necessary
-    if (!fs.existsSync(this.OUTFILE_DIRECTORY)) {
-        fs.mkdirSync(this.OUTFILE_DIRECTORY);
+    if (!fs.existsSync(self.OUTFILE_DIRECTORY)) {
+        fs.mkdirSync(self.OUTFILE_DIRECTORY);
     }
 
-    if (!fs.existsSync(this.OUTFILE_TEMP_DIRECTORY)) {
-        fs.mkdirSync(this.OUTFILE_TEMP_DIRECTORY);
+    if (!fs.existsSync(self.OUTFILE_TEMP_DIRECTORY)) {
+        fs.mkdirSync(self.OUTFILE_TEMP_DIRECTORY);
     }
 
     // Generate new timestamped outfile name
     var date = new Date();
-    var outfile = this.RESOURCE_TYPE + "_" + date.toISOString().replace(/:/g, "-") + ".json";
+    var outfile = self.RESOURCE_TYPE + "_" + date.toISOString().replace(/:/g, "-") + ".json";
 
 
     return outfile;
