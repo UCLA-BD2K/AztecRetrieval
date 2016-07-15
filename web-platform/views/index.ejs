@@ -1,0 +1,60 @@
+<head>
+  <title><%=title%></title>
+  <link href="/public/stylesheets/style.css" rel="stylesheet">
+</head>
+<body>
+  <h1><%=title%></h1>
+  <p> MySQL Database:
+    <% if(bookshelfStatus=="READY"){ %>
+      <div class='connReady'>&emsp;READY</div>
+    <% } else{ %>
+      <div class='connErr'>&emsp;NOT READY</div>
+    <% } %>
+  </p>
+  <p> Mongo Database:
+    <% if(mongoStatus=="READY"){ %>
+      <div class='connReady'>&emsp;READY</div>
+    <% } else{ %>
+      <div class='connErr'>&emsp;NOT READY</div>
+    <% } %>
+  </p>
+  <p> Solr Status:
+    <% if(solrStatus=="READY"){ %>
+      <div class='connReady'>&emsp;READY</div>
+    <% } else{ %>
+      <div class='connErr'>&emsp;NOT READY</div>
+    <% } %>
+  </p>
+
+  <hr>
+  <h2>Available Actions:</h2>
+  <table class="action">
+    <tr>
+      <th>Source</th>
+      <th>Retrieve</th>
+      <th>Update</th>
+    </tr>
+    <tr>
+      <td>Bioconductor</td>
+      <td><a href='/bioconductor/retrieve'>/bioconductor/retrieve</a></td>
+      <td><a href='/bioconductor/update'>/bioconductor/update</a></td>
+    </tr>
+    <tr>
+      <td>Biojs</td>
+      <td><a href='/biojs/retrieve'>/biojs/retrieve</a></td>
+      <td><a href='/biojs/update'>/biojs/update</a></td>
+    </tr>
+    <tr>
+      <td>Cytoscape</td>
+      <td><a href='/cytoscape/retrieve'>/cytoscape/retrieve</a></td>
+      <td><a href='/cytoscape/update'>/cytoscape/update</a></td>
+    </tr>
+    <tr>
+      <td>Source Forge</td>
+      <td><a href='/sourceforge/retrieve'>/sourceforge/retrieve</a></td>
+      <td><a href='/sourceforge/update'>/sourceforge/update</a></td>
+    </tr>
+  </table>
+
+
+</body>
