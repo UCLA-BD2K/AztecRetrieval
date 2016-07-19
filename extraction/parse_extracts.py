@@ -111,6 +111,21 @@ def getTitle(record):
     title = getAttribute(record["TEI"]["teiHeader"]["fileDesc"]["titleStmt"]["title"], "#text")
     return title
 
+def getTechnologies(text):
+    techWords = ["SOAP","REST","Mongo","Cassandra","Redis","SQL","Perl","PHP","Java","JAVA"] # Common databases and API services
+    found = []
+    # file = open('languages.txt','rU')
+    # for line in file:
+    #     line = line.rstrip()
+    #     print line
+    #     if line in text:
+    #         found.append(line)
+
+    for word in techWords:
+        if word in text:
+            found.append(word)
+    return set(found)
+
 def getAbstract(record):
     abstract = getAttribute(record["TEI"]["teiHeader"]["profileDesc"], "abstract")
     return (abstract["p"] if abstract!=None else "")
@@ -242,8 +257,8 @@ def writeRecords(records, filename):
     outfile = open(filename, 'w')
     outfile.write(json.dumps(records, indent = 2))
     outfile.close()
-    outfile = open(filename,'r')
-    print outfile.read()
+    # outfile = open(filename,'r')
+    # print outfile.read()
 
 def getAllFiles(path):
     mypath = path
@@ -289,10 +304,11 @@ def main():
         grants = getAllGrants(ack)
         conclusions = getConclusion(dictionary)
         summary = summarize(conclusions)
+        technologies = getTechnologies(text)
 
         # Push to dict.
         publication_extractions[file[:-4]] = {}
-        publication_extractions[file[:-4]]["toolName"] = file[:-4]
+        publication_extractions[file[:-4]]["toolName"] = title
         publication_extractions[file[:-4]]["abstract"] = abstract
         publication_extractions[file[:-4]]["pubTitle"] = title
         publication_extractions[file[:-4]]["authors"] = authors
@@ -304,6 +320,7 @@ def main():
         publication_extractions[file[:-4]]["grants"] = grants
         publication_extractions[file[:-4]]["conclusions"] = conclusions
         publication_extractions[file[:-4]]["summary"] = summary
+        publication_extractions[file[:-4]]["technologies used"] = technologies
 
 
         # ANALYSIS:
