@@ -129,7 +129,7 @@
 <field name="versionDate" type="standard" indexed="false" stored="true" required="false" multiValued="false"/>
 <field name="prevVersion" type="standard" indexed="false" stored="true" required="false" multiValued="false"/>
 <field name="nextVersion" type="standard" indexed="false" stored="true" required="false" multiValued="false"/>
-<field name="licenses" type="string" indexed="false" stored="true" required="false" multiValued="true"/>
+<field name="licenses" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="licenseUrls" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="source" type="standard" indexed="true" stored="true" required="false" multiValued="false"/>
 <field name="types" type="standard" indexed="true" stored="true" required="false" multiValued="true"/>
@@ -147,18 +147,22 @@
 <field name="upstreams" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="downstreams" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="dependencies" type="standard" indexed="true" stored="true" required="false" multiValued="true"/>
-<field name="tags" type="string" indexed="true" stored="true" required="false" multiValued="true"/>
+<field name="tags" type="standard" indexed="true" stored="true" required="false" multiValued="true"/>
 <field name="maintainers" type="string" indexed="true" stored="true" required="false" multiValued="true"/>
 <field name="maintainerEmails" type="standard" indexed="true" stored="true" required="false" multiValued="true"/>
 <field name="owners" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="dateCreated" type="date" indexed="true" stored="true" required="false" multiValued="true"/>
 <field name="dateUpdated" type="date" indexed="true" stored="true" required="false" multiValued="true"/>
 <field name ="citations" type="int" indexed="true" stored="true" required="false" multiValued="false"/>
-<field name="citationsUpdatedMilliseconds" type="long" indexed="false" stored="true" required="false" multiValued ="false"/>
+<field name="lastUpdatedMilliseconds" type="long" indexed="false" stored="true" required="false" multiValued ="false"/>
 <field name="acknowledgements" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="summary" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
-<field name="versions" type="string" indexed="false" stored="true" required="false" multiValued="true"/>
+<field name="latest_version" type="string" indexed="false" stored="true" required="false" multiValued="true"/>
+<field name="prev_version" type="standard" indexed="false" stored="true" required="false" multiValued="true"/>
 <field name="signatureField" type="string" stored="true" indexed="true" multiValued="false"/>
+<field name="subscribers" type="int" stored="true" indexed="false" multiValued="false"/>
+<field name="forks" type="int" stored="true" indexed="false" multiValued="false"/>
+<field name="repo" type="string" stored="true" indexed="true" multiValued="false"/>
 <copyField source="name" dest="suggestName"/>
 <copyField source="name" dest="suggestNamePrefix"/>
 <field name="suggestName" type="text_suggest" indexed="true" stored="true" required="false" multiValued="false"/>
