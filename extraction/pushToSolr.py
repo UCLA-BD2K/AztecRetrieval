@@ -1,77 +1,94 @@
 import argparse
 import json
 import subprocess
+from json import JSONDecoder
+from functools import partial
 
 port = 8983
 
 
-def add_github_data(output, obj):
+class Suppressor:
+
+    def __init__(self, exception_type, obj, output):
+        self._exception_type = exception_type
+        self.obj = obj
+        self.output = output
+
+    def __call__(self, expression):
+        try:
+            exec expression
+        except self._exception_type as e:
+            print 'Suppressor: suppressed exception %s with content \'%s\'' % (type(self._exception_type), e)
+
+
+def json_parse(fileobj, decoder=JSONDecoder(), buffersize=2048):
+    buf = ''
+    for chunk in iter(partial(fileobj.read, buffersize), ''):
+        buf += chunk
+        while buf:
+            try:
+                result, index = decoder.raw_decode(buf)
+                yield result
+                buf = buf[index:]
+            except ValueError:
+                # Not enough data to decode, read more
+                break
+
+
+def add_github_data(s, output, obj):
+    s.__call__(
+        'self.output["language"] = self.obj["github_data"]["languages"]')
+    s.__call__(
+        'self.output["dateUpdated"] = self.obj["github_data"]["updated_at"]')
+    s.__call__('self.output["owners"] = self.obj["github_data"]["owner"]')
+    s.__call__(
+        'self.output["licenses"] = self.obj["github_data"]["license"]')
+    s.__call__(
+        'self.output["dateCreated"] = self.obj["github_data"]["created_at"]')
+    s.__call__(
+        'self.output["maintainers"] = str(self.obj["github_data"]["contributors"])')
     try:
-        obj = obj['github data']
-    except Exception as e:
-        print e.message
-    try:
-        output['language'] = obj['languages']
-    except Exception as e:
-        print e
-    try:
-        output['dateUpdated'] = obj['updated_at']
-    except Exception as e:
-        print e
-    try:
-        output['owners'] = obj['owner']
-    except Exception as e:
-        print e
-    try:
-        output['licenses'] = str(obj['license'])
-    except Exception as e:
-        print e
-    try:
-        output['dateCreated'] = obj['created_at']
-    except Exception as e:
-        print e
-    try:
-        output['maintainers'] = str(obj['contributors'])
-    except Exception as e:
-        print e
-    try:
-        output['versions'] = str(obj['versions'])
+        latest = True
+        prev = []
+        for version in obj["github_data"]["versions"]:
+            if latest:
+                output["latest_version"] = version["zipball_url"]
+                latest = False
+                continue
+            prev.append(version["zipball_url"])
+        output['prev_version'] = prev
     except Exception as e:
         print e
 
+    s.__call__(
+        'self.output["subscribers"] = self.obj["github_data"]["subscribers"]')
+    s.__call__('self.output["forks"] = self.obj["github_data"]["forks"]')
 
-def add_sourceforge_data(output, obj):
-    try:
-        obj = obj['sourceforge data']
-    except Exception as e:
-        print e
-    try:
-        output['language'] = obj['languages']
-    except Exception as e:
-        print e
-    try:
-        output['licenses'] = str(obj['license'])
-    except Exception as e:
-        print e
-    try:
-        output['maintainers'] = str(obj['developers'])
-    except Exception as e:
-        print e
-    try:
-        output['versions'] = str(obj['Development Status'])
-    except Exception as e:
-        print e
+
+def add_sourceforge_data(s):
+    s.__call__(
+        'self.output["language"] = self.obj["sourceforge_data"]["languages"]')
+    s.__call__(
+        'self.output["licenses"] = self.obj["sourceforge_data"]["license"]')
+    s.__call__(
+        'self.output["maintainers"] = str(self.obj["sourceforge_data"]["developers"])')
+    s.__call__(
+        'self.output["latest_version"] = str(self.obj["sourceforge_data"]["Development Status"])')
 
 
 def push_to_solr(output):
-    subprocess.call(["curl",
-                     "-X",
-                     "-POST",
-                     "-H",
-                     "Content-Type: application/json",
-                     "http://localhost:"+str(port)+"/solr/BD2K/update/json/docs?commit=true",
-                     "--data-binary",
-                     output])
+    subprocess.call(
+        [
+            "curl",
+            "-X",
+            "-POST",
+            "-H",
+            "Content-Type: application/json",
+            "http://localhost:" +
+            str(port) +
+            "/solr/BD2K/update/json/docs?commit=true",
+            "--data-binary",
+            output])
 
 
 def main():
@@ -83,33 +100,43 @@ def main():
         required=True)
     args = parser.parse_args()
     with open(args.data, 'rU') as f:
-        parsed_json = json.load(f)
-        for obj in parsed_json:
-            obj = parsed_json[obj]
+        for obj in json_parse(f):
             output = dict()
-            output['name'] = obj['toolName']
-            output['publicationDOI'] = obj['doi']
-            output['sourceCodeURL'] = obj['sourceLinks']
-            output['linkUrls'] = obj['links']
-            output['authors'] = obj['authors']
-            output['funding'] = obj['grants']
-            if 'github data' in obj:
-                add_github_data(output, obj)
-            elif 'sourceforge data' in obj:
-                add_sourceforge_data(output, obj)
+            s = Suppressor(Exception, obj, output)
+
+            s.__call__('self.output["name"] = self.obj["toolName"]')
+            s.__call__('self.output["publicationDOI"] = self.obj["doi"]')
+            s.__call__(
+                'self.output["sourceCodeURL"] = self.obj["sourcelinks"]')
+            s.__call__('self.output["linkUrls"] = self.obj["links"]')
+            s.__call__('self.output["authors"] = self.obj["authors"]')
+            s.__call__('self.output["funding"] = self.obj["grants"]')
+            s.__call__('self.output["lastUpdatedMilliseconds"] = self.obj["updated"]')
+
+            if 'github_data' in obj:
+                add_github_data(s, output, obj)
+                s.__call__('self.output["repo"] = "github"')
+            elif 'sourceforge_data' in obj:
+                s.__call__('self.output["repo"] = "sourceforge"')
+                add_sourceforge_data(s)
             else:
-                output['name'] = obj['pubTitle']
+                s.__call__('self.output["name"] = self.obj["title"]')
 
             if 'language' not in output:
-                output['language'] = obj['technologies used']
+                s.__call__(
+                    'self.output["language"] = self.obj["technologies"]')
 
-            output['tags'] = obj['keywords']
-            output['description'] = obj['abstract']
-            output['summary'] = obj['summary']
-            output['acknowledgements'] = obj['ack']
-            output['institutions'] = obj['affiliations']
+            s.__call__('self.output["tags"] = self.obj["keyWords"]')
+            s.__call__('self.output["description"] = self.obj["abstract"]')
+            s.__call__('self.output["summary"] = self.obj["summary"]')
+            s.__call__(
+                'self.output["acknowledgements"] = self.obj["acks"]')
+            s.__call__(
+                'self.output["institutions"] = self.obj["affiliations"]')
             if 'dateCreated' in obj:
-                output['dateCreated'] = obj['dateCreated']
+                s.__call__(
+                    'self.output["dateCreated"] = self.obj["dateCreated"]')
+
             output = json.dumps(output)
             push_to_solr(output)
 

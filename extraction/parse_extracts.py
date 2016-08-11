@@ -10,7 +10,12 @@ import requests
 from summa import summarizer
 from summa import keywords
 import urllib
-
+import time
+from threading import Thread
+import Queue
+import urllib2
+import xml.etree.ElementTree as ET
+from inspect import currentframe
 # README.md:
 # This final script then interacts with the XML and text extracts of the Journal pdf to extract:
 # authors, author affiliations, title,
@@ -23,6 +28,142 @@ import urllib
 # Dummy Github account to get more API calls
 user = "TestAccount2K"
 password = "testpassword1"
+publications = []
+num_threads = 4
+dois = None
+xmlpath = None
+textPath = None
+
+
+def get_linenumber():
+    cf = currentframe()
+    return str(cf.f_back.f_lineno)
+
+
+class MasterClass(Thread):
+    def __init__(self, queue):
+        Thread.__init__(self)
+        self.queue = queue
+
+    def run(self):
+        while True:
+            # Get the work from the queue
+            inputFile = self.queue.get()
+            dictionary = read_xml_from_file(inputFile)
+            text = read_text_from_file(inputFile)
+            if not dictionary or not text:
+                self.queue.task_done()
+            else:
+                pub = Publication()
+                pub.name = str(inputFile).replace('.xml', '')
+                start_tasks(dictionary, text, pub)
+                update_info(pub, text)
+                push_to_dict(pub)
+                publications.append(pub)
+                self.queue.task_done()
+
+
+class Publication(object):
+    def __init__(self):
+        self.title = None
+        self.authors = None
+        self.affiliations = None
+        self.grants = None
+        self.abstract = None
+        self.links = None
+        self.sourcelinks = None
+        self.keyWords = None
+        self.summary = None
+        self.technologies = None
+        self.name = None
+        self.doi = None
+        self.dateCreated = None
+        self.toolName = None
+        self.github_data = None
+        self.sourceforge_data = None
+        self.acks = None
+        self.citations = None
+        self.updated = None
+        self.data = dict()
+
+
+def push_to_dict(pub):
+    try:
+        for attr, value in pub.__dict__.iteritems():
+            if value is not None and str(attr) is not "data":
+                pub.data[attr] = value
+    except Exception as e:
+        print e
+        print "Line number " + get_linenumber()
+        print "Writing data failed with " + pub.name
+
+
+def start_tasks(dictionary, text, publication):
+    get_title(dictionary, publication)
+    get_authors(dictionary, publication)
+    get_affiliations(dictionary, publication)
+    get_abstract(dictionary, publication)
+    get_all_links(text, publication)
+    get_acks(dictionary, publication)
+    get_all_grants(text, publication)
+    summarize(text, publication)
+    get_keywords(text, publication)
+    get_technologies(text, publication)
+    find_source_links(publication.links, text, publication)
+
+
+def get_citations(doi):
+    if "10." not in str(doi):
+        "Invalid Doi number"
+        return 0
+    email = 'avirudhtheraja@gmail.com'
+    url = 'http://www.crossref.org/openurl/?pid=' + \
+        str(email) + '&id=doi:' + str(doi) + '&noredirect=true'
+    response = urllib2.urlopen(str(url)).read()
+    if "Malformed" in response:
+        "Could not find citation data/ invalid doi number"
+        return 0
+    try:
+        root = ET.fromstring(str(response))
+        return root[0][1][0].attrib['fl_count']  # the number of citations
+    except Exception as e:
+        print e
+        print "Line number " + get_linenumber()
+        return 0
+
+
+def update_info(pub, text):
+    try:
+        if dois is not None:
+            doi = dois[pub.name] if pub.name in dois else "Not found"
+            pub.doi = doi
+            if doi is not "Not found":
+                date = get_date(doi)
+                if date is not None:
+                    pub.dateCreated = date
+                pub.citations = get_citations(pub.doi)
+                pub.updated = long(round(time.time() * 1000))
+    except Exception as e:
+        print "Line number " + get_linenumber()
+        print e
+
+    try:
+        repo = find_code_source(pub.sourcelinks, text)
+        if repo is not None:
+            name = repo['name']
+            pub.toolName = name
+            if repo['github']:
+                pub.github_data = get_git_info(name)
+                if pub.github_data and 'url' in pub.github_data and pub.github_data['url'] not in pub.sourcelinks:
+                    pub.sourcelinks.append(pub.github_data['url'])
+            else:
+                pub.sourceforge_data = get_sourceforge_info(name)
+        else:
+            pub.toolName = pub.title
+    except Exception as e:
+        print e
+        print "Line number " + get_linenumber()
+        print "Repository data extraction failed with " + pub.name
 
 
 def is_candidate(text, words):
@@ -41,7 +182,7 @@ def get_attribute(record, attribute):
     return None
 
 
-def get_authors(record):
+def get_authors(record, pub):
     authorNames = []
     biblStruct = record["TEI"]["teiHeader"][
         "fileDesc"]["sourceDesc"]["biblStruct"]
@@ -67,10 +208,10 @@ def get_authors(record):
                             persName, "surname") is not None else ""
                         fullname = fullname + surname
                         authorNames.append(fullname)
-    return authorNames
+    pub.authors = authorNames
 
 
-def get_affiliations(record):
+def get_affiliations(record, pub):
     affiliations = []
     biblStruct = record["TEI"]["teiHeader"][
         "fileDesc"]["sourceDesc"]["biblStruct"]
@@ -93,15 +234,15 @@ def get_affiliations(record):
 
     filtered = filter(lambda x: not re.match(r'^\s*$', x),
                       affiliations)  # Remove whitespaces
-    return list(set(filtered))
+    pub.affiliations = list(set(filtered))
 
 
-def get_title(record):
-    return get_attribute(record["TEI"]["teiHeader"]["fileDesc"][
+def get_title(record, pub):
+    pub.title = get_attribute(record["TEI"]["teiHeader"]["fileDesc"][
                         "titleStmt"]["title"], "#text")
 
 
-def get_technologies(text):
+def get_technologies(text, pub):
     # Common databases and API services
     techWords = [
         " SOAP ",
@@ -121,7 +262,7 @@ def get_technologies(text):
         " written ",
         " coded ",
         "package"]
-    valid = [" ", ".", ",", ":", ";"]
+    valid = [" ", ".", ",", ":", ";", "-"]
     found = []
     with open('languages.txt', 'rU') as f:
         for line in f:
@@ -131,12 +272,7 @@ def get_technologies(text):
             for match in matches:
                 for word in filters:
                     if word in match:
-                        # print match
-                        # print "Word found is " + word
                         index = match.find(line)
-                        # print "Length of technology is " + str(len(line))
-                        # print "Index of technology is " + str(index)
-                        # print "Technology is " + line
                         if index == 0:
                             if match[index + len(line)] not in valid:
                                 continue
@@ -154,13 +290,13 @@ def get_technologies(text):
     for word in techWords:
         if word in text:
             found.append(word)
-    return list(set(found))
+    pub.technologies = list(set(found))
 
 
-def get_abstract(record):
+def get_abstract(record, pub):
     abstract = get_attribute(record["TEI"]["teiHeader"][
                             "profileDesc"], "abstract")
-    return abstract["p"] if abstract is not None else ""
+    pub.abstract = abstract["p"] if abstract is not None else ""
 
 
 def get_word_sentence(word, paragraph):
@@ -170,7 +306,7 @@ def get_word_sentence(word, paragraph):
 
 
 # Get all sentences with grant information.
-def get_all_grants(textRecord):
+def get_all_grants(textRecord, pub):
     words = [
         "funds",
         "grant",
@@ -184,10 +320,10 @@ def get_all_grants(textRecord):
     sentences = []
     for word in words:
         sentences += get_word_sentence(word, textRecord)
-    return list(set(sentences))
+    pub.grants = list(set(sentences))
 
 
-def get_acks(record):
+def get_acks(record, pub):
     divs = record["TEI"]["text"]["back"]["div"]
     text = " "
     if isinstance(divs, list):
@@ -216,15 +352,15 @@ def get_acks(record):
                             text = text + p + " "
                 elif "p" in div:
                     text = text + div["p"] + " "
-    return text
+    pub.acks = text
 
 
 def get_unique_words(words, threshold):
     ignore_words = []
     length = len(words)
     for i in range(0, length):
+        word = words[i]
         for j in range(i + 1, length):
-            word = words[i]
             second_word = words[j]
             len_min = len(word) if len(word) < len(
                 second_word) else len(second_word)
@@ -239,7 +375,7 @@ def get_unique_words(words, threshold):
     return list(set(words) - set(ignore_words))
 
 
-def get_keywords(text):
+def get_keywords(text, pub):
     numWords = 8
     try:
         keyWords = keywords.keywords(text, words=numWords).split('\n')
@@ -251,19 +387,18 @@ def get_keywords(text):
             if " " in word:
                 finalWords.append(word)
         words = list(set(words) - set(finalWords))
-        finalWords.append(get_unique_words(words, threshold))
-        return finalWords
+        pub.keyWords = finalWords + get_unique_words(words, threshold)
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
-        return []
 
 
-def summarize(sentences):
+def summarize(sentences, pub):
     try:
-        return summarizer.summarize(sentences, words=100)
+        pub.summary = summarizer.summarize(sentences, words=100)
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
-        return ""
 
 
 def chop_behind(string):
@@ -275,7 +410,7 @@ def chop_behind(string):
     return string
 
 
-def get_all_links(textRecord):
+def get_all_links(textRecord, pub):
     # Remove new lines.
     textRecord = textRecord.replace('\n', '')
     # Remove multi-character spaces.
@@ -284,10 +419,10 @@ def get_all_links(textRecord):
     regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     urls = re.findall(regex, textRecord)
     urls = [str(chop_behind(url)) for url in urls]
-    return list(set(urls))
+    pub.links = list(set(urls))
 
 
-def find_source_links(linksRecord, textRecord):
+def find_source_links(linksRecord, textRecord, pub):
     words = [
         "source",
         "code",
@@ -307,15 +442,16 @@ def find_source_links(linksRecord, textRecord):
         sentences = get_word_sentence(linkRecord, textRecord)
         for sentence in sentences:
             for word in words:
-                if str(word.encode('utf-8')) in str(sentence.encode('utf-8')):
+                if word in sentence:
                     sourceLinks.append(linkRecord)
-    return list(set(sourceLinks))
+    pub.sourcelinks = list(set(sourceLinks))
 
 
-def write_records(records, filename):
-    outfile = open(filename, 'w')
-    outfile.write(json.dumps(records, indent=2))
-    outfile.close()
+def write_records(filename):
+    print "Writing extracted data for " + str(len(publications)) + " publications"
+    with open(filename, 'w') as outfile:
+        for pub in publications:
+            outfile.write(json.dumps(pub.data, indent=2))
 
 
 def get_all_files(path):
@@ -330,13 +466,19 @@ def get_all_files(path):
 def extract_git_json(git_json):
     # Basic info
     result = dict()
-    item = git_json['items'][0]
-    result['name'] = item['name']
-    result['owner'] = item['owner']['html_url']
-    result['updated_at'] = item['updated_at']
-    result['created_at'] = item['created_at']
-    result['homepage'] = item['homepage'] if item[
-        'homepage'] != "null" else None
+    try:
+        item = git_json['items'][0]
+        result['name'] = item['name']
+        result['owner'] = item['owner']['html_url']
+        result['updated_at'] = item['updated_at']
+        result['created_at'] = item['created_at']
+        result['url'] = item['html_url']
+        result['homepage'] = item['homepage'] if item[
+            'homepage'] != "null" else None
+    except Exception as e:
+        print e
+        print "Line number " + get_linenumber()
+        return None
 
     # Contributors
     try:
@@ -349,6 +491,7 @@ def extract_git_json(git_json):
                          "contributions": obj['contributions']})
         result['contributors'] = list
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
     # print contributors_json
 
@@ -363,6 +506,7 @@ def extract_git_json(git_json):
             langs.append(k)
         result['languages'] = langs
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
     # print languages_json
 
@@ -379,6 +523,7 @@ def extract_git_json(git_json):
                              "tarball_url": obj['tarball_url']})
         result['versions'] = versions
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     # print version_json
@@ -389,14 +534,10 @@ def extract_git_json(git_json):
         subscribers_url = item['subscribers_url']
         r = requests.get(subscribers_url, auth=(user, password))
         subscribers_json = json.loads(r.text)
-        subs = []
-        for obj in subscribers_json:
-            subs.append({"html_url": obj['html_url']})
-        result['subscribers'] = subs
+        result['subscribers'] = len(subscribers_json)
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
-
-    # print subscribers_json
 
     # License
 
@@ -405,10 +546,22 @@ def extract_git_json(git_json):
         r = requests.get(license_url, auth=(user, password))
         license_json = json.loads(r.text)
         licenses = []
-        licenses.append({"name": license_json['license']['name']})
-        licenses.append({"link": license_json['download_url']})
+        licenses.append(license_json['license']['name'])
+        licenses.append(license_json['download_url'])
         result['license'] = licenses
     except Exception as e:
+        print "Line number " + get_linenumber()
+        print e
+
+    # Forks
+
+    try:
+        forks_url = item['forks_url']
+        r = requests.get(forks_url, auth=(user, password))
+        forks_json = json.loads(r.text)
+        result['forks'] = len(forks_json)
+    except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     return result
@@ -417,11 +570,40 @@ def extract_git_json(git_json):
 # Return info about the repository object as a json object
 def get_git_info(repo):
     url = "https://api.github.com/search/repositories?q="
-    r = requests.get(str(url) + str(repo), auth=(user, password))
-    parsed_json = json.loads(r.text)
-    if parsed_json['total_count'] == 0:
+    try:
+        r = requests.get(str(url) + str(repo), auth=(user, password))
+        parsed_json = json.loads(r.text)
+        if parsed_json['total_count'] == 0:
+            return None
+        return extract_git_json(parsed_json)
+    except Exception as e:
+        print "Line number " + get_linenumber()
+        print e
         return None
-    return extract_git_json(parsed_json)
+
+
+def extract_sourceforge_repo(link):
+    link = str(link)
+    list = link.split('/')
+    try:
+        index = list.index("projects")
+        return list[index + 1]
+    except:
+        pass
+
+    try:
+        index = list.index("p")
+        return list[index+1]
+    except:
+        pass
+
+    try:
+        link = link.replace("http://", '')
+        list = link.split('.')
+        return list[0]
+    except:
+        print link
+        print "Invalid sourceforge url"
 
 
 # Finds github or sourceforge links in the source links
@@ -435,13 +617,15 @@ def find_code_source(sourcelinks, text):
             try:
                 possibleGitRepos.append(list[-1])
             except:
+                print link
                 print "Invalid github url"
         elif "sourceforge" in link:
-            list = str(link).split('/')
             try:
-                index = list.index("projects")  # Repo name
-                possibleSFRepos.append(list[index + 1])
+                found = extract_sourceforge_repo(link)
+                if found:
+                    possibleSFRepos.append(found)
             except:
+                print link
                 print "Invalid sourceforge url"
     max_count = 0
     result = dict()
@@ -476,6 +660,7 @@ def get_sourceforge_info(repo):
             dev_list.append({"url": item['url'], "name": item['name']})
         result['developers'] = dev_list
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     # Languages
@@ -486,26 +671,23 @@ def get_sourceforge_info(repo):
             lang_list.append(item['fullname'])
         result['languages'] = lang_list
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     # Licenses
     try:
         license_json = json_info['categories']['license']
-        license_list = []
-        for item in license_json:
-            license_list.append({"name": item['fullname']})
-        result['license'] = license_list
+        result['license'] = license_json[0]['fullname']
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     # Status
     try:
         status_json = json_info['categories']['developmentstatus']
-        status_list = []
-        for item in status_json:
-            status_list.append({"status": item['fullname']})
-        result['Development Status'] = status_list
+        result['Development Status'] = status_json[0]['fullname']
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
 
     return result
@@ -518,11 +700,61 @@ def get_date(doi):
     try:
         return parsed_json['message']['created']['date-time']
     except Exception as e:
+        print "Line number " + get_linenumber()
         print e
         return None
 
 
+def start_parsing(files):
+    queue = Queue.Queue()
+    for x in range(num_threads):
+        worker = MasterClass(queue)
+        worker.daemon = True
+        worker.start()
+
+    for file in files:
+        queue.put(file)
+
+    queue.join()
+
+
+def read_doi_records(records):
+    global dois
+    try:
+        with open(records, 'rU') as file:
+            dois = json.loads(file.read())
+    except Exception as e:
+        print "Line number " + get_linenumber()
+        print e
+
+
+def read_xml_from_file(file):
+    filepath = xmlpath + file
+    try:
+        with codecs.open(filepath, "r", encoding='utf-8', errors='ignore') as f:
+            read = f.read()
+            return xmltodict.parse(read)
+    except Exception as e:
+        print "Could not open/parse file " + filepath
+        print "Line number " + get_linenumber()
+        print e
+
+
+def read_text_from_file(file):
+    # Read text of file.
+    filepath = textPath + file[:-4] + ".txt"
+    try:
+        with codecs.open(filepath, "r", encoding='utf-8', errors='ignore') as f:
+            text = f.read()
+            return text.encode('utf-8')
+    except Exception as e:
+        print "Could not open file " + filepath
+        print "Line number " + get_linenumber()
+        print e
+
+
 def main():
+    start_time = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-XMLFiles',
@@ -546,102 +778,19 @@ def main():
         required=True)
     args = parser.parse_args()
 
-    files = get_all_files(args.XMLFiles)
-    try:
-        with open(args.correctDOIRecords, 'rU') as file:
-            dois = json.loads(file.read())
-    except Exception as e:
-        print e
-        dois = None
+    global textPath
+    global xmlpath
+    textPath = args.textFiles
+    xmlpath = args.XMLFiles
+    xmlpath = xmlpath + '/' if xmlpath[-1] is not '/' else xmlpath
+    textPath = textPath + '/' if textPath[-1] is not '/' else textPath
 
-    publication_extractions = {}
+    files = get_all_files(xmlpath)
+    read_doi_records(args.correctDOIRecords)
+    start_parsing(files)
 
-    for file in files:
-        # Read xml file.
-        filepath = args.XMLFiles + file
-        try:
-            with codecs.open(filepath, "r", encoding='utf-8', errors='ignore') as f:
-                read = f.read()
-        except Exception as e:
-            print "Could not open file " + filepath
-            print e
-            continue
-
-        # Convert: Xml to dictionary.
-        try:
-            dictionary = xmltodict.parse(read)
-        except Exception as e:
-            print "Reading failed on " + str(file)
-            print e
-            continue
-
-        # Read text of file.
-        filepath = args.textFiles + file[:-4] + ".txt"
-        try:
-            with codecs.open(filepath, "r", encoding='utf-8', errors='ignore') as f:
-                text = f.read()
-                text = text.encode('utf-8')
-        except Exception as e:
-            print "Could not open file " + filepath
-            print e
-            continue
-
-        # All extractions:
-        title = get_title(dictionary)
-        authors = get_authors(dictionary)
-        affiliations = get_affiliations(dictionary)
-        abstract = get_abstract(dictionary)
-        links = get_all_links(text)
-        sourceLinks = find_source_links(links, text)
-        ack = get_acks(dictionary)
-        grants = get_all_grants(text)
-        summary = summarize(text)
-        keyWords = get_keywords(text)
-        technologies = get_technologies(text)
-
-        publication_extractions[file[:-4]] = {}
-
-        name = file.replace(".xml", '')
-        try:
-            if dois is not None:
-                doi = dois[name] if name in dois else "Not found"
-                publication_extractions[
-                    file[:-4]]["doi"] = doi
-                if doi is not "Not found":
-                    date = get_date(doi)
-                    if date is not None:
-                        publication_extractions[file[:-4]]["dateCreated"] = date
-        except Exception as e:
-            print e
-
-        # Push to dict.
-        publication_extractions[file[:-4]]["toolName"] = title
-        publication_extractions[file[:-4]]["abstract"] = abstract
-        publication_extractions[file[:-4]]["pubTitle"] = title
-        publication_extractions[file[:-4]]["authors"] = authors
-        publication_extractions[file[:-4]]["affiliations"] = affiliations
-        publication_extractions[file[:-4]]["keywords"] = keyWords
-        publication_extractions[file[:-4]]["links"] = links
-        publication_extractions[file[:-4]]["sourceLinks"] = sourceLinks
-        publication_extractions[file[:-4]]["ack"] = ack
-        publication_extractions[file[:-4]]["grants"] = grants
-        publication_extractions[file[:-4]]["summary"] = summary
-        publication_extractions[file[:-4]]["technologies used"] = technologies
-
-        # Find github/sourceforge link in the source links
-        repo = find_code_source(sourceLinks, text)
-        if repo is not None:
-            name = repo['name']
-            publication_extractions[file[:-4]]["toolName"] = name
-            if repo['github']:
-                publication_extractions[
-                    file[:-4]]["github data"] = get_git_info(name)
-            else:
-                publication_extractions[
-                    file[:-4]]["sourceforge data"] = get_sourceforge_info(name)
-
-    # Write extractions to file:
-    write_records(publication_extractions, args.outfile)
+    write_records(args.outfile)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
     main()
