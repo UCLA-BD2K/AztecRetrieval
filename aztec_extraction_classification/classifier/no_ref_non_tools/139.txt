@@ -1,0 +1,252 @@
+
+==== Front
+CellCellCell0092-86741097-4172Cell Press S0092-8674(15)01345-810.1016/j.cell.2015.10.031ArticleCalcium and SOL Protease Mediate Temperature Resetting of Circadian Clocks Tataroglu Ozgur 1Zhao Xiaohu 1Busza Ania 1Ling Jinli 1O’Neill John S. 2Emery Patrick patrick.emery@umassmed.edu1∗1 Department of Neurobiology, University of Massachusetts Medical School, Worcester, MA 01605, USA2 MRC Laboratory of Molecular Biology, Cambridge CB2 0QH, UK∗ Corresponding author patrick.emery@umassmed.edu19 11 2015 19 11 2015 19 11 2015 163 5 1214 1224 10 4 2015 24 7 2015 30 9 2015 © 2015 The Authors. Published by Elsevier Inc.2015Elsevier Inc.This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/).Summary
+Circadian clocks integrate light and temperature input to remain synchronized with the day/night cycle. Although light input to the clock is well studied, the molecular mechanisms by which circadian clocks respond to temperature remain poorly understood. We found that temperature phase shifts Drosophila circadian clocks through degradation of the pacemaker protein TIM. This degradation is mechanistically distinct from photic CRY-dependent TIM degradation. Thermal TIM degradation is triggered by cytosolic calcium increase and CALMODULIN binding to TIM and is mediated by the atypical calpain protease SOL. This thermal input pathway and CRY-dependent light input thus converge on TIM, providing a molecular mechanism for the integration of circadian light and temperature inputs. Mammals use body temperature cycles to keep peripheral clocks synchronized with their brain pacemaker. Interestingly, downregulating the mammalian SOL homolog SOLH blocks thermal mPER2 degradation and phase shifts. Thus, we propose that circadian thermosensation in insects and mammals share common principles.
+
+Graphical Abstract
+Highlights
+• Calcium and the protease SOL trigger TIM degradation in response to thermal input
+
+• Thermal TIM degradation resets the Drosophila circadian pacemaker
+
+• TIM integrates light and temperature input
+
+• In mammals, the SOL homolog also impacts circadian thermal responses
+
+
+
+Temperature phase shifts the Drosophila circadian clock through the regulated degradation of the pacemaker protein TIMELESS.
+
+Published: November 19, 2015
+==== Body
+Introduction
+Circadian rhythms result from endogenous biological clocks found in most organisms, which enable them to adapt to and predict daily changes in their environment to increase their fitness. They drive a wide range of behaviors and physiological functions. Consequently, perturbation of clock function is associated with various ailments in mice and humans (Davidson et al., 2006, Knutsson, 2003, Reddy and O’Neill, 2010). A fundamental property of circadian clocks is their ability to respond to environmental inputs and thereby remain correctly synchronized with the day/night cycle. Light and temperature are critical inputs to circadian clocks, acting synergistically in natural settings. As such, reception and integration of these environmental signals is essential for optimizing daily behavior and physiology.
+
+Biological clocks are universally observed to be temperature compensated, presumably since a circadian rhythm strongly affected by ambient temperature would confer little adaptive advantage. Critically however, the phase of circadian clocks shifts in response to an applied daily temperature cycle (Bruce, 1960, Bruce and Pittendrigh, 1956, Pittendrigh, 1954), but in contrast to light, the molecular mechanisms underlying temperature input to the clock are poorly understood.
+
+Circadian timekeeping occurs cell autonomously, with a molecular mechanism that is highly conserved from Drosophila to humans (Weaver and Emery, 2013). The fly clock consists of a transcriptional feedback loop, whereby the transcription factors CLOCK (CLK) and CYCLE (CYC) form a heterodimer and drive rhythmic expression of target genes, such as period (per) and timeless (tim), which encode a heterodimeric repressor of CLK/CYC activity. Throughout the day, PER and TIM abundance and activity are tightly regulated by various transcriptional, post-transcriptional, and post-translational mechanisms (Zhang and Emery, 2012). This results in rhythmic repression of CLK/CYC activity, which ultimately determines circadian period.
+
+In addition to its role in rhythm generation, TIM has an essential role in the circadian light input pathway. Light induces a conformational change in the photoreceptor CRYPTOCHROME (CRY), which enables it to bind to JETLAG (JET) and TIM and thus to trigger TIM’s proteasomal degradation (Busza et al., 2004, Koh et al., 2006, Ozturk et al., 2011, Peschel et al., 2009). PER degradation occurs as a consequence, ultimately resetting the molecular pacemaker, because PER abundance is supported by TIM (Ko et al., 2002, Price et al., 1995). Therefore, photic TIM degradation results in a delay or advance in the phase of the circadian clock, depending on the timing of the light signal.
+
+In Drosophila, NOCTE functions in peripheral thermo- and mechano-sensors (the chordotonal organs) to synchronize brain circadian rhythms with temperature cycles (Sehadova et al., 2009). In addition, cationic TRANSIENT RECEPTOR POTENTIAL A1 (TRPA1) and PYREXIA (PYX) channels participate in temperature entrainment of circadian behavior (Lee and Montell, 2013, Wolfgang et al., 2013). How these molecules communicate with brain circadian pacemakers, however, is completely unknown. Body clocks found in most fly tissues are autonomously sensitive to temperature (Glaser and Stanewsky, 2005), but again the mechanism of peripheral clock temperature sensing remains essentially unexplained. Very high temperature pulses (37°C) were found to affect PER and TIM levels and to shift circadian behavior in a CRY-dependent manner (Kaushik et al., 2007, Sidote et al., 1998). However, CRY is not required for responses to temperature ranges usually experienced by fruit flies in the wild (Busza et al., 2007, Stanewsky et al., 1998) and even appears to inhibit thermal entrainment (Gentile et al., 2013).
+
+The mammalian clockwork shares a similar logic and many molecular components with Drosophila. Mammalian CRY proteins (mCRY1/2) no longer function as photoreceptors but have instead replaced TIM as partners with mammalian PER proteins (mPER1/2). Thus, mPER1/2 interact with mCRY1/2 as key repressors of the CLK/BMAL1 transactivator (homologs of Drosophila CLK/CYC) (Griffin et al., 1999, Kume et al., 1999), with mPERs being the rate-limiting factors driving interactions between CLK/BMAL1 and CRY1/2 (Chen et al., 2009). Outside the retina, the molecular clockwork in mammalian cells is not directly photosensitive. Rather, ambient lighting information is conveyed via the retinohypothalamic tract to be integrated within the brain’s master pacemaker, the suprachiasmatic nuclei (SCN) (Weaver and Emery, 2013). SCN timing cues are then communicated with peripheral cells and tissues through a diversity of endocrine and other signaling mechanisms, including circadian body temperature rhythms. These body temperature rhythms are sufficient to entrain and synchronize mammalian cells and tissues in vivo and ex vivo (Brown et al., 2002, Buhr et al., 2010). The heat-induced transcription factor HSF1 plays an important role in temperature entrainment, although it does not appear to be essential (Buhr et al., 2010, Saini et al., 2012), nor is the mechanism whereby HSF1 resets the mammalian circadian clock clear at present.
+
+In summary, previous studies in Drosophila and mammals provide intriguing clues to how temperature information is relayed to the clock but do not yet explain its molecular effects on the circadian pacemaker. TRPA1 and PYX are cationic channels, HSF1 is a transcription factor and nocte is a protein of unknown function not conserved in mammals. Therefore, the connection between these proposed pathways is uncertain. These studies also suggest that various mechanisms might be employed for temperature input and entrainment of circadian clocks. Therefore, we decided to elucidate the temperature input mechanism using a bottom-up strategy, hypothesizing that all environmental cues must ultimately converge on the core molecular circadian pacemaker and affect its critical components. Here, we provide strong evidence that in Drosophila, a calcium (Ca2+)-dependent mechanism triggers TIM degradation by the protease Small Optic Lobe (SOL) in response to temperature input, and that a similar mechanism mediates thermal response in mammals.
+
+Results
+Temperature Increase Induces Specific Degradation of TIM
+To begin to understand how temperature cycles could affect the Drosophila circadian pacemaker, we expressed the critical pacemaker proteins PER and TIM in Drosophila S2 cells. An ecologically relevant temperature shift (TS) from 20°C to 30°C degraded TIM in S2 cells (Figure 1A), but not PER (data not shown). The proteasomal inhibitor MG-132, which blocks light-induced TIM degradation (Koh et al., 2006), failed to protect TIM against thermal degradation (Figure 1A). Moreover, it was not necessary to co-transfect CRY or JET to observe thermal TIM degradation, while photic degradation requires these proteins (Koh et al., 2006). We confirmed this result in vivo with Drosophila head extracts and observed a similar specific degradation of TIM after 4 hr TS, while PER was not affected (Figures 1B and S1A).
+
+To measure TIM degradation in real time, we fused TIM and PER with LUCIFERASE (TIM-LUC, PER-LUC) and expressed these proteins in S2 cells. Similar to the results described above, a 20°C to 30°C TS induced rapid TIM degradation, while PER was not affected (Figure 1C). We then created flies expressing TIM-LUC under the tim promoter (ptim). The TIM-LUC fusion protein was functional in vivo since it rescued normal rhythmicity to tim0 flies with a period of 24.04 ± 0.37 hr in constant darkness (DD). The rescued flies also entrained normally to light/dark (LD) cycles (Figure S1B). We were able to quantitatively measure in whole flies TIM-LUC degradation induced by TS from 20°C to 30°C when TIM level is at its highest (Zeitgeber Time 18, ZT18) (Figure 1D). Similar results were observed with TS from 16°C to 25°C (Figure S1C). In both experiments, PER levels, monitored with the BG-LUC transgene (Stanewsky et al., 1997), did not respond acutely to TS (Figures 1D and S1C). Interestingly, TIM was not degraded when the temperature was lowered from 30°C to 20°C (Figure S1D). These results fit with the observation that TIM levels decrease during the warm phase of a temperature cycle, even in the absence of rhythmic tim transcription (Goda et al., 2014).
+
+We tested whether the 4-hr temperature increase that specifically degrades TIM in vivo could also shift the circadian clock in flies. We found that a 4- or 6-hr temperature pulse (TP) from 20°C to 30°C at ZT18 advanced the phase of the clock as measured with TIM-LUC or BG-LUC (Figures 1E and 1F) or locomotor behavior (Figures 1G and S1E). Locomotor behavior is representative of the brain clocks, while luciferase recordings represent primarily peripheral clocks. We observed that a TP longer than 4 hr did not significantly increase the magnitude of phase advances (Figure 1F), which was approximately 3.4 hr in the periphery (Luciferase) and 2.0 hr in the brain (locomotor behavior; data not shown). Pulses shorter than 3 hr failed to advance locomotor behavior rhythms (data not shown). We did not see a significant difference between two wild-type fly strains (y w and w1118) carrying two different alleles of tim (s-tim and ls-tim), which have different sensitivity to light (Sandrelli et al., 2007). We also observed similar phase shifts with tim0;ptim-TIM-LUC flies (Figure 1G).
+
+Thermal TIM Degradation Is Dependent on Intracellular Ca2+
+We hypothesized that Ca2+ could mediate thermal TIM degradation and phase shifts for two reasons. First, brain pacemaker neurons receive thermal inputs through cationic channels (TRPA1, PYX) (Lee and Montell, 2013, Wolfgang et al., 2013). Second, TIM carries predicted Calmodulin binding sites (see below). Thus, we tested whether a TP from 20°C to 30°C at ZT18 can elicit an intracellular Ca2+ increase in circadian tissues. We quantitatively measured intracellular Ca2+ levels in isolated fly heads from flies expressing GFP-AEQUORIN under the control of the circadian tim-GAL4 driver. GFP-AEQUORIN is a well-established in vivo reporter of Ca2+ levels (Baubet et al., 2000). We found that temperature increases intracellular Ca2+ levels with a slow kinetics that peaks after ca. 2 hr (Figure 2A). To mimic the effects of TP on Ca2+ levels, we pharmacologically increased intracellular Ca2+ in fly heads using the bacterial ionophore ionomycin (Figure 2B). Its application at 20°C resulted in acute TIM degradation with a kinetic similar to TP-induced TIM degradation. In contrast, ionomycin had no effect on PER levels (Figure 2B). We also found that TP had no additive effect on ionomycin-induced TIM degradation, suggesting that Ca2+ is in the circadian thermal pathway (Figure 2C).
+
+We then buffered intracellular Ca2+ levels in vivo using PARVALBUMIN (PV), an albumin-like protein that binds Ca2+ through multiple EF-hand motifs. PV overexpression was previously used in flies to show that intracellular Ca2+ affects circadian rhythmicity in DD, but not light entrainment (Harrisingh et al., 2007). Expressing four copies of a PV-encoding transgene with tim-gal4 strongly compromised thermal TIM degradation (Figure 2D). Furthermore, PV flies showed reduced phase advances in both peripheral (Figures 2E, S2A, and S2B) and brain clocks (Figures 2F, S2C, and S2D). As expected (Harrisingh et al., 2007), we did not observe an effect on photic TIM degradation in PV flies (Figure S2E). Furthermore, temperature compensation was not affected (Figure S2F). We did not observe the period lengthening that PV expression can cause, presumably because our experiments were performed with young flies (Harrisingh et al., 2007). We thus conclude that Ca2+ plays an important role in Drosophila circadian thermal responses. The slow kinetics of Ca2+ increase likely explain the need for a prolonged temperature pulse to elicit phase shifts. TRPA1 conducts Ca2+ and has been implicated in temperature entrainment of circadian behavior (Lee and Montell, 2013), However, TIM degradation was not affected in trpa11 mutant flies (Figure S2G), indicating that another Ca2+ conductance is implicated.
+
+Calmodulin Binding Is Required for Thermal TIM Degradation
+Calcium signaling can work through several effectors, such as Calmodulin (CaM). Upon binding Ca2+, CaM changes conformation and binds to target proteins (Chin and Means, 2000). We predicted six putative CaM binding sites on TIM (Figure 3A). We therefore assessed whether CaM could be involved in the effects of temperature on the circadian clock. Downregulating CaM in vivo—using a previously validated double-stranded RNA (dsRNA) (Melom and Littleton, 2013) or another non-overlapping dsRNA—blocked thermal phase advances both in the periphery (Figures 3B and S3A) and brain (Figures 3C and S3B). Thermal TIM degradation was also significantly reduced in CaM RNAi flies (Figure 3D).
+
+To test whether the predicted CaM binding sites are indeed critical for thermal TIM degradation, we performed an N- and C-terminal deletion analysis in S2 cells using TIM-LUC. The results showed a progressive thermal stabilization of TIM as more putative CaM binding sites were deleted (Figure 3E). We also performed site-directed mutagenesis on these sites and found that significant reduction of thermal degradation required mutations of at least five sites (Figure 3F; data not shown). Because mutagenizing the most N-terminal CaM binding site also affected photic TIM degradation in S2 cells (data not shown), we used a mutant TIM-LUC protein for which the other five CaM sites are mutated (TIM-LUC 5C) for in vivo experiments. Although TIM-LUC 5C could not sustain rhythms in tim0 flies (data not shown), it was rhythmically expressed and did not interfere with LD or DD behavior when expressed in wild-type flies (Figures S3C and S3D). Similar to the results in S2 cells, TIM-LUC 5C was protected from thermal degradation in vivo (Figure 3G), but was degraded normally by light (Figure S2E). Furthermore, TIM-LUC 5C acted as dominant negative for thermal responses and blocked molecular (Figures 3H and S3D) and behavioral phase advances (Figures 3I and S3E). The dominant-negative effect was not caused by abnormally high TIM levels, as TIM-LUC 5C was expressed at levels similar to wild-type TIM-LUC (Figure S3F). In support of these results, we also found that CaM could bind to TIM-LUC (but not to LUC alone) in a Ca2+-dependent manner in vitro and that this binding was lost with the TIM-LUC 5C mutant (Figure S3G). Similar to PV, TIM-LUC 5C or CaM RNAi did not have an effect on temperature compensation (Figure S2F).
+
+TIM Is Degraded by the Calpain SOL in Response to Temperature
+Since thermal TIM degradation is not dependent on the proteasome (Figure 1A), we turned our attention to calpains, which are Ca2+-responsive proteases (Zhao et al., 2012). In Drosophila, there are four calpains: Calpain A, B, and C and small optic lobes (SOL) (Friedrich et al., 2004). Using RNAi in S2 cells, we found that thermal TIM degradation was reduced with SOL dsRNAs, while dsRNAs against other calpains had no effect (Figure 4A). Moreover, TP-induced phase shifts in peripheral circadian tissues were significantly reduced when SOL was downregulated using two non-overlapping dsRNA, while RNAi against calpains A, B, or C had no effect (Figures 4B and S4A). In addition, SOL downregulation by RNAi or using a deficiency caused a strong reduction in TP-induced behavioral phase advances (Figures 4C and S4B). Consistently, we also found that thermal TIM degradation was reduced in vivo (Figure 4D). In contrast, SOL overexpression in clock cells increased the amplitude of the phase shifts (Figure 4C). We confirmed SOL knockdown and overexpression using RT-PCR (Figure S4C). It is interesting to note that thermal phase shifts are very sensitive to SOL, since a 50% reduction in SOL is sufficient to strongly attenuate them. SOL is thus rate limiting. Photic TIM degradation and temperature compensation were not affected by SOL RNAi (Figures S2E and S2F). Since blocking either SOL or CaM activity caused severe disruption of thermal TIM degradation, we concluded that these proteins function in the same pathway, rather than in independent pathways converging on TIM.
+
+Phase Delays and Temperature Entrainment Are Also Mediated by SOL-Dependent TIM Degradation
+Drosophila circadian behavior can respond to 2°C temperature cycles (Wheeler et al., 1993). Thus, we tested whether such small changes in temperature could induce TIM degradation. We found that a 25°C to 27°C TP caused rapid TIM degradation just as well as a 10°C TP, in both the advance and delay zones (Busza et al., 2007). These responses were reduced in CaM RNAi, SOL RNAi, and TIM-LUC 5C flies (Figures S5A and S5B). Next, we tested the effects of TIM-LUC 5C and SOL RNAi on entrainment to thermal cycles (TC). We subjected flies to a LD cycle at 25°C and then applied an 8-hr shifted 25°C/27°C TC for 7 days in constant darkness (DD), followed by constant 25°C in DD. Release into constant conditions is critical to determine whether the circadian pacemaker underlying rhythmic behavior was indeed entrained to the shifted TC. Strikingly, both TIM-LUC 5C and SOL RNAi flies showed significantly reduced entrainment to TC in both advance and delay directions (Figure 5).
+
+SOLH Promotes mPER2 Degradation and Thermal Phase Shifts in Mammals
+Temperature is also an important timing cue for peripheral clocks in mammals. We tested whether the temperature input mechanism we uncovered in flies might be conserved in mammals. We found that a physiologically relevant 36°C to 38.5°C TS results in degradation of the mammalian circadian repressor PERIOD2 (mPER2) at its peak (CT12) in cultured liver cells (Figures 6A and S6A). We also observed a decrease in mPER1 levels by western blot, although it was less pronounced than that of mPER2, and less consistent. mCRY1 and mCRY2 responded more slowly and weakly to temperature shifts. Thus, mPER2 appears to be the preferential target of temperature within the mammalian pacemaker.
+
+Next, we asked whether the sole mammalian SOL homolog (SOLH) (Kamei et al., 1998, Kamei et al., 2000) is involved in thermal mPER2 degradation and phase shifts of the mammalian clock. We generated immortalized liver cells expressing short hairpin RNAs (shRNAs) directed against Solh using lentivirus. By RT-PCR, we determined that two of the four shRNAs we tested efficiently downregulated Solh (Figure S6B). These two shRNAs do not overlap. We found a striking correlation between Solh downregulation efficacy and disruption of thermal phase shifts (Figures 6B, S6B, and S6C). We also found that thermal mPER2 degradation was disrupted by Solh RNAi compared to eGFP RNAi control (Figure 6C). Interestingly, ionomycin induced mPER2 degradation in a dose-dependent manner in lung fibroblasts (Figures 6D and S6D). This degradation occurs both at CT8 and CT12 (Figure 6E), but results in a phase delay only at CT12 (Figures 6F, 6G, and S6E). Ionomycin-induced mPER2 degradation was also observed in liver cells. As with Drosophila TIM degradation, ionomycin and temperature shift had no additive effect on mPER2 degradation, indicating that Ca2+ is also in the mammalian circadian thermal input pathway. Moreover, Solh RNAi reduced ionomycin-induced mPER2 degradation (Figure 6H). We therefore propose that as in flies, a sustained temperature increase triggers an increase in Ca2+ signaling to activate the atypical calpain SOLH, resetting the mammalian circadian pacemaker in a phase-specific manner.
+
+Discussion
+Our results reveal a specific molecular pathway that allows circadian pacemakers to respond to temperature and thus to remain properly synchronized with their environment. In Drosophila, a temperature increase results in a delayed, yet sustained, increase in cytosolic Ca2+, which triggers the CaM-mediated degradation of TIM by the atypical protease SOL. In mammals, our results indicate that SOLH also plays an important role in circadian thermal responses, triggering mPER2 degradation. Although we have not yet determined the role of mammalian CaMs in circadian thermal entrainment, we have strong evidence that Ca2+ is also implicated. Indeed, we show that Ca2+ phase shifts the mammalian clock in a time-dependent manner and triggers SOLH-mediated mPER2 degradation. Moreover, Ca2+ and temperature effects on mPER2 degradation are not additive, indicating that Ca2+ is likely to be the second messenger responsible for communicating physiological temperature increases to the molecular clockwork. mPER1 responded to temperature shifts as well. Consistent with this, mammalian PER1 and PER2 contain a highly conserved CaM recognition motif.
+
+The SOL/SOLH thermal input pathway is thus likely to be preserved in flies and mammals, although its final target is different. It is worth noting, however, that both TIM and mPER2 levels are critical in determining circadian phase, and both are also light input targets, albeit through different mechanisms (Naidoo et al., 1999, Shearman et al., 1997, Suri et al., 1998, Yang et al., 1998). It should also be noted that we do not exclude the possibility that additional elements of the circadian pacemaker are targeted by SOL/SOLH; nor do we suggest that SOL/SOLH is the sole mechanism whereby Ca2+ affects the clock, since Ca2+ and other second messengers clearly engage multiple mechanisms to effect phase resetting at different times during the circadian cycle, e.g., through functional Ca2+/cAMP response elements in the period1 and 2 promoters (Balsalobre et al., 2000, O’Neill et al., 2008).
+
+Rather, our investigation focuses on a simple post-translational mechanism for the integration of multiple environmental inputs into the cellular clockwork. Indeed, light, through CRY photoreception, and temperature, through Ca2+, both converge on TIM to entrain the molecular clock in flies. This explains how light and temperature cooperate to entrain molecular and behavioral circadian rhythms (Boothroyd et al., 2007, Yoshii et al., 2009). In natural environments, both inputs are noisy and their integration enables a more accurate estimation of external time, rather than by relying upon either input separately. Indeed, in the wild, temperature plays a particularly important role in entraining and modulating circadian behavior (Menegazzi et al., 2012, Vanin et al., 2012). For circadian behavior, neural networks probably also play a role in input integration. Indeed, several studies indicate that light and temperature can be preferentially detected by specific groups of circadian neurons, which would then communicate with the ventral lateral neurons, the master pacemaker neurons in Drosophila (Busza et al., 2007, Lamba et al., 2014, Picot et al., 2009, Shang et al., 2008, Tang et al., 2010, Yoshii et al., 2010).
+
+Previous studies have identified three candidate sensory mechanisms for circadian temperature detection in Drosophila. Interestingly, two of them (TRPA1, PYX) are Ca2+ channels, although probably only TRPA1 is expressed in specific circadian neurons (Lee and Montell, 2013, Wolfgang et al., 2013). Thus, TRPA1 is a plausible candidate for synchronizing the molecular clock of these neurons through the SOL pathway. PYX is apparently not expressed in the brain (Sun et al., 2009) and would thus have to rely on neural circuitry. This is also the case for the third circadian thermal sensory candidate, which is dependent on the expression of NOCTE in chordotonal organs (Sehadova et al., 2009). However, since neural communication relies heavily on Ca2+ as a second messenger, SOL-dependent TIM degradation might also be crucial for those non-autonomous thermal inputs. Actually, Ca2+-dependent TIM degradation could be necessary for other sensory inputs to reach the circadian pacemaker neurons, such as visual (Helfrich-Förster et al., 2001), mechanical (Simoni et al., 2014), and olfactory cues (Levine et al., 2002). We note that in larvae, visual inputs trigger TIM degradation in a CRY-independent manner (Mazzoni et al., 2005). In addition, communication between circadian neurons, critical for maintaining properly synchronized circadian rhythms and for entrainment to light inputs (Guo et al., 2014, Lamba et al., 2014, Shang et al., 2008, Tang et al., 2010, Yao and Shafer, 2014), might also rely on Ca2+-mediated TIM degradation.
+
+This said, our results show that SOL functions cell autonomously, since we observe TIM degradation in Drosophila cell cultures. In flies, we observe that both peripheral and brain clocks are entrained to temperature cycles by this mechanism. Accordingly, peripheral clocks have previously been shown to entrain autonomously to temperature cycles (Glaser and Stanewsky, 2005). Surprisingly, however, Sehadova et al. (2009) proposed that brain circadian clocks are not directly sensitive to thermal cycles, but are dependent on the chordotonal organs and NOCTE. However, in our hands, at least the Dorsal Neurons—which include neurons specifically sensitive to temperature (Busza et al., 2007, Picot et al., 2009, Yoshii et al., 2010)—can synchronize to temperature cycles in cultured dissected brains (Figures S5C–S5F), disconnected from chordotonal organs and thus from NOCTE input. Sehadova et al. (2009) used constant light conditions, while all our experiments are done under constant darkness. Constant light strongly reduces the amplitude of circadian rhythms and might thus sensitize brain circadian clocks to non-autonomous NOCTE input. Based on all our results, we propose that even in the brain, temperature entrainment can function cell autonomously. TRPA1 expression in a subset of clock neurons (Lee and Montell, 2013) fits with this notion. However, TRPA1 is not the conductance that triggers TIM degradation in most circadian tissues, since TIM degradation is not affected in whole-head protein extracts. Thus, as for light (Helfrich-Förster et al., 2001), a combination of cell-autonomous and non-autonomous mechanisms might be involved in thermal behavior entrainment. Indeed, none of our manipulations completely eliminate thermal entrainment, although it should also be noted that our genetic manipulations are unlikely to have completely blocked the thermal TIM degradation pathway (RNAi and dominant-negative mutants were used).
+
+That Ca2+ plays such an important role in thermal entrainment in both mammals and flies is intriguing. Indeed, intracellular Ca2+ has other important circadian functions. In organotypic mouse SCN, cytosolic Ca2+ levels oscillate and the appropriate manipulation of intracellular Ca2+ is sufficient to determine the phase, period, and amplitude of circadian gene expression (Brancaccio et al., 2013). Similarly in plants, flies, and non-excitable mammalian cells, Ca2+ signaling is intimately intertwined with molecular timekeeping (Harrisingh et al., 2007, Noguchi et al., 2012, Xu et al., 2007). Ca2+ signaling in SCN neurons is also important for light input from retinal ganglionic cells (Ding et al., 1998). Are these functions for Ca2+ separate, or are they interconnected? We have identified the SOL pathway as a cellular mechanism that responds to a gradual Ca2+ increase over the course of hours and thereby elicits a specific phase-dependent resetting of the cellular clockwork through clock protein degradation. Therefore, prolonged exposure to temperature is needed to get a response to this input, and this fits perfectly with the slow pace of behavior synchronization to temperature cycles (Busza et al., 2007, Currie et al., 2009). This slow kinetics probably separates the thermal function of Ca2+ from at least some of its other circadian functions, such as those involving fast neural communication. SOLH might, on the other hand, turn out to contribute to the effect of Ca2+ oscillations in the SCN or on circadian period, since they have a much longer time frame.
+
+In mammals, HSF1 has been implicated in circadian thermal responses, where it clearly contributes to, but is not essential for, entrainment to applied thermal cycles (Buhr et al., 2010, Saini et al., 2012). Intriguingly, HSF1 is regulated by Ca2+ (Buhr et al., 2010, Ding et al., 1996). Since neither HSF1 knockout nor downregulation of SOLH completely blocks thermal responses, these proteins could be on two parallel branches of a complex Ca2+-activated circadian thermal pathway. Alternative models are possible, such as a regulatory role for HSF1 upon SOLH-mediated mPER2 degradation. We also note that a CLK mutant protein that cannot be phosphorylated partially disrupts thermal entrainment of Drosophila circadian behavior (Lee et al., 2014). Conceivably, CLK phosphorylation could affect TIM’s sensitivity to SOL in clock neurons since CLK and TIM physically interact.
+
+In summary, our results point to a striking conservation of entrainment pathways in animals that tune the cellular clock to thermal cycles. In addition, our work uncovers how the atypical calpain SOL/SOLH, which lacks EF domains for Ca2+ binding found in most calpains, can be activated physiologically. Moreover, we identify a specific biological function for this poorly studied protease. It will be interesting to determine whether Ca2+ and SOL/SOLH play additional roles in other thermal responses.
+
+In developed nations, ∼15% of the work force engage in shift work and as a consequence suffer from a significantly increased risk of chronic diseases, such as type 2 diabetes and many cancers. Preventive strategies that directly target the transcriptional clockwork would be highly likely to result in adverse off-target effects. In contrast, as an endogenous means of circadian entrainment to systemic cues, SOLH could have clear potential as a target for pharmacological resetting of the body clock, thereby alleviating the deleterious acute and long-term effects of jetlag and shift work.
+
+Experimental Procedures
+For detailed protocols, see the Supplemental Experimental Procedures.
+
+Temperature Pulses
+2- to 7-day-old male flies were entrained to 12/12-hr LD cycles for 3 days at constant temperature. Flies were then moved to a pre-warmed dark incubator for 4 hr for the temperature pulse experiments at ZT18 and then moved back to the original incubator. Control flies were handled similarly but were returned to the original incubator. Locomotor activity or luciferase rhythms were then monitored for several days in constant conditions as indicated. Luciferase data were normalized to tim(enh-mut)-LUC controls (Allada et al., 2003). A pactin-LUC plasmid was used as control for S2R+ cells for normalization.
+
+Data analysis was done in Excel (Microsoft) using raw data for short-term experiments (<4 hr) and by fitting a 6-hr moving average for long-term experiments (>7 days) for added reliability. Circadian phase was calculated using at least three troughs of the locomotor activity or luminescence rhythm from pulsed and non-pulsed samples, because we found troughs to be the most reliable phase marker. Flies that did not show overt rhythmicity or did not survive until the end of the experiment were excluded from the analysis.
+
+In Vivo Ca2+ Recording with GFP-Aequorin
+Isolated heads from TG4:Aequorin-GFP flies were cultured in Shields and Sang M3 insect medium (Sigma; + 10% fetal bovine serum+ penicillin-streptomycin+ insulin-transferrin-selenium) in the presence of native coelenterazine (Gold-biotech) substrate (1 mM final) for 4 hr and then moved from 20°C to a pre-warmed 30°C incubator and continuously monitored for luciferase activity. Four independent experiments were performed. Most heads (74.2%) responded to the temperature shift (Figure 2A). Heads that did not show a significant response within 2.5 hr of the temperature shift were excluded from the analysis.
+
+Culture and Manipulation of Mammalian Cells
+Animal work was licensed under the UK Animals (Scientific Procedures) Act of 1986 with local ethical approval or approved by the Institutional Animal Care and Use Committee of UMass Medical School. Immortalized fibroblasts homozygous for PER2::LUC (Yoo et al., 2004) were cultured, and luminescence was recorded as described previously (O’Neill and Hastings, 2008). Data were detrended to remove baseline changes and then fit with a damped sine wave in order to determine circadian period, amplitude, and phase. Statistical analyses were performed using Graphpad Prism. In order to be able to interpret our observations with respect to the accepted timetable of molecular events established in organotypic mouse SCN (Brancaccio et al., 2013), we arbitrarily defined CT12 as the peak of PER2:LUC bioluminescence under constant conditions.
+
+Liver cells were extracted from PER2:LUC mice and immortalized. Solh knockdown viruses (or control viruses) were added to the liver cells followed by selection with 2 mg/ml puromycin for 1 week. Bioluminescence assays were performed with cells seeded into 96-well plates, sealed with PCR film, and entrained to 36°C /38.5°C thermal cycles for 2 days in puromycin-containing complete Williams’ E medium with luciferin (400 μM).
+
+Author Contributions
+O.T. and P.E. designed the project. X.Z. generated the liver cell lines expressing Solh shRNAs. A.B. conducted the initial S2 cell experiments on thermal TIM degradation. J.L. performed experiments on cultured brains. J.S.O. designed and performed the lung fibroblast experiments. All other experiments were performed by O.T. O.T., J.S.O., and P.E. wrote the manuscript.
+
+Supplemental Information
+Document S1. Supplemental Experimental Procedures
+ Document S2. Article plus Supplemental Information
+ 
+
+Acknowledgments
+We specially thank D. Weaver for discussions and help with mammalian experiments and antibodies and R. Stanewsky for sharing unpublished results. We thank D. Wentworth, D. Szydlik, and C. Yuan for technical assistance, Y. Zhang and S. Antolin for discussions, M. Nitabach for PV and GFP-Aequorin flies, M. Rosbash for LUC control flies, A. Seghal for anti-TIM antibody, R. Stanewsky for anti-PER antibody and BG-LUC flies, the Bloomington and VDRC Drosophila stock centers for fly stocks, and the UMass Medical School shRNA core for viruses expressing Solh shRNAs. This work was supported by NIH grants (GM079182 and GM066777) (to P.E.). J.S.O. is supported by the Medical Research Council (MC_UP_1201/4) and the Wellcome Trust (093734/Z/10/Z).
+
+Supplemental Information includes Supplemental Experimental Procedures and six figures and can be found with this article online at http://dx.doi.org/10.1016/j.cell.2015.10.031.
+
+Figure 1 A Temperature Increase Degrades TIM and Resets the Drosophila Circadian Clock
+
+(A) A 20°C to 30°C temperature shift (TS) degrades TIM in Drosophila S2 cell culture. Western blots (WB) show TIM degradation even in the presence of MG-132. Spectrin is the loading control.
+
+(B) Quantification of WB from fly head extracts shows similar TIM (red), but not PER (blue), degradation induced by TS.
+
+(C and D) TS-induced TIM (red), but not PER (blue), degradation is reproduced using luciferase fusion proteins in S2 cells (C) and in whole flies (D). BG-LUC is an in vivo PER-luciferase fusion protein (Stanewsky et al., 1997).
+
+(E) Representative long-term luciferase recordings from TIM-LUC flies show that a 4-hr temperature pulse (TP) from 20°C to 30°C shifts the circadian clock in flies. Traces show a 6-hr moving average of TIM-LUC rhythms in flies.
+
+(F and G) Quantification of phase advances induced by a 4-hr TP at ZT18 in peripheral (TIM-LUC) (F) and brain (locomotor behavior) clocks (G). Error bars represent SEM for (B)–(D) or SD for (F) and (G). p < 0.01 or p < 0.001 from at least five independent experiments (n ≥ 6 each) is indicated with “∗∗” or “∗∗∗,” respectively.
+
+See also Figure S1.
+
+Figure 2 Thermal TIM Degradation Is Dependent on Cytosolic Ca2+
+
+(A) A 20°C to 30°C temperature shift (TS) increases intracellular Ca2+ in fly head circadian tissues as measured by luminescence from GFP-Aequorin (n = 72).
+
+(B) An ionomycin-induced intracellular Ca2+ increase triggers TIM-LUC (red), but not PER (blue), degradation in isolated heads in culture at 20°C.
+
+(C) Simultaneous application of TS and ionomycin has no additive effect on TIM degradation.
+
+(D–F) Buffering intracellular Ca2+ in vivo with PV (blue) reduces thermal TIM degradation (D), thermal phase shifts in the periphery (E) and in the brain (F). Both tim-Gal4 (TG4) and tim-GAL4 combined with UAS-dcr2 (TD2) were used to express PV (see the Supplemental Experimental Procedures). Error bars represent SEM for (A)–(D) or SD for (E) and (F). p < 0.01 or p < 0.001 from at least four independent experiments (n ≥ 6 each) is indicated with “∗∗” or “∗∗∗,” respectively.
+
+See also Figure S2.
+
+Figure 3 The Effects of Temperature on TIM Stability and the Circadian Clock Are Mediated by CaM
+
+(A) TIM harbors six putative CaM binding sites (blue) that are distributed among amino acids 64–1057 (black bar). Mutations to abolish CaM binding are indicated (red).
+
+(B and C) In vivo CaM downregulation using two non-overlapping RNAi blocks thermal phase advances in the periphery (B) and brain (C).
+
+(D) CaM RNAi (blue) causes reduced TIM degradation in response to TS.
+
+(E) N- and C-terminal deletion of TIM results in progressive thermal stabilization in Drosophila S2 cells.
+
+(F) Mutations of at least five CaM binding sites on TIM (TIM-LUC 5C) are required to reduce strongly TS-induced TIM degradation in S2 cells, due to redundancy.
+
+(G) A TIM-LUC 5C mutant, which lacks the five C-terminal CaM-binding sites, also shows diminished thermal degradation in vivo.
+
+(H and I) TIM-LUC 5C acts as a dominant negative and blocks thermal phase advances in the peripheral (H) and brain clocks (I). Error bars represent SD for (B), (C), (H), and (I) or SEM for (D)–(G). p < 0.01 or p < 0.001 from at least five independent experiments (n ≥ 6 each) is indicated with “∗∗” or “∗∗∗,” respectively. Significance for less stable mutants is not shown to keep the figures clear.
+
+See also Figure S3.
+
+Figure 4 Thermal TIM Degradation and Phase Advances Are Mediated by SOL
+
+(A) Downregulation of Drosophila SOL, but not calpain A, B, or C, impairs TIM degradation in S2 cells.
+
+(B and C) Two non-overlapping SOL RNAis block thermal phase advances in the periphery (B) and brain (C), while RNAi against the other calpains has no effect. SOL overexpression increases, and deficiency blocks phase shifts in the brain.
+
+(D) SOL RNAi reduces TS-induced TIM degradation in whole flies in vivo. Error bars represent SEM for (A) and (D) or SD for (B) and (C). p < 0.05, p < 0.01, or p < 0.001 from at least five independent experiments (n ≥ 6 each) is indicated with “∗,” “∗∗,” or “∗∗∗,” respectively.
+
+See also Figure S4.
+
+Figure 5 CaM Binding Mutations and SOL RNAi Impair Thermal Entrainment
+
+(A) Representative actograms of flies entrained to a 12/12-hr LD cycle for 4 days at 25°C, then to an 8-hr advanced temperature cycle (TC) of 25°C/27°C for 7 days in DD, and finally released to constant 25°C in DD. Red bars indicate the circadian phase before (solid) and after TC (dashed).
+
+(B) Quantification of circadian phases from at least five independent advanced TC experiments (n ≥ 8 each) is shown.
+
+(C and D) Similar experiments using an 8-hr delayed TC and their quantification from at least five independent experiments (n ≥ 8 each) are shown. Error bars represent SEM for (B) and (D). p < 0.01 or p < 0.001 is indicated with “∗∗” or “∗∗∗,” respectively.
+
+See also Figure S5.
+
+Figure 6 Temperature Shifts the Mammalian Clock through SOLH-Mediated Degradation of mPER2
+
+(A) A 4-hr temperature shift triggers mPER2 degradation at CT12 (defined by peak PER2::LUC bioluminescence) in mammalian immortalized liver cells.
+
+(B and C) SOLH downregulation using shRNA reduces thermal phase shifts (B) and mPER2 degradation in immortalized liver cells at CT12 (C).
+
+(D) Intracellular Ca2+ induced by ionomycin degrades mPER2 in a dose-dependent manner at CT12 in lung fibroblasts.
+
+(E–G) Ionomycin results in mPER2 degradation both at CT8 and CT12 (E), and phase delays molecular rhythms at CT12 in lung cells (F and G).
+
+(H) Ionomycin-induced mPER2 degradation in liver cells is SOLH dependent and not additive with TP, suggesting that Ca2+ and temperature are on the same pathway. Error bars represent SD for (B) and SEM for others. p < 0.05, p < 0.01, or p < 0.001 from at least three independent experiments (n ≥ 6 each) is indicated with “∗,” “∗∗,” or “∗∗∗,” respectively.
+
+See also Figure S6.
+
+Figure S1 Temperature Degrades TIMELESS and Shifts the Circadian Clock, Related to Figure 1
+
+(A) Representative Western blots from Drosophila heads show that TIM is specifically degraded after TS, while PER is not affected. An unspecific band is shown for loading control.
+
+(B) Expression of TIM-LUC fusion protein under 4.6 kb tim promoter restores normal rhythmicity to TIM null (tim0) flies and has no effect when expressed in a wild-type background (not shown).
+
+(C) A temperature pulse from 16°C to 25°C also degrades TIM (red) in a specific manner in TIM-LUC flies, while it has no effect on PER (blue).
+
+(D) A cold shift from 30°C to 20°C has no specific effect on TIM (red) and PER (blue) in flies.
+
+(E) Locomotor behavior recordings of control (non-pulsed, black) and temperature-pulsed TIM-LUC flies (red) with 6 hr moving average traces are shown. Phase advance induced by Temperature pulse (TP) is measured by comparing at least three corresponding troughs from average traces of at least 8 flies, which we found is the most reliable phase marker Error bars: SEM for (C and D). p < 0.05 or p < 0.001 from at least four independent experiments (n ≥ 6 each) is indicated with “∗” or “∗∗∗,” respectively.
+
+Figure S2 Ca2+ Mediates Circadian Phase Shifts, Related to Figure 2
+
+(A and B) Representative average luciferase recordings of 6 control (non-pulsed, black) or temperature-pulsed (red) flies with corresponding 6 hr moving average traces are shown. TIM-LUC flies expressing various transgenes were housed individually in wells in a 96-well plate and luciferase activity was measured. A 4 hr TP was applied at ZT18 after three days of entrainment to a 12/12 LD cycle. Same paradigm was used for Figures S2-S4. Flies from crosses to y w (A) are used as controls and show ca. 3 hr advance in response to TP, while PV (B) show much reduced shifts.
+
+(C and D) Representative average locomotor behavior recordings of 8 control (non-pulsed, black) or temperature-pulsed (red) flies with corresponding 6 hr moving average traces are shown after a 4 hr TP which was applied at ZT18. Same paradigm was used for Figures S2-S4. Flies from crosses to y w (C) are used as controls and show ca. 2 hr advance in response to TP, while PV (D) show much reduced shifts.
+
+(E) Light given at ZT18 degrades TIM normally in flies expressing the TIM-LUC, TIM-LUC 5C mutant, SOL RNAi or PV in vivo.
+
+(F) Flies expressing TIM-LUC 5C mutant, SOL RNAi or PV have normal temperature compensation. Locomotor activity rhythms from at least 30 flies per genotype were recorded at 20, 25 and 30°C in DD and average period lengths from at least four independent experiments are shown. Error bars: SEM for (E-F) from at least four independent experiments (n ≥ 6 each) is shown.
+
+(G) Thermal TIM degradation is not affected in trpa11 flies. Temperature shift (TS) and non-pulsed control (cnt) from 6 independent experiments.
+
+Figure S3 Thermal Degradation of TIM Is Mediated by CALMODULIN Binding, Related to Figure 3
+
+(A and B) CaM RNAi reduces phase-shifts induced by a 4 hr TP both in the periphery, as measured by luciferase activity (A) and in the brain, measured by locomotor behavior (B). See Figure S2A and S2C for controls from crosses to y w.
+
+(C) Flies expressing the TIM-LUC 5C mutant on a wild-type background free-run with normal period in constant darkness. Flies were entrained to a 12/12 LD cycle for three days and then released to constant darkness (DD). Locomotor activity of a single TIM-LUC 5C fly is shown.
+
+(D and E) Reductions in phase shifts were observed for TIM-LUC 5C mutant compared to its control, TIM-LUC. Flies were subjected to a 4 hr TP at ZT18 after three days of entrainment to a 12/12 LD cycle and luciferase (D) and locomotor behavior (E) was recorded.
+
+(F) Overall levels of TIM-LUC 5C was similar to TIM-LUC in all experiments. Average luciferase count from whole flies (n > 50) at ZT18 are shown.
+
+(G) TIM-LUC binds to CaM in a Ca2+ dependent manner in vivo, while TIM-LUC 5C mutant shows severely reduced binding. Whole head extracts (n = 80) from flies expressing wild-type TIM-LUC and 5C mutant were immunoprecipitated with CaM beads in the presence of CaCl2 or EGTA. Ca2+-dependent binding is shown as the ratio of luciferase signal in CaCl2 to EGTA. Error bars: SEM for (F) and (G). p < 0.01 from at least five independent experiments is indicated with “∗∗.”
+
+Figure S4 SOL Protease Mediates Temperature-Induced Phase Shifts, Related to Figure 4
+
+(A and B) SOL RNAi reduces phase-shifts induced by a 4 hr TP both in the periphery, as measured by luciferase activity (A) and in the brain, measured by locomotor behavior (B). See Figure S2A and S2C for controls from crosses to y w.
+
+(C) sol mRNA levels measured by RT-PCR confirm that SOL is downregulated in flies expressing SOL-RNAi1 and flies heterozygous for a deficiency containing sol, and overexpressed with a EP-element located in the 5′ end of the sol gene (oe). Error bars: SEM p < 0.01 from at least three independent experiments is indicated with “∗∗.”
+
+Figure S5 TIM Responds to Small Temperature Increases, and Isolated Brains Are Sensitive to Temperature Cycles, Related to Figure 5
+
+(A and B) 25°C to 27°C TS causes rapid degradation of TIM both at ZT18 (A) and ZT14 (B). This degradation is blocked by CaM or SOL RNAi and TIM-LUC 5C mutation.
+
+(C and D) Dissected Drosophila brains entrain to temperature cycles. Flies were entrained to a 12/12 light/dark cycles and their brain was dissected during the light phase. They were then exposed to in-phase (control) or 12 hr shifted (anti-phase) temperature cycles as indicated. Brains were then harvested at different Zeitgeber Times (ZT) and stained with anti-PER antibody (the ZTs on the X-axes are relative to the temperature cycle). Representative images for anti-PER staining of DN1-3 clock neurons in brains that were shifted to a 12 hr anti-phase 29°C/20°C TC are shown in (C) with quantification of immunostainings showing that both DN1 and 2 were entrained to the anti-phase TC (D).
+
+(E and F) Similar results were observed when a 25°C/16°C TC was used. Note that the in-phase control (C) and 12 hr anti-phase (D) brains have identical phase with respect to the temperature cycle, which proves entrainment. Staining in Lateral Neurons was weak and could not be reliably quantified. Error bars: SEM. For (A and B), p < 0.01 or p < 0.001 from at least three independent experiments (n ≥ 6 each) is indicated with “∗∗” or “∗∗∗,” respectively.
+
+Figure S6 The Temperature Input Pathway Is Conserved in Mammals, Related to Figure 6
+
+(A) Western blots for thermal degradation of mammalian circadian proteins mPER1-2 (n = 9) and mCRY1-2 (n = 11) and their quantification.
+
+(B) RT-PCR results for downregulation of Solh in immortalized liver cells.
+
+(C) TP-induced phase delays in mPER2-LUC rhythms are reduced in Solh shRNA in liver cells.
+
+(D) Raw traces for ionomycin-induced dose-dependent degradation of mPER2 in lung fibroblasts.
+
+(E) Ionomycin application does not shift the mammalian clock at CT8. Error bars: SEM for (A and B). p < 0.05 or p < 0.001 from at least four independent experiments (n ≥ 3 each) is indicated with “∗” or “∗∗∗.”

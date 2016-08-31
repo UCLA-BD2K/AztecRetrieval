@@ -1,0 +1,969 @@
+
+==== Front
+BMC Syst BiolBMC Syst BiolBMC Systems Biology1752-0509BioMed Central London 2681824224510.1186/s12918-015-0245-0ProceedingsA network based covariance test for detecting multivariate eQTL in saccharomyces cerevisiae Yuan Huili hlyuan@pku.edu.cn Li Zhenye lizhenye@pku.edu.cn Tang Nelson L.S. nlstang2015@gmail.com Deng Minghua dengmh@math.pku.edu.cn  LMAM, School of Mathematical Sciences, Peking University, Yiheyuan Road, Beijing, 100871 China  Department of Chemical Pathology, Prince of Wales Hospital, Faculty of Medicine, The Chinese University of Hong Kong, Shatin, Hong Kong, China  Center for Quantitative Biology, Peking University, Yiheyuan Road, Beijing, 100871 China  Center for Statistical Sciences, Peking University, Yiheyuan Road, Beijing, 100871 China 11 1 2016 11 1 2016 2016 10 Suppl 1 Publication of this supplement has not been supported by sponsorship. Information about the source of funding for publication charges can be found in the individual articles. Articles have undergone the journal's standard peer review process. The Supplement Editors declare that they have no competing interests.8© Yuan et al. 2016
+Open Access This article is distributed under the terms of the Creative Commons Attribution 4.0 International License (http://creativecommons.org/licenses/by/4.0/), which permits unrestricted use, distribution, and reproduction in any medium, provided you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The Creative Commons Public Domain Dedication waiver (http://creativecommons.org/publicdomain/zero/1.0/) applies to the data made available in this article, unless otherwise stated.Background
+Expression quantitative trait locus (eQTL) analysis has been widely used to understand how genetic variations affect gene expressions in the biological systems. Traditional eQTL is investigated in a pair-wise manner in which one SNP affects the expression of one gene. In this way, some associated markers found in GWAS have been related to disease mechanism by eQTL study. However, in real life, biological process is usually performed by a group of genes. Although some methods have been proposed to identify a group of SNPs that affect the mean of gene expressions in the network, the change of co-expression pattern has not been considered. So we propose a process and algorithm to identify the marker which affects the co-expression pattern of a pathway. Considering two genes may have different correlations under different isoforms which is hard to detect by the linear test, we also consider the nonlinear test.
+
+Results
+When we applied our method to yeast eQTL dataset profiled under both the glucose and ethanol conditions, we identified a total of 166 modules, with each module consisting of a group of genes and one eQTL where the eQTL regulate the co-expression patterns of the group of genes. We found that many of these modules have biological significance.
+
+Conclusions
+We propose a network based covariance test to identify the SNP which affects the structure of a pathway. We also consider the nonlinear test as considering two genes may have different correlations under different isoforms which is hard to detect by linear test.
+
+Electronic supplementary material
+The online version of this article (doi:10.1186/s12918-015-0245-0) contains supplementary material, which is available to authorized users.
+
+Keywords
+eQTLPathwayIsoformThe Fourteenth Asia Pacific Bioinformatics Conference (APBC 2016) APBC 2016San Francisco, CA, USA 11 - 13 January 2016 http://www.sfasa.org/apbc2016/apbc2016.htmlissue-copyright-statement© The Author(s) 2016
+==== Body
+Background
+GWAS aims to detect the association between genetic variation and complex diseases. Recent years, GWAS has found 2000 loci associated to complex diseases by statistical methods [1]. As the development of the next-generation sequencing and other high-throughput technology, various types of genome-scale datasets have been collected, providing opportunity to find the mechanism of genetic variation leading to complex diseases by connect the high-throughout data to GWAS. The eQTL study is one of them, which aims to uncover the genetic effects to gene expression and have been conducted in many organisms [2–5]. A common approach in eQTL data analysis is to consider association between each expression trait and each genetic marker through regression analysis. Despite great success with this approach, some regulatory signals may not be detected due to complex interaction between SNPs like epistasis.
+
+Although most eQTL studies considered the expression levels of individual genes as response (single outcome variable), the change of correlation between genes under different genetic status still contains some biological information. For example, post-transcriptional regulations such as phosphorylations and dephosphorylations often affect the activities of transcriptional factors (TFs), which further affect the correlation among TF genes and TF target genes, also the co-expression patterns of the targets of TFs. However, such regulations are hard to be detected if only individual gene considered because there may be little change at the expression levels of individual TF genes. The approach considering “liquid association” (LA) between a pair of genes proposed by [6] is a method to identify such loci, which is later introduced into eQTL study [7]. Subsequently, conditional bi-variate normal model has been developed to capture the change of correlation between a pair of genes [8–10].
+
+However, a biological process is usually performed by a group of genes (more than two genes as in the bi-variate model). Network approaches should be used to study these interactions [11–13]. If we want to see the effects of a cellular change to the organism, it is better for us to consider the change in a functional gene-set such as a pathway. Therefore, some papers has considered the multivariate circumstances by applying CCA to gene expressions and SNP (or CNV) data [14–16]. However, these methods do not consider the network structure when finding the association between gene sets and genetic variant, which will miss the information contained in the network. Li et al. [17], Kim and Xing [18], Zhang and Kim [19], Casale et al. [20] have considered pathway structure when studied the association between genetic variation and gene expression. However, they assume the network structure is the same (static) under different genetic variant. In fact, network structure may be dynamic and biologists have realized that differential network analysis will become a standard mode in network analysis and insightful discoveries could be made with differential network analysis [21]. For example, [22] identified a cancer point mutation in the kinase domain of RET, which causes multiple endocrine neoplasia type 2B by leading to a switch in peptide specificity and then altering the network structure.
+
+So we propose a method to test whether the co-expression pattern in a pathway is affected by a SNP. Our goal is to test for a global change in covariance structure in each pathway, which is different from other network-based methods, which tries to detect non-zero edges from all pairs of genes. When we applied our method to a yeast eQTL dataset, we were able to find some pathway-SNP modules that have biological significance.
+
+Methods
+Let (X1,X2,…,Xp) be the expression levels of a group of genes and (Z1,Z2,…,Zm) be the set of SNPs. Suppose that there are n independent samples and let (x1i,x2i,…,xpi)i=1,…,n denote the expression level of (X1,X2,…,Xp) in the ith sample and (Z1i,Z2i,…,Zmi) denote the SNP types of the SNP set in the ith sample. Since the mean expression levels of (X1,X2,…,Xp) are also possibly affected by some SNPs in (Z1,Z2,…,Zm), we can imitate the procedure in [9] that we first perform regression analysis or penalized regression analysis such as Lasso [23] or SCAD [24] to adjust the effects of (Z1,Z2,…,Zm) on the means and then model the residuals. We assume that the covariate-adjusted expression levels are appropriately centered to have mean values of zero and our interest is to test whether the covariate-adjusted covariance of expression levels is changed under each SNP. In our analysis, the group of genes are a pathway in KEGG [25]. Figure 1 describes our strategy to detect pathway-SNP associations. In this manuscript, we define a module as the collection of a SNP and a pathway, and our objective is to find pathway-SNP modules where the SNP affect the co-expression patterns among the genes in the pathway.
+Fig. 1 Flowchart of our strategy. Flowchart of our strategy for detecting pathway-associated SNP. We first perform Lasso to adjust the effects of SNPs on the means of gene expression. Then we use covariance test and kernel covariance test to select candidate pathway-SNP modules
+
+
+
+Model
+We use covariance test to find the pathway-SNP modules. There are three key elements of covariance test for a given gene set S. We consider the strategy similar to [26]. 
+Calculation of T statistics. We calculate a T statistics that reflects the difference of the covariance matrix of the two classes of samples. The statistics is calculated by estimating the Frobenius norm of the difference of the covariance matrix. We first perform the method by [27] to do the test: 
+ (1) H0:Σ1=Σ2,H1:Σ1≠Σ2 
+
+where Σ1 is the covariance matrix of gene expression under one genotype and Σ2 is that of gene expression under the other genotype. Then we consider the nonlinear relationship between gene expressions by applying kernel method.
+
+Estimation of significance level of T statistics. We estimate the statistical significance (nominal P value) of the T statistics by using an empirical SNP-based permutation test procedure that preserves the complex correlation structure of the gene expression data. Specifically, we permute the SNP labels and recompute the T statistics of the gene set for the permuted data, which generates a null distribution for the T statistics. The empirical, nominal P value of the observed T statistics is then calculated relative to this null distribution. Importantly, the permutation of class labels preserves gene-gene correlations and, thus, provides a more biologically reasonable assessment of significance than would be obtained by permuting genes.
+
+Adjustment for multiple hypothesis testing. When an entire database of gene sets is evaluated, we adjust the estimated significance level to account for multiple hypothesis testing. We first normalize the T statistics for each gene set to account for the size of the set, yielding a normalized T statistics. We then control the proportion of false positives by calculating the false discovery rate (FDR) corresponding to each NT statistics. The FDR is the estimated probability that a set with a given NT statistics represents a false positive finding; it is computed by comparing the tails of the observed and null distributions for the NT statistics. To capture the change of the structure of the gene network, we consider the covariance of the gene expression.
+
+
+
+Test for high-dimensional covariance matrices
+To simplify the problem, we just consider there are two possible values of each SNP. Covariance matrices under two genotypes of the SNP are denoted as Σ1 and Σ2, respectively. The primary interest is to test 
+ H0:Σ1=Σ2,H1:Σ1≠Σ2  which is a nontrivial statistical problem because the number of genes is greater than the number of samples sometimes. The test statistic for the hypothesis is formulated by targeting on tr (Σ1−Σ2)2, the squared Frobenius norm of Σ1−Σ2 [27]. Specifically, the test statistic is 
+ Tn1,n2=An1+An2−2Cn1n2  Anh=1nh(nh−1)∑i≠j(Xhi′Xhj)2−2nh(nh−1)(nh−2)∑i,j,k∗Xhi′XhjXhj′Xhk+1nh(nh−1)(nh−2)(nh−3)∑i,j,k,l∗Xhi′XhjXhk′Xhl  Cn1n2=1n1(n2)∑i∑jX1i′X2j2−1n1n2(n1−1)∑i,k∗∑jX1i′X2jX2j′X1k−1n1n2(n2−1)∑i,k∗∑jX2i′X1jX1j′X2k+1n1n2(n1−1)(n2−1)∑i,k∗∑j,l∗X1i′X2jX1k′X2l 
+
+where h refers to a subpopulation with a particular SNP.
+
+For test H0:Σ1=Σ2=Σ3,H1:Σ1≠Σ2 or Σ2≠Σ3 We consider tr (Σ1−Σ2)2 + tr (Σ2−Σ3)2. Specifically, the test statistic is 
+ Tn1,n2+Tn2,n3  where Tn2,n3 is defined similar to Tn1,n2.
+
+Kernel method
+We generalize the method of [27] to the kernel space inspired by the method of [28]. We give the similar definition of Frobenius norm and covariance matrix. Let px and py be Borel probability measures defined on a domain Ω. Given observations X:={x1,…,xm} and Y:={y1,…,yn}, drawn independently and identically distributed(i.i.d.) from px and py, respectively.
+
+Definition (HSDCC) Given separable reproducing kernel Hilbert space (RKHS) F, and measures px,py over (X,Γ), we define the Hilbert-Schmidt Different Covariance Criterion(HSDCC) as the squared HS-norm of the difference of covariance Σxx and Σyy: 
+ HSDCC(px,py,F):=∥Σxx−Σyy∥HS2 
+
+The detailed computation of above norm can be found in text of the Additional file 1. We give the unbiased statistics to HSDCC(Px,Py,F) like [27] 
+ Anh=1nh(nh−1)∑i≠jk(Xhi,Xhj)2−2nh(nh−1)(nh−2)∑i,j,k∗k(Xhi,Xhj)k(Xhj,Xhk)+1nh(nh−1)(nh−2)(nh−3)∑i,j,k,l∗k(Xhi,Xhj)k(Xhk,Xhl)  Cn1n2=1n1(n2)∑i∑jk(X1i,X2j)2−1n1n2(n1−1)∑i,k∗∑jk(X1i,X2j)k(X2j,X1k)−1n1n2(n2−1)∑i,k∗∑jk(X2i,X1j)k(X1j,X2k)+1n1n2(n1−1)(n2−1)∑i,k∗∑j,l∗k(X1i,X2j)k(X1k,X2l)  Tn1,n2=An1+An2−2Cn1n2 
+
+For test
+
+H0:Σxx=Σyy=Σzz,H1:Σxx≠Σyy or Σyy≠Σzz
+
+We consider ∥Σxx−Σyy∥HS2+∥Σyy−Σzz∥HS2.
+
+Specifically, the test statistic is 
+ Tn1,n2+Tn2,n3  where Tn2,n3 is defined similar to Tn1,n2.
+
+Results
+Simulation
+Comparison between linear method and kernel method
+We performed a simulation study to evaluate the power of the proposed kernel methods, and compared the results with the primary method by [27]. Three models have been considered, as below.
+
+Model 1: Xijk=Zijk + θZijk+1, where Zijk were i.i.d. standard normally distributed, and θ=0.5 in the null hypothesis while 0.2 or 0.3 in the alternative hypothesis.
+
+Model 2: Xijk=Zijk3+θZijk+13, where Zijk and θ were defined the same as that in Model 1.
+
+Model 3: Xijk=eZijk+θeZijk+1, where Zijk and θ were defined the same as that in Model 1.
+
+The correlation between variables are linear in model 1, while the correlation between variables are nonlinear in model 2 and 3.
+
+We chose (p, n1,n2)=(40, 60, 60) and (80, 120, 120) respectively. The power of the tests are shown by ROC curves (Fig. 2). All the simulation results reported were based on 1000 simulations. We can see from the simulation that kernel methods with some parameters have higher power than the linear test when the true relationships between variables are nonlinear (Model 2 and Model 3). A similar simulation results with different setup of parameters can be found in Additional file 1: Figure S3.
+Fig. 2 Comparison between linear method and kernel method. Simulations under different setups. Setup of the first column is under model 1, the second column is under model 2 and the third column is under model 3. First row: (p, n
+1,n
+2,θ) = (40, 60, 60, 0.2); Second row: (p, n
+1,n
+2,θ) = (40, 60, 60, 0.3); Third row: (p, n
+1,n
+2,θ) = (80, 120, 120, 0.2); Fourth row: (p, n
+1,n
+2,θ) = (80,120,120, 0.3)
+
+
+
+Comparison between Chen et al.’s linear method and other method
+We conducted a simulation to compare the power of Chen et al.’s method [27] and Tony Cai et al.’s method [29]. We consider four simulation setups represented different signal quantities and strength, the first of which is the same as the model 2 in [29].
+
+Model 1: Let 
+ Σ∗=(σij∗),whereωij∗=0.5|i−j|for1≤i,j≤p.Σ=D1/2Σ∗D1/2,whereD=(dij),dii=Unif(0.5,2.5),1≤i≤pΣ1=Σ+δI,Σ2=Σ+U+δI,whereδ=|min{λmin(Σ+U),λmin(Σ)}|+0.05, 
+
+U=(ukl) be a matrix with eight random nonzero entries, each with a magnitude generated from Unif(0,4)∗ max1≤j≤pσjj. The number of each class samples is 50 and the number of variables is 50.
+
+Model 2: U=(ukl) be a matrix with eight random nonzero entries, each with a magnitude generated from Unif(0,400)∗ max1≤j≤pσjj.
+
+Model 3: U=(ukl) be a matrix with 500 random nonzero entries, each with a magnitude generated from Unif(0,4)∗ max1≤j≤pσjj.
+
+Model 4: U=(ukl) be a matrix with 500 random nonzero entries, each with a magnitude generated from Unif(0,400)∗ max1≤j≤pσjj.
+
+As shown in Fig. 3, under the sparse setups (Model 1 and 2), the results of Tony Cai et al.’s method is much better than those of Chen et al.’s method. Chen et al.’s method is better than Tony Cai et al.’s method when the setups are not sparse (Model 3 and 4). Since Tony Cai et al.’s method corresponds to testing each element in the covariance matrix by Hoteling’s test and then give the judgement according to the maximum statistic of all of the Hoteling’s tests, so Chen et al.’s linear method has higher power than bi-variate model when the setups are not sparse. A similar simulation results with different number of samples can be found in Additional file 1: Figure S2.
+Fig. 3 Comparison between Chen’s linear method and other method. Topleft: The two covariance matrices have eight different elements, each with a magnitude generated from U
+n
+i
+f(0,4)∗ max1≤j≤p
+σ
+jj; Topright: The two covariance matrices have eight different elements, each with a magnitude generated from U
+n
+i
+f(0,400)∗ max1≤j≤p
+σ
+jj; Bottomleft: The two covariance matrices have 500t different elements, each with a magnitude generated from U
+n
+i
+f(0,4)∗ max1≤j≤p
+σ
+jj; Bottomright: The two covariance matrices have 500 different elements, each with a magnitude generated from U
+n
+i
+f(0,400)∗ max1≤j≤p
+σ
+jj
+
+
+
+
+Real data results
+Associated SNP and pathways
+We analyzed the yeast dataset collected by Kruglyak and colleagues [30]. The expression data were downloaded from http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.0060083, with 4482 genes measured in 109 segregants derived from a cross between BY and RM. The experiments were performed under two conditions, glucose and ethanol. We did the pre-processing like [10], after which 4419 genes and 820 merged markers remained. We mapped 4419 genes to 103 pathways and analyzed the effect of each SNP to each pathway. Therefore, we tested 103*820 times. The algorithm was implemented in R, which can be found at http://www.math.pku.edu.cn/teachers/dengmh/NetworkBiomarker.
+
+We performed covariance test and kernel covariance with parameter 1 and 10 respectively to the pathway-SNP adjusted modules. We consider 103 pathways in KEGG [25] (the number of genes in each pathway can be found in the Additional file 1: Figure S1) and 820 merged markers under ethanol and glucose condition respectively. We found 72 pathway-SNP modules under ethanol condition and 94 modules under glucose condition. Specifically, we found 36 modules by covariance test, 9 modules by kernel covariance test with parameter 1 and 51 modules by kernel covariance test with parameter 10 under ethanol condition, while 86 modules by covariance test, 3 modules by kernel covariance test with parameter 10 and 12 modules by kernel covariance test with parameter 1 under glucose condition (Fig. 4). Table 1 showed the associated pathways and SNPs under ethanol condition while Table 2 showed the associated pathways and SNPs under glucose condition.
+Fig. 4 Different modules detected under different conditions by different method. a Detected modules under ethanol condition. We found 36 modules by covariance test, 9 modules by kernel covariance test with parameter 1 and 51 modules by kernel covariance test with parameter 10; b Detected modules under glucose condition. We found 86 modules by covariance test, 3 modules by kernel covariance test with parameter 10 and 12 modules by kernel covariance test with parameter 1
+
+Table 1 New associated pathways and SNPs under ethanol condition
+
+Pathways	Associated markers	
+Glycolysis/Gluconeogenesis	
+g
+O
+L02(10)
+	
+Synthesis and degradation of ketone bodies	
+Y
+L
+R257W
+(10),Y
+L
+R261C
+(10)
+	
+Steroid biosynthesis	
+Y
+E
+L021W
+L, Y
+F
+R035C
+L,	
+	
+Y
+J
+L001W
+L, Y
+J
+R006W
+L,(10),	
+	
+Y
+J
+L007C
+L,(10),	
+Valine, leucine and isoleucine degradation	
+Y
+O
+R006C
+L, N
+O
+R005W
+L,(10),	
+	
+Y
+O
+R051C
+L,(10), Y
+O
+R076C
+L,(10)
+	
+Valine, leucine and isoleucine	
+N
+L
+R116W
+L,(10), Y
+O
+R076C
+L,	
+biosynthesis	
+Y
+C
+L023C
+(10), Y
+L
+R257W
+(10)
+	
+Histidine metabolism	
+g
+O
+L02L,(10), Y
+O
+R025W
+(10)
+	
+Tyrosine metabolism	
+Y
+F
+L019C
+L, g
+O
+L02L,(10)
+	
+Phenylalanine metabolism	
+g
+O
+L02L,(10)
+	
+beta-Alanine metabolism	
+g
+O
+L02L,(10)
+	
+Taurine and hypotaurine metabolism	
+g
+O
+L02(10)
+	
+Selenocompound metabolism	
+Y
+O
+R006C
+L,(10), Y
+O
+R019W
+L,(10),	
+	
+Y
+O
+R025W
+L,(10), N
+O
+R005W
+L,(10)
+	
+Purine metabolism	
+N
+N
+L035W
+(1)
+	
+Cyanoamino acid metabolism	
+Y
+L
+R027C
+(1)
+	
+Arachidonic acid metabolism	
+g
+P
+L09(1)
+	
+Linoleic acid metabolism	
+Y
+F
+L029C
+L,(1),(10), Y
+F
+L019C
+(1)
+	
+Glyoxylate and dicarboxylate metabolism	
+N
+N
+L035W
+(1), Y
+N
+L074C
+(1)
+	
+Porphyrin and chlorophyll metabolism	
+N
+B
+R008W
+(1)
+	
+Sphingolipid metabolism	
+Y
+H
+L047C
+L
+	
+Pantothenate and CoA biosynthesis	
+Y
+G
+L053W
+L, N
+L
+R116W
+L,(10)
+	
+Terpenoid backbone biosynthesis	
+Y
+J
+L007C
+L,(10), Y
+J
+L001W
+L,(10),	
+	
+Y
+J
+R006W
+L,(10), N
+J
+R006C
+L,(10)
+	
+Sesquiterpenoid and triterpenoid	
+Y
+O
+R334W
+L, Y
+O
+R343C
+L,	
+biosynthesis		
+	
+Y
+L
+R261C
+(10), N
+L
+R116W
+(10),	
+	
+Y
+L
+R257W
+(10)
+	
+Metabolic pathways	
+Y
+I
+L078W
+(10), Y
+L
+R257W
+(10),	
+	
+Y
+L
+R308W
+(10), N
+N
+L035W
+(10),	
+	
+g
+O
+L02(10), Y
+O
+R006C
+(10),	
+	
+Y
+O
+R051C
+(10),Y
+O
+R019W
+(10),	
+	
+Y
+N
+L066W
+(10),Y
+L
+R261C
+(10)
+	
+Biosynthesis of secondary metabolites	
+Y
+O
+R025W
+(10), Y
+O
+R063W
+(10)
+	
+Carbon metabolism	
+Y
+O
+R019W
+(10)
+	
+2-Oxocarboxylic acid metabolism	
+Y
+L
+R261C
+L,(10), Y
+L
+R308W
+L,(10),	
+	
+Y
+C
+L022C
+(10), Y
+L
+R265C
+(10),	
+	
+N
+L
+R116W
+(10),Y
+L
+R322W
+L
+	
+mRNA surveillance pathway	
+Y
+O
+R072W
+L
+	
+Mismatch repair	
+g
+K
+R08L
+	
+Non-homologous end	
+Y
+G
+R006W
+L
+	
+Biosynthesis of amino acids	
+g
+O
+L02(10)
+	
+MAPK signaling pathway	
+Y
+D
+R164C
+(10), g
+D
+R10(10)
+	
+L means detected by covariance test, (1) means detected by kernel covariance test with parameter 1 and (10) means detected by kernel covariance test with parameter 10. The FDR of the covariance test, kernel covariance test with parameter 1 and kernel covariance test with parameter 10 are 0.25, 0.33 and 0.25 respectively. The FWER of the test by Tony Cai is 0.2
+
+Table 2 New associated pathways and SNPs under glucose condition
+
+Pathways	Associated markers	
+Synthesis and degradation of ketone bodies	
+g
+J
+L07(10)
+	
+Inositol phosphate metabolism	
+Y
+B
+R259W
+(10)
+	
+Riboflavin metabolism	
+Y
+M
+L056C
+(10)
+	
+Fatty acid degradation	
+Y
+B
+R045C
+(1)
+	
+Cysteine and methionine metabolism	
+Y
+G
+L195W
+(1)
+	
+Valine, leucine and isoleucine biosynthesis	
+Y
+C
+L025C
+L,N
+G
+R093C
+L
+	
+	
+Y
+O
+R253W
+L,Y
+O
+R274W
+L
+	
+	
+Y
+O
+R326W
+L,Y
+O
+R334W
+L
+	
+	
+Y
+O
+R343C
+L,Y
+C
+L022C
+(1)
+	
+Phenylalanine metabolism	
+Y
+J
+R040W
+L,Y
+O
+L123W
+L
+	
+	
+Y
+O
+L118C
+L,Y
+O
+L106W
+L
+	
+	
+Y
+O
+L093W
+L,Y
+O
+L088C
+L
+	
+	
+g
+O
+L02L,(1)
+	
+beta-Alanine metabolism	
+Y
+B
+R271W
+L,g
+O
+L02L,(1)
+	
+	
+N
+J
+R007C
+L,Y
+O
+L106W
+L
+	
+Arachidonic acid metabolism	
+Y
+I
+R022W
+L,(1)
+	
+Vitamin B6 metabolism	
+Y
+K
+L118W
+(1)
+	
+Porphyrin and chlorophyll metabolism	
+Y
+M
+L071C
+(1),g
+F
+L02L
+	
+Degradation of aromatic compounds	
+Y
+M
+R316C
+L,(1),Y
+M
+R316C
+L
+	
+ABC transporters	
+Y
+B
+R131W
+L,(1),Y
+B
+R137W
+L
+	
+Glycolysis/Gluconeogenesis	
+Y
+J
+R071W
+L
+	
+Pentose phosphate pathway	
+N
+O
+L043W
+L, Y
+O
+L151W
+L
+	
+	
+Y
+O
+L123W
+L, Y
+O
+L094C
+L
+	
+	
+Y
+O
+L093W
+L, Y
+O
+L088C
+L
+	
+	
+g
+O
+L02L
+	
+Pentose and glucuronate interconversions	
+Y
+G
+L263W
+L
+	
+Purine metabolism	
+Y
+L
+R140W
+L
+	
+Pyrimidine metabolism	
+Y
+B
+L010C
+L, Y
+G
+L217C
+L
+	
+Glycine, serine and threonine metabolism	
+Y
+C
+L065W
+L, Y
+J
+R038C
+L
+	
+Lysine biosynthesis	
+Y
+B
+R087W
+L
+	
+Histidine metabolism	
+Y
+B
+R271W
+L, N
+J
+R007C
+L
+	
+	
+Y
+J
+R040W
+L, Y
+J
+R057W
+L
+	
+	
+Y
+O
+L106W
+L, Y
+O
+L093W
+L,	
+	
+g
+O
+L02L,(1)
+	
+Tyrosine metabolism	
+Y
+O
+L123W
+L, Y
+O
+L106W
+L
+	
+	
+Y
+O
+L094C
+L, g
+O
+L02L,(1)
+	
+Cyanoamino acid metabolism	
+Y
+D
+R351W
+L
+	
+Starch and sucrose metabolism	
+Y
+E
+R095W
+L,Y
+E
+R116C
+L
+	
+Linoleic acid metabolism	
+N
+D
+R174C
+L
+	
+Butanoate metabolism	
+Y
+B
+R271W
+L
+	
+Pantothenate and CoA biosynthesis	
+Y
+O
+R274W
+L
+	
+Lipoic acid metabolism	
+g
+L
+L01L,Y
+N
+L158W
+L
+	
+Folate biosynthesis	
+N
+M
+L013W
+L,Y
+N
+L066W
+L,Y
+N
+L050C
+L
+	
+Sesquiterpenoid and triterpenoid biosynthesis	
+Y
+M
+R084W
+L
+	
+Aminoacyl-tRNA biosynthesis	
+Y
+C
+L065W
+L,Y
+C
+L047C
+L
+	
+	
+Y
+C
+L039W
+L,N
+J
+R007C
+L,Y
+N
+L010W
+L
+	
+Biosynthesis of unsaturated fatty acids	
+Y
+F
+L029C
+L
+	
+Metabolic pathways	
+Y
+C
+L065W
+L,Y
+J
+R071W
+L
+	
+Biosynthesis of secondary metabolites	
+Y
+J
+R038C6L
+	
+Biosynthesis of amino acids	
+Y
+J
+R071W
+L,Y
+O
+L123W
+L
+	
+	
+Y
+O
+L118C
+L,Y
+O
+L106W
+L
+	
+	
+Y
+O
+L094C
+L,Y
+O
+L093W
+L
+	
+	
+Y
+O
+L088C
+L,g
+O
+L02L
+	
+Ribosome	
+Y
+A
+R035W
+L,Y
+J
+L026W
+L
+	
+RNA transport	
+Y
+B
+L010C
+L
+	
+RNA polymerase	
+Y
+L
+R140W
+L
+	
+Proteasome	
+Y
+B
+L010C
+L
+	
+Phosphatidylinositol signaling system	
+Y
+B
+R045C
+L
+	
+Meiosis - yeast	
+Y
+O
+L106W
+L
+	
+L means detected by covariance test, (1) means detected by kernel covariance test with parameter 1 and (10) means detected by kernel covariance test with parameter 10. The FDR of the covariance test, kernel covariance test with parameter 1 and kernel covariance test with parameter 10 are 0.20, 0.24 and 0.33 respectively. The FWER of the test by Tony Cai is 0.2
+
+
+
+Kernel Method found isoform-specific structure change
+In our result, we found Valine, leucine and isoleucine biosynthesis pathway was associated with YCL023C marker only by kernel method under ethanol condition. Figure 5 shows the non-linear correlation between two pairs of genes, YER086W-YCL064C and YLR355C-YCL064C were nonlinear correlated with genotypes of YCL023C. And more than 10 isoforms of YER086W and 6 isoforms of YLR355C have been found (Saccharomyces Genome Database, http://www.yeastgenome.org/). The nonlinear correlation between two pairs of genes might be caused by samples in different isoforms. Specifically, two genes may be positive correlated under one isoform while negetive correlated under another isoform. However, the correlation of two genes might be missed if when we only considered linear correlation.
+Fig. 5 Isoform-specific structure change. Left: Scatter plot of gene YER086W and YCL064C under two different genotypes of YCL023C; Right: Scatter plot of gene YLR355C and YCL064C under two different genotypes of YCL023C. We found the associated pathway-SNP modules only by kernel covariance test. The scatter figures show that YER086W-YCL064C and YLR355C-YCL064C were nonlinear correlated under genotypes of marker YCL023C
+
+
+
+Linoleic acid metabolism is associated to cell cycle
+Our method found YFL029C is associated with linoleic acid metabolism pathway under ethanol condition. With single gene correlation analysis, both of the mean of expression levels of YKR089C (TGL4) and YJR155W (AAD10) were not associated with YFL029C (Fig. 6 middle and right). Specifically, with p-value 0.5174 and 0.002804 (not significant for multiple test). However, the scatterplot after correction shows the correlation of two genes change apparently under YFL029C (Fig. 7 left). Under one status of SNP, the two genes are positive correlated while under the other status of SNP, the two are nearly independent. To understand this from the biological meaning which was showned in Fig. 8b, we found that marker locates in gene CAK1 (The expression of CAK1 is slightly different under two SNP status which was shown in Fig. 6 left.), the product of which can increase the activity of CDC28 [31]. CDC28 plays an important role in cell cycle. It can control the progress of cell cycle by phosphorylate different transcription factor. In our case, CDC28 phosphorylate ACE2 [32] which can increase the activity of transcription factor, SUA7 [33]. SUA7 is the transcription factor of TGL4, which is a lipase in linoleic acid metabolism pathway. Meanwhile, CDC28 and FKH1 can form complex [34] and FKH1 is the transcription factor of AAD10, which is another enzyme in linoleic acid metabolism pathway. The correlation between YKR089C and its TF was shown in Fig. 7 middle and the correlation between YJR155W and its TF was shown in Fig. 7 right. From the structure of the pathway in KEGG [25] as shown in Fig. 8a, the different status of the SNP YFL029C might lead to different amounts of intermediate product in the pathway.
+Fig. 6 Failure to detect correlation between single gene expression level and genotype of YFL029C. Left: Boxplot of expression level of YFL029C; middle, Boxplot of expression level of YKR089C; right: Boxplot of expression level of YJR155W. We can see that the means of YKR089C and YJR155W expressions do not change significantly
+
+Fig. 7 Three examples of differential coexpression patterns of 2 genes due to genotype of YFL029C. Left: the co-expression patterns between the two genes YKR089C and YJR155W depend on the genotype of YFL029C. For samples with genotype 1, the co-expression correlation is different from the other samples. Middle: the co-expression patterns between the two genes YKR089C and YPR086W depend on the genotype of YFL029C. Right: the co-expression patterns between the two genes YJR155W and YIL131C depend on the genotype of YFL029C
+
+Fig. 8 The possible regulatory mechanism of the marker YFL029C to Linoleic acid metabolism pathway. a KEGG pathway of Linoleic acid metabolism pathway; b The potential regulatory relationship between marker YFL029C and Linoleic acid metabolism pathway
+
+
+
+Discussion and conclusion
+We propose a network based covariance test to identify the marker which affects the structure of a pathway. It has an advantage that a static network structure is not assumed. The biomarker we defined is the SNP associated to the structure of genes in the pathway. Considering two genes may have different correlations under different isoforms which is hard to detect by linear test, so we also consider the nonlinear test. We identified a total of 166 modules, with each module consisting of a group of genes and one eQTL where the eQTL regulate the co-expression patterns of the group of genes. We found that many of these modules have biological interpretations. Till now, we consider the difference of two networks by covariance matrix and covariance operators. We will focus on difference of precision matrix in the future research.
+
+Additional file
+Additional file 1 
+Supplementary materials for the computation of HSDCC and additional figures Figures S1–S3. (PDF 1474 kb)
+
+ From The Fourteenth Asia Pacific Bioinformatics Conference(APBC2016) San Francisco, CA, USA. 11 - 13 January 2016
+
+Competing interests
+
+The authors declare that they have no competing interests.
+
+Authors’ contributions
+
+MD and NT conceived of the project. The flowchart of the strategy was designed by MD and HY. HY and ZL developed the kernel method. HY conducted the simulation and real data analysis. HY wrote the first draft of the manuscript, which all authors revised and approved.
+
+Declarations
+
+This article has been published as part of BMC Systems Biology Volume 10 Supplement 1, 2016: Selected articles from the Fourteenth Asia Pacific Bioinformatics Conference (APBC 2016): Systems Biology. The full contents of the supplement are available online at http://www.biomedcentral.com/bmcsystbiol/supplements/10/S1.
+
+Acknowledgements
+This work is supported by the National Natural Science Foundation of China (Nos. 31171262, 31428012, 31471246), and the National Key Basic Research Project of China (No. 2015CB910303). We thank Dr. Lin Wang for helpful feedback during the saccharomyces cerevisiae data pre-processing and Dr. Minping Qian and Dr. Kai Song’s discussions. The publication costs for this article are from the National Natural Science Foundation of China (No. 31471246).

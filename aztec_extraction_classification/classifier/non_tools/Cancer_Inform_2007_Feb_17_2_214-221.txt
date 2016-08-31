@@ -1,0 +1,176 @@
+
+==== Front
+Cancer Inform101258149Cancer Informatics1176-9351Libertas Academica cin-02-214Original ResearchTumor Growth Rate Approximation-Assisted Estimation An Lihua 1Ahmed S. Ejaz 1Ali Adnan 21  Department of Mathematics and Statistics, University of Windsor, 401-Sunset Avenue, Windsor, ON N9B 3P4, Canada2  Biotechnology Section, Patent Branch/CIPO-Industry Canada, 50-rue Victoria, Gatineau, QC K1A 0C9, CanadaCorrespondence: Ejaz Ahmed. Email:
+seahmed@uwindsor.ca17 2 2007 2006 2 214 221 © 2006 The authors.2006This article is an open-access article distributed under the terms and conditions of the Creative Commons Attribution license (http://creativecommons.org/licenses/by/3.0/).
+
+From tumor to tumor, there is a great variation in the proportion of cancer cells growing and making daughter cells that ultimately metastasize. The differential growth within a single tumor, however, has not been studied extensively and this may be helpful in predicting the aggressiveness of a particular cancer type. The estimation problem of tumor growth rates from several populations is studied. The baseline growth rate estimator is based on a family of interacting particle system models which generalize the linear birth process as models of tumor growth. These interacting models incorporate the spatial structure of the tumor in such a way that growth slows down in a crowded system. Approximation-assisted estimation strategy is proposed when initial values of rates are known from the previous study. Some alternative estimators are suggested and the relative dominance picture of the proposed estimator to the benchmark estimator is investigated. An over-riding theme of this article is that the suggested estimation method extends its traditional counterpart to non-normal populations and to more realistic cases.
+
+growth rateinteracting particle systemtumor growthapproximation-assisted estimationlinear and non-linear shrinkage estimatorslarge-sample bias and risk
+==== Body
+Introduction
+One of the most typical characteristic of malignancy is the disturbance in the balance within cell multiplication. The proliferative activity of the tumor cell population is responsible for the uncontrolled tumor growth. Oncogenic cells are characterized by the continued renewal in their growth and by inhibiting their differentiation. A spatial analysis of the tumor cell growth exhibits a differential rate of growth and may be important in accessing the oncogenic status of the tumor as well as its potential to become malignant.
+
+Braun and Kulperger (1993) and Braun and Kulperger (1995) have introduced an estimator to estimate the growth parameter of an interacting particle system which is discussed in detail by Schürger and Tautu (1976). The interacting particle system theory is also dealt with comprehensively by Liggett (1985) for modeling the proliferation of cells in cancer tumors. They view this interacting particle system as a refinement of the linear birth process which more closely resembles the actual growth of the tumor.
+
+Estimation of the growth rate parameter for linear birth, exponential growth, and Gompertz models has been well-studied. However, the Braun-Kulperger estimator is the first growth rate estimator being proposed for an interacting particle system given the actual tumor data.
+
+The data arises from tumor measurements in mice, for example, at various times following injection of carcinogens. In animal sacrifice experiments, it is only possible to take measurements of the growing tumor at one time point, but several different types of measurements can be taken from the tumor. In longitudinal studies, measurements may be taken at more than one time point, but not as much information can be collected in this case. Usually, only an estimate of tumor volume can be obtained each time. In this paper, we will consider only the former situation. Such data should be considered as coming from an in vivo experiment. In particular, we assume that measurements of the total number of cells and the number of boundary cells can be obtained, but at only one time point for each tumor. Boundary cells are defined here as those cells which still have proliferative potential; cells which are in the interior tend to stop proliferating, because of crowding and other effects. Each boundary cell is assumed to split after an exponentially distributed amount of time, with rate λ independent of all other cells, and independent of the history of the process (a Markov assumption).
+
+In this paper, we consider the situation in which the measurements come from different populations. For example, an experimenter may wish to consider data for several populations of animals on different diets, to obtain a potentially more precise estimate for the growth rate. The experimenter is now at risk, since the growth rate may differ depending on the type of diet. A similar situation arises in the case of testing the effectiveness of different radiation treatments on the reduction of tumors, where controlling for the physical presence of the radiation seed is a common practice. Often, the experimenter will conduct a prior experiment to determine if there is such a physical effect by surgically planting a dummy seed in the growing tumor and comparing the resulted growth with a control group which has no seed. Ultimately, the experimenter may want to pool the growth rate estimates from the two populations to obtain a more precise growth rate estimate.
+
+In order to model this type of situation, we suppose that there are k possibly different populations of tumors evolving with time and denote the growth rate of the lth population by λl.
+
+The model is a continuous time Markov chain whose state space is the set of all possible configurations of cells existing at the vertices of a regular lattice Zd. To each site x of the lattice, we associate a set of sites (called the nearest-neighborhood) which is usually of the form:
+
+ {y:y=x±ek,   k=1,2,…,d} where ± ek refers to either the addition or subtraction of the kth standard unit vector (i.e. ekj = 0, if j ≠ k, and ekk = 1).
+
+At the time of exposure to carcinogen, an initial configuration of tumor cells arises from mutation of normal cells. The cells in the initial configuration each waits an independent exponential time, λl, before starting fission to produce two offspring. One of the offspring stays at the original site, while the other chooses a site at random from the unoccupied sites of the nearest-neighborhood of the original site. If the nearest-neighborhood is completely occupied, then the new offspring does not survive. In this latter case, we may interpret the cell in the process of fission as hypoxic – cut off from the blood supply by the surrounding layer(s) of cells. The process continues with each of the new offspring waiting and undergoing fission in the same manner.
+
+Braun and Kulperger (1993) have shown that, for a large class of such Markovian models and for tf > to, the growth rate is given by
+
+ (1) λl=xl(tf)-xl(to)∫totfbl(t)dt,   l=1,2,⋯k. where xl (t) is the expected number of cells at time t and bl (t) is the expected number of boundary cells at time t in a tumor from the lth population. We let Xl(ti) be the observed number of cells and Bl(ti) be the number of boundary cells at time ti, where i = 1, 2,..., nl, and the ti’s are assumed to be equally spaced apart. Multiple measurements are required at to = t1 and tf = tn. Measurements taken from different animals can be assumed independent, but Bl(ti) and Xl(ti) are dependent random variables if taken from the same animal.
+
+If ml independent observations are available at to and tf, then an estimator of λl is given by
+
+ (2) λ^lB=2X¯l(tf)-X¯l(to)hn(Bl(to)+Bl(tf)+2∑j=2nl-1Bl(tj)), where X̄l(t) is the sample average of the ml observations taken at time t, and hn = tj − tj − 1, j = 2,..., nl. We call this estimator the baseline estimator (BE) of the rate parameter λl, and use the alternate notation λ̂B = (λ̂1B, λ̂2B, ···, λ̂lB)′.
+
+In the following theorem, we summarize some useful properties of λ̂lB which will form the basis of our asymptotic results.
+
+Theorem (Braun and Kulperger (1995)) Under usual regularity conditions, for each l = 1, 2,..., k,
+
+λ̂lB is a strongly consistent estimator of λl;
+
+
+ml(λ^lB-λl)→LN(0,σl2), as hn → 0, ml → ∞,
+
+where 
+→L means convergence in law and
+
+ σl2=λl2Var(Xl(tf)-Xl(to))(xl(tf)-xl(to))2. We now consider the simultaneous estimation of rate parameter vector λ = (λ1, λ2, ···, λk)′ based on random samples of size m1, m2,··· mk, respectively, taken from k populations. The main objective of this study is to provide estimators when prior information about the population rates is available, i.e., when it is suspected that λ = λo, where {λo = λ1o, λ2o,, ···,λko}′ is a vector of the initial valued rates based on previous studies.
+
+Our interest here is to estimate λ by combining the sample information and the prior information, i.e., the rates calculated from the sample data and the initial values of the rate parameters. Our goal is to develop natural adaptive estimation methods that are free of subjective choice, tuning parameters, and have superior risk performance under quadratic loss. We demonstrate a well-defined data-based and approximation-assisted shrinkage-type rate estimator that combines estimation problems by shrinking a base estimator to a plausible approximate value. Asymptotic results are demonstrated and the relationship between the base estimator and the family of Stein-rule estimators is discussed. The approximation-assisted estimators are formally defined in section I; meanwhile some preliminary results are stated. In section II, expressions of the asymptotic bias and the asymptotic risk for the estimators of λ are presented. In sections III bias and risk analysis is performed and some discussion on how to use these estimators are provided. Section IV summarizes the findings.
+
+I. Approximation-Assisted Estimation Strategies
+In this paper simultaneous estimation of rates from independent Markovian distributions is considered. Assume that X1, X2, ···, Xk are independent variables following Markovian models with rate parameters λl, l = 1, 2, ··, k. It is desired to estimate λ = (λ1, λ2, ··, λk)′. The baseline estimator λ̂B = (λ̂1B, λ̂2B, ··, λ̂kB)′ is based on the respective sample size m1,···, mk. The statistical objective is to estimate rate parameter vector λ when initial estimates are available from past experiments. Hence, we discuss some approximation-assisted point estimation strategies when (λ1, ··, λk)′ may be approximated by (λ1o, ··, λko)′.
+
+Linear Shrinkage Estimator
+We first propose a linear shrinkage estimator (LSE) of λ as follows
+
+ (3) λ^LS=πλo+(1-π)λ^B=λ^B-π(λ^B-λo), here π ε (0,1) is a coefficient reflecting degree of trust in the prior information about λ. If π = 1, we 100% trust the approximation value and hence choose λo; while if π = 0 we do not trust the approximation value at all, and hence choose λ̂B- the baseline estimator. Therefore, a value of π near 0 causes λ̂LS to be based essentially on the sample data alone. In general λ̂LS moves towards λ̂B according to the degree of distrust in λ = λo. Further, note that λ̂LS is a convex-combination of λ̂B and λ o via fixed value of π ε (0,1). The value of π may be completely determined by the scientist, depending upon the degree of her/his belief in the initial values. However, it is well documented in literature that estimator like λ̂LS has smaller quadratic risk than λ̂B in an interval at the expense of poorer performance in the rest of the parameter space induced by the initial values. Not only that, but also the risk function of λ̂LS becomes unbounded as the approximation error grows. If the prior information regarding initial values of the parameters is bad in the sense that the approximation error is large, the LSE is inferior to λ̂B. Alternatively, if the information is good, i.e., the approximation error is small, λ̂LS offers a substantial gain over λ̂B. Nevertheless, in some experimental cases, it is not certain whether or not this information held. Since the information about the parameter is rather uncertain, we incorporate this information using the binary choice estimation.
+
+Binary Choice Estimator
+The binary choice family of estimators is defined as
+
+ (4) λ^BC={λo         if T<Toλ^B         otherwise, where T is the normalized distance between λ̂B and λo, and T o is a specified real number. Further, it can be shown that
+
+ (5) λ^BC=λ^B-I(T<To)(λ^B-λo), where I(A) is the indicator of the set A. Note that we have replaced π by I(T < T o) in (3) to obtain (5) with a random dichotomous weight. However, λ̂BC has the disadvantage of resulting in extreme outcomes either λ̂B or λo. Indeed, if we choose T as a suitable test statistic for testing the null hypothesis that λ = λ o, then binary choice estimation is generally known as preliminary test estimation. The above insight leads to non-linear shrinkage-type estimation to combine the sample data and past information. This is another basis for combining the information. Stein (1956) demonstrated the inadmissibility of the maximum likelihood estimator (MLE) when estimating the k-variate normal mean vector θ under quadratic loss. Following this result, James and Stein (1961) and Baranchik (1964) combined the k-variate MLE θ̂ with k-dimensional fixed null vector, under the normality assumption, as
+
+ θ^S=(1-c/∥θ^-0∥2)(θ^-0), where
+
+ 0<c<2(k-2), and demonstrated that for k > 2 this estimator dominates the MLE. Further, making use of Stein-type estimator, Sclove and Radhakrishnan (1972) demonstrated the non-optimality of the preliminary test estimation. Hence, here we are confined with Stein-type estimation. However, for k < 3, the preliminary test estimation may be a useful choice to tackle the estimation problem at hand.
+
+Non-linear Shrinkage Estimator
+Now using the Stein-like base, we propose the following non-linear shrinkage estimator (NLSE) for the parameter vector, λ, as follows:
+
+Define 
+Y=m+(λ^B-λo), and
+
+ Sm+-1=Diag(m1m+(λ10σ˜1)-2,⋯,mkm+(λk0σ˜k)-2), where
+
+ σ˜2=S2(X¯f-X¯o)2,S2=∑i=1n(Xf-Xo)2n-1,m+=∑i=1kmi. The NLSE is defined by
+
+ λ^NS=λ^B-(k-3)T-1(λ^B-λ^o), where
+
+ (6) T=Y′Sm+-1Y,         k≥4. The estimator λ̂NS can be considered as the general form of the shrinkage family of estimators (including linear and non-linear), where the shrinkage of the base estimator λ̂B is toward the approximate valued vector λo. Note that the weight in (3) is replaced by a random and smooth function of λ̂B and λo, i.e., (k − 3)T−1. However, the proposed λ̂NS is no longer a linear function of the benchmark estimator. Further, noting that the shrinkage coefficient (k − 3)T−1 may be greater than 1 causing over-shrinking, we make a truncation that leads to a convex combination of λ̂B and λo. This truncated estimator is called positive-part non-linear shrinkage estimator (PNLSE).
+
+Positive-part Non-linear Shrinkage Estimator
+In the spirit of Sclove and Radhakrishnan (1972), the PNLSE may be defined as
+
+ (7) λ^NS+=λo+[1-(k-3)T-1]+(λ^B-λo), where [·]+ = max(0, ·). The positive part estimator is particularly important to control the over-shrinking inherent in λ̂NS. The above equation may be rewritten in the following computationally attractive form.
+
+ (8) λ^NS+=λo+[1-(k-3)T-1](λ^B-λo)I(T>k-3) It is interesting to note that the proposed strategy is similar in spirit to the Bayesian model-averaging procedures. However, the main difference is that the Bayesian model-averaging procedures are not optimized with respect to any particular loss function. The present investigation is stimulated by prediction offered by Professor Efron in RSS News of January, 1995.
+
+“The empirical Bayes/James-Stein category was the entry in my list least affected by computer developments. It is ripe for a computer-intensive treatment that brings the substantial benefits of James-Stein estimation to bear on complicated, realistic problems. A side benefit may be at least a partial reconciliation between frequentist and Bayesian perspectives as they apply to statistical practice.” It may be worth mentioning that this is one of the two areas Professor Efron predicted for continuing research for the early 21st century.
+
+Shrinkage and likelihood-based methods continue to play vital roles in statistical inference. These methods provide extremely useful techniques for combining data from various sources.
+
+II. Main Results
+In this section, we showcase our main results by providing the large-sample expressions for the quadratic bias and risk of the estimators. It is straightforward to show that for large samples, λ̂B, λ̂NS and λ̂NS+ are risk equivalent under the non-homegeneity of the parameters. This motivates us to consider a sequence {C(m+)}
+
+ C(m+):λ=λ(m+), where
+
+ (9) λ(m+)=λ+δom+. to obtain useful asymptotic results and to provide a meaningful risk performance of the estimators. Note that for δo = 0, λ(m+) = λ, for all m+.
+
+Lemma Under the sequence in (9) and the model assumptions of Section 1, as m+ → ∞, 
+X=m+(λ^B-λo) follows approximately a multivariate normal distribution with mean vector δo and covariance matrix Γ = lim Sm+−1; here we assume that 
+lim(mim+)=γi.
+
+Now, we present the expressions for the asymptotic distributional bias (ADB) of the estimators as follows. First, the notation ψk(x; Δ) stands for the noncentral chi-square distribution function with non-centrality parameter Δ and k degrees of freedom. Then we can write 
+E(χk-2u(Δ))=∫0∞x-2udψk(x;Δ).
+
+ (10) ADB(λ^NS)=-(k-3)δE(χk+1-2(Δ)),Δ=δ′Γ-1δ,  (11) ADB(λ^NS+)=-δ[ψk+1(k-3;Δ)+E{χk+1-2(Δ)I(χk+12(Δ))>(k-3)}]. Now, we transform these functions in a scalar (quadratic) form to obtain a simple yet meaningful interpretation. Define
+
+ B(.)=[ADB(λ^)]′Γ-1[ADB(λ^)] as the quadratic bias of λ̂. Then
+
+ B(λ^NS)=(k-3)2Δ[E(χk+1-2(Δ))]2,B(λ^NS+)=Δ[ψk+1(k-3;Δ)+E{χk+1-2(Δ)I(χk+12(Δ))>(k-3)}]2. Note that the quadratic bias of λ̂NS starts from 0 at Δ = 0, increases to a point, and then decreases towards 0. This is due to the fact that E(χv−2 (Δ))is a decreasing log-convex function of Δ. The behavior of λ̂NS+ is similar to that of λ̂NS. However, the quadratic bias curve of λ̂NS+ remains below the bias curve of λ̂NS for all values of Δ. Note that λ̂B is an asymptotically unbiased estimator of λ, since it does not incorporate the approximate value, λo, in the estimation process.
+
+To appraise the risk performance of the estimators, we use the quadratic loss function: ℒ(λ⋄) = m+(λ⋄ − λ)′W(λ⋄ − λ), where λ⋄ is any estimator of λ, and W is a positive semi-definite weight matrix. Then, the quadratic risk of λ⋄ is given by
+
+ (12) R(λ⋄)=m+E{(λ⋄-λ)′W(λ⋄-λ)}. The sequence {C(m+)} in (9) will be used to compute the asymptotic distributional quadratic risk (ADQR) defined below. First, the asymptotic distribution function of 
+{m+(λ⋄-λ)} is given by
+
+ (13) G(z)=limm+→∞Pr{m+(λ⋄-λ)≤z}, for which the limit in (13) exists. Further, define
+
+ (14) Q=∬⋯∫zz′dG(z). Finally, the ADQR is defined by R(λ̂) = trace (WQ). Under (9) and the usual regularity conditions, we obtain the ADQR functions of the estimators in the following theorem.
+
+Theorem
+ (15) R1(λ^B)=trace(WΓ),  (16) R2(λ^NS)=R1(λ^B)+δ′Wδ(k-3)(k+1)E(χk+3-4(Δ))-(k-3)R1(λ^B){2E(χk+1-2(Δ))-(k-3)E(χk+1-4(Δ))},  (17) R3(λ^NS+)=R2(λ^NS)-R1(λ^B)E[{1-(k-3)χk+1-2(Δ)}2I(χk+12(Δ)≤(k-3)]+δ′Wδ[E[2{1-(k-3)χk+1-2(Δ)}I(χk+12(Δ)≤(k-3)]-E[{1-(k-3)χk+3-2(Δ)}2I(χk+32(Δ)≤(k-3)]]. Proof. By Lemma the above relations are obtained using the same arguments as given in Ahmed and Braun (2000).
+
+III. Risk Performance of the Estimators
+The large sample properties of the proposed estimators are discussed in the light of the quadratic loss function. We now investigate the comparative statistical properties of the Stein-type estimators. When Ho is true,
+
+ R1(λ^B)-R2(λ^NS)=trace(WΓ) (k-3)E{2χk+1-2-(k-3)χk+1-4} is a positive quantity. Hence, we conclude that λ̂NS dominates λ̂B for δ = 0. Meanwhile, the maximum risk reduction gain of λ̂NS over λ̂B is achieved at the null vector. In order to investigate the performance of λ̂NS for all values of δ, we characterize a class of positive semi-definite matrices by
+
+ (18) WD={trace(WΓ)emax(WΓ)≥k+12} where emax(.) means the largest eigenvalue of (.).
+
+Theorem: (Courant) If A and B are two positive semi-definite matrices with B nonsingular, both of order (q × q), then
+
+ emin(AB-1)≤x′Axx′Bx≤emax(AB-1) where emin(.) means the smallest eigenvalue of (.) and x is a column vector of order (q × 1).
+
+We note that the above lower and upper bounds are equal to the infimum and supremum, respectively, of the ratio 
+x′Axx′Bx for x ≠ 0. For B = I, the ratio is known as the Rayleigh quotient for the matrix A. As a consequence of the Courant Theorem,
+
+ emin(WΓ)≤δ′WδΔ≤emax(WΓ),for δ≠0 and W∈WD. Thus, under the class of matrices defined in relation (18) we conclude that R((λ̂NS) ≤ R((λ̂B) for all δ, where strict inequality holds for some δ. This clearly indicates the asymptotic inadmissibility of (λ̂B under local alternatives relative to (λ̂NS. The risk of (λ̂NS begins with an initial value of 3 and increases monotonically towards trace(WΓ). Thus, the risk of (λ̂NS is uniformly smaller than (λ̂B, where the upper limit is attained when ||δ|| → ∞. The result is valid as long as the expectations in (16) exist.
+
+Based on relations (16) and (17), it is seen that
+
+ R(λ^NS+)/R(λ^NS)≤1,         for all δ, with strict inequality hold for some δ. Therefore, (λ̂NS+ asymptotically dominates (λ̂NS. Hence, (λ̂NS+ is superior to (λ̂B. The risks of all the estimators depend on the matrices W and Γ.
+
+Numerical Risk Output
+In order to facilitate numerical computation of the risk functions, we consider the particular case W = Γ−1. In this case trace (WΓ) = k and δ′Wδ = Δ. The values of the risks are obtained using Maple.
+
+We have numerically computed R1(λ̂B), R2(λ̂NS) and R3(λ̂NS+) versus Δ. It is seen that Stein-type estimators dominate λ̂B for all the values of Δ. We notice that both estimators have maximum risk gain as compared to λ̂B at Δ = 0. In order to quantify this value, the efficiency of the Stein-type estimators relative to λ̂B at different values of Δ is computed by using the formula
+
+ REp=R1Rp,         p=2,3. Table 1 provides the estimated relative efficiency of λ̂NS+ and λ̂NS over λ̂B, respectively. Both estimators attained maximum efficiency relative ro λ̂B at Δ = 0 and the value of the efficiency is a decreasing function of Δ. In addition, table 2 gives the efficiency of λ̂NS+ relative to λ̂NS, i.e., R3/R2, for different choices of k with Δ = 0, 0.5, 1.0, 1.5 and 3.0.
+
+Seemingly, the magnitude of relative efficiency increases as the value of k increases. On the contrary, efficiency decreases with the increasing of Δ.
+
+IV. Comments and Outlook
+The Stein-type estimation strategies are asymptotically superior to strategies based on sample information only. Further, the usual Stein-type estimator is asymptotically dominated by its truncated part. However, we must stress that the important issue here is not the improvement in sense of lowering the risk by using the positive part of the λ̂NS. By doing so, λ̂NS+ removes the over-shrinking behavior of λ̂NS when the test statistic takes values near zero. The components of λ̂NS+ have the same sign as that of components of λ̂B. More importantly, positive part estimation provides grounds for studying confidence sets.
+
+In this research we continue the search started four decades ago by Lindley (1962) for new strategies to think about combining estimation problems. In the context of several models, we consider methods for optimally combining the data from various sources. Although the estimation and inference implications of shrinkage estimator are encouraging, some interesting questions remain. For example, we have used the unbiased estimator and the initial value in the proposed estimation methodology. Perhaps one can use biased estimator to further improve the risk-performance of the estimator. Research on the statistical implications of these and other estimators combining possibilities for a range of statistical models is ongoing.
+
+Acknowledgement
+This research was supported by Natural Sciences and Engineering Research Council of Canada. The authors would like to thank Drs. J. Braun and R.J. Kulperger for useful discussions. We would also like to thank the editor for helpful comments.
+==== Refs
+References
+Ahmed SE Braun WJ  2000 Testing the homogeneity of tumor growth rates in several models Stochastic Modelling and Applications 3 11 22 
+Baranchik AM  1964 Multiple regression and estimation of the mean of a multivariate normal distribution Technical Report 51 Stanford University, Dept. of Statistics. 
+Braun WJ Kulperger RJ  1993 Differential equations for moments of an interacting particle process on a lattice Journal of Mathematical Biology 31 199 214 
+Braun WJ Kulperger RJ  1995 Data analytic implementation of an inter acting particle system for tumor growth modeling Pakistan Journal of Statistics 11 123 136 
+James W Stein C  1961 Estimation with quadratic loss Proceeding of the Fourth Berkeley Symposium On Mathematical Statistics and Probability  University of California Press Berkeley, CA 
+Liggett T  1985 Interacting Particle Systems  New York Springer 
+Lindley DV  1962 Discussions of professor stein’s paper Journal of Royal Statistical Society, B 24 285 288 
+Schürger K Tautu P  1976 A markovian configuration model for carcinogenesis Lecture Notes Biomath 11 92 108 
+Sclove SL Morris C Radhakrishnan R  1972 Optimality of preliminary test estimation for the multinormal mean The Annals of Mathematical Statistics 43 1481 1490 
+Stein C  1956 Inadmissibility of the usual estimator of the mean of a multivariate normal distribution Proceeding of the Fourth Berkeley Symposium On Mathematical Statistics and Probability  University of California Press Berkeley, CA

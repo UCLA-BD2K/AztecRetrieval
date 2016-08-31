@@ -1,0 +1,241 @@
+
+==== Front
+04104626011NatureNatureNature0028-08361476-46871909292710.1038/nature07605nihpa76741ArticleNeural Palmitoyl-Proteomics Reveals Dynamic Synaptic Palmitoylation Kang Rujun 1#Wan Junmei 2#Arstikaitis Pamela 1Takahashi Hideto 1Huang Kun 1Bailey Aaron O. 3Thompson James X. 3Roth Amy F. 2Drisdel Renaldo C. 4Mastro Ryan 4Green William N. 4Yates John R. 3rd3Davis Nicholas G. 2*El-Husseini Alaa 1*┴1 Department of Psychiatry, Brain Research Centre, University of British Columbia, Vancouver, British Columbia, Canada2 Department of Pharmacology, Wayne State University School of Medicine, Detroit, Michigan, USA3 Department of Cell Biology, The Scripps Research Institute, La Jolla, CA, USA4 Department of Neurobiology, University of Chicago, Chicago, IL, USAAddress correspondence to N. Davis ndavis@med.wayne.edu and R. Kang rkang@interchange.ubc.ca┴ This paper is dedicated to the memory of our friend and colleague, Alaa El-Husseini, whose ideas about palmitoylation and plasticity inspired this work (deceased Dec 23, 2007)
+
+#* Authors contributed equally
+
+Author Contributions R.K. and J.W. are co-first authors. R.K. was responsible for assessing candidate PP palmitoylation, siRNA knockdown effects in neurons, and activity-dependent palmitoylation changes. J.W. was responsible both for the ABE purifications of samples used for Western blotting and MS analysis, and for the quantitative Northern analysis. P.A. and H.T. analyzed filopodia and spine changes in transfected neurons. K.H. analyzed palmitoylated proteins using ABE assay. A.R. constructed plasmids, particularly those used for the siRNA analysis and rescue. A.E.H. and N.D. provided hypothesis development, experimental design input, data interpretation and co-wrote the manuscript. A.B., J.T. and J.Y. performed the MS analysis. R.D., R.M. and W.G. contributed to analysis of some of the palmitoylated proteins.
+
+31 10 2008 18 12 2008 18 6 2009 456 7224 904 909 Users may view, print, copy, and download text and data-mine the content in such documents, for the purposes of academic research, subject always to the full Conditions of use:http://www.nature.com/authors/editorial_policies/license.html#termsSummary
+Palmitoylation regulates diverse aspects of neuronal protein trafficking and function. Here, a global characterization of the neuronal palmitoyl-proteome identifies most of the known neuronal palmitoyl-proteins (PPs), 68 in total, plus over 200 new PP candidates, with additional testing confirming palmitoylation for 21 of these candidates. New PPs include neurotransmitter receptors, transporters, adhesion molecules, scaffolding proteins, as well as SNAREs and other vesicular trafficking proteins. Of particular interest is a finding of palmitoylation for a brain-specific Cdc42 splice variant. The palmitoylated Cdc42 isoform (Cdc42-palm) differs from the canonical, prenylated form (Cdc42-prenyl) both with regard to localization and function: Cdc42-palm, concentrates in dendritic spines and plays a special role in inducing these post-synaptic structures. Finally, assessing palmitoylation dynamics in drug-induced activity paradigms finds rapidly induced changes both for Cdc42 as well as for other synaptic PPs, suggesting that palmitoylation may participate broadly in the activity-driven changes that shape synapse morphology and function.
+==== Body
+Text
+Recent studies hint at a key role for palmitoylation in modulating neuronal protein trafficking and function1. This lipid modification, the attachment of palmitate, a 16-carbon saturated fatty acid through thioester linkage to cysteines, serves in tethering proteins to membranes, or for sorting to particular lipid microdomains such as lipid rafts1-4. Like phosphorylation, palmitoylation can be reversible, and thus can dynamically regulate protein localization. A striking example of palmitoyl-regulation in neurons is provided by the scaffolding molecule, postsynaptic density-95 (PSD-95), whose activity-directed palmitoylation-depalmitoylation regulates AMPA-type glutamate receptor retention at excitatory glutamatergic synapses5. Nonetheless, given the technical difficulties hindering palmitoylation analysis, coupled with lack of palmitoylation consensus sequences for prediction, one expects that the scope of this modification’s involvement at the synapse has been underestimated.
+
+Neural Palmitoyl-Proteomes
+Here, we have applied an acyl-biotinyl exchange (ABE) proteomic technology5, which purifies palmitoylated proteins from complex protein extracts, towards a comprehensive description of the neuronal palmitoyl-proteome. Use of this methodology in the yeast Saccharomyces cerevisiae tripled the number of known yeast PPs6. This method, based on the ABE chemistry of Drisdel and Green7, substitutes biotin for palmitoyl-modifications through a sequence of three chemical steps: unmodified cysteine thiols are blocked with N-ethyl maleimide (NEM); palmitoylation thioester linkages are cleaved with hydroxylamine (HA); and finally, newly-exposed cysteinyl thiols are marked with a thiol-specific biotinylation reagent. These biotinylated proteins are then affinity-purified with streptavidin-agarose and identified by Multi-Dimensional Protein Identification Technology (MuDPIT), a tandem MS-based proteomic methodology8.
+
+Proteins from cultured rat embryonic cortical neurons and purified synaptosomal membrane fractions (enriched for both pre- and postsynaptic membranes) extracted from whole adult rat brain tissues were used for this analysis. Application of ABE to cortical neurons purifies a wide spectrum of proteins (Fig. 1a, +HA). A standard control that allows contaminant proteins to be distinguished, involves processing protein extracts through a parallel protocol which omits the HA cleavage step6 (Fig. 1a, −HA). Four iterations of MuDPIT analysis of + and −HA samples identified 1643 proteins, including many known PPs. Using spectral count-based quantification9,10, identified proteins were plotted by relative + and −HA sample abundance (Fig. 1b; Suppl. Methods). Proteins showing substantial abundances in both the + and −HA samples are likely contaminant proteins, while the proteins that cluster along the x-axis with the known PPs (Fig. 1b, red dots) represent the new PP candidates. Parallel ABE/MuDPIT analysis of synaptosomal membrane fractions yielded a similar collection of known and candidate PPs that overlapped the neuronal collection considerably (Fig. 1c; Suppl. Fig. 1 and Suppl. Tables 1-5).
+
+The combined neuronal and synaptosomal MuDPIT datasets were used to assign candidate PPs to a high-confidence Group A and a lower confidence Group B. The 64 known PPs identified within these groupings were removed (50 from Group A and 14 from Group B; 4 known PPs were detected only at low significance levels; known PPs are listed and annotated in Suppl. Table 3). Also removed were proteins that while likely not palmitoylated, are nonetheless detected by ABE due to their biochemical usage of thioester linkages, a category that includes several ubiquitin conjugases/ligases, as well as enzymes utilizing either lipoic acid or phosphopantetheine prostheses (Suppl. Table 6). The 113 Group A candidates that remain after these substractions are listed and annotated in Supplementary Table 4; the 318 Group B candidates are listed in Supplementary Table 5 (see Suppl. Methods for analysis details). For 21 of the new candidates, palmitoylation was subsequently confirmed using traditional [3H]palmitate metabolic and/or ABE methodologies (Fig. 1d and e; Suppl. Fig. 2).
+
+Many of the new candidate PPs (Box 1; Suppl. Fig. 1), are hydrophilic proteins, with palmitoylation likely serving for membrane tethering. However, the majority of the candidates are predicted transmembrane proteins where palmitoylation may serve for targeting to specialized membrane microdomains, or perhaps structurally, modifying the protein’s transmembrane architecture. Notable highlights of our list include the scaffolding protein AKAP79/150, numerous ion channels, voltage-gated Na channels, as well as multiple transporters for neurotransmitter re-uptake (Box 1). Adding to the list of ionotropic neurotransmitter receptor subunits recently found to be palmitoylated1,11, our method identifies the NMDA receptor subunits NR2A and NR2B, as well as the serotonin receptor subunit 5HT-3C (Htr3c). Numerous SNARE proteins also are prominently detected, including six different syntaxins, as well as synaptobrevin and VAMP proteins. Other key proteins identified include those involved in regulation of growth cone dynamics (Semaphorin 4D, latrophilin-1), and synaptic adhesion (protocadherinα 1,8,9,10,17, δ-catenin, SynCAM4, Eph receptors).
+
+Box 1 New palmitoyl-protein candidates
+The proteins with strong proteomic support for palmitoylation are listed by functional category. Proteins with confirmed palmitoylation (Fig. 1e) are highlighted by diamonds. For annotated, more complete listings of both known and newly identified candidate PPs, see Suppl. Fig. 1 and Suppl. Tables 3-6.
+
+Receptors and Channels
+Grin2a(NR2A)◆, Grin2b(NR2B)◆
+
+Scn1a, -2a1, -3a, 9a (voltage-gated Na-channel α subunits)
+
+Ttyh1, -3 (tweety-like Cl-channels)
+
+Ptgfm (prostaglandin receptor negative regulator)
+
+Htr3c (iontropic 5-HT receptor subunit)
+
+Kcnma1 (BK channel)
+
+Scaffolding proteins
+Akap5(AKAP79/150)◆
+
+Dlgap2(PSD95-associated protein)
+
+Gphn(gephyrin)◆
+
+Membrane trafficking
+Stx1a◆, -1b2◆, -6◆, -7, -8, -12◆, -19◆ (syntaxins)
+
+Sybl1(synaptobrevin-like 1)
+
+Vamp1, -4
+
+Scamp1◆, -3, -5◆
+
+Rab1b, -3, -5, -7, -10, -14
+
+Sort1(sortilin)
+
+Rtn1, -3 (reticulons)
+
+Cell adhesion
+Mcam (M-CAM)
+
+Epha5, -a3, -b2 (ephrin receptors)
+
+Efnb3(ephrin-B3; ligand)
+
+Igsf4c(SynCAM4; Necl4)◆
+
+Igsf8(PGRL; EWI-2)
+
+Pcdh1◆, -8, -9, -10, -17 (protocadherins)
+
+Ctnnd2(δ-catenin-2)◆
+
+Cxadr(Coxsackie and adenovirus receptor)
+
+Astn1 (astrotactin-1)
+
+Cntn1 (contactin)
+
+Jam3 (junctional CAM-3)
+
+Pkp4 (plakophilin-4)
+
+Sema4d (semaphorin-4D)
+
+Lphn1 (latrophilin-1)
+
+Plxnb2 (plexin-B2)
+
+Neo1 (neogenin-1)
+
+Myelin-associated
+Mbp (MBP and Golli-MBP)
+
+MOBP (myelin-associated oligodendrocyte basic protein)
+
+Mog (myelin oligodendrocyte glycoprotein)
+
+Gpm6a(M6A; PLP-like)◆
+
+Transporters
+Slc1a1, -1a2, -1a3(Glu-T1)◆ (glutamate transporters)
+
+Slc6a1, -32a1 (vesicular GABA transporters)
+
+Atp2b1, -2b3, -2c1 (Ca transporters)
+
+Slc8a1, -8a2 (Na/Ca exchangers)
+
+Slc3a2 (amino acid transporter)
+
+Slc4a2 (choline transporter)
+
+GTPases and Signaling proteins
+Cdc42◆, Rac1
+
+Rras(R-Ras), Rras2(R-Ras2)
+
+Rala, Ralb (Ral-A, Ral-B)
+
+Sept3, -6, -8 (septins)
+
+Gprin1◆, Gprin3 (Gα-interacting)
+
+Arhgdia (Rho-GDIα)
+
+Spred1, Spred2 (sprouty-related)
+
+*Adcy1, -5, -6, -9 (adenylyl cyclases)
+
+Inpp5a (inositol phosphatase)
+
+Zfyve28 (FYVE PI-binding)
+
+Pde10a (cAMP/cGMP dual phosphodiesterase)
+
+Cytoskeletal proteins
+Ablim2 (actin-binding LIM protein 2)
+
+Dync1i1(DIC; dynein intermediate chain)◆
+
+Chaperones
+Canx(calnexin)◆
+
+Ppib (peptidylprolyl isomerase B)
+
+Metabolism
+Zdhhc5 (DHHC palmitoylation enzyme)
+
+Agpat1 (lipid biosynthesis)
+
+Capn5 (calpain-5)
+
+Ggtl3 (gamma-glutamyl transpeptidase)
+
+Cyb5r3 (cytochrome B5 reductase)
+
+Mpst (mercaptopyruvate sulfotransferase)
+
+Mitochondrial
+Cox6c (respiratory chain)
+
+Vdac1, -2, -3 (outer membrane porins)
+
+Aldh6a1
+
+*Palmitoylation has been reported for an adenylyl cyclase previously; however, isoform identity of the palmitoylated cyclase was not determined32.
+
+A Palmitoylated Cdc42 Splice Variant
+Our strong proteomic identification of Cdc42 as a candidate PP was intriguing. Like other Rho GTPases, Cdc42 uses actin cytoskeletal regulation to reshape cellular morphology, inducing filipodia in many cell types, and in neurons, it has been implicated in inducing axon/dendrite outgrowth, dendritic arborization, and spine formation12-16. Although Cdc42 is well known to be prenylated17, it has not been shown to be palmitoylated. Furthermore, Cdc42 differs from dually palmitoylated-prenylated G proteins like H- and N-Ras, in that it lacks cysteines proximal to its C-terminal -CaaX prenylation motif that might serve as palmitoyl-acceptors. However, a second Cdc42 splice variant has been reported that exchanges in an alternative C-terminal exon, which replaces the prenylation motif with a new C-terminal domain that terminates with tetrapeptide sequence –CCIF18 (Fig. 2a). This Cdc42 splice variant (isoform 2), we find, by metabolic [3H]palmitate labeling, is palmitoylated, while the canonical form is not (Fig. 2b). Furthermore, introduction of a C2S mutation (Fig. 2a) eliminates this palmitoylation, implicating these cysteines as the likely palmitoyl-acceptors. Intriguingly, while the canonical, prenylated Cdc42 isoform (Cdc42-pren) is expressed in all tissues, the variant, palmitoylated form (Cdc42-palm) is expressed only in brain18 (Fig. 2c). Quantitative mRNA analysis finds the two forms to be expressed at roughly similar levels in brain and in neuronal culture (Suppl. Fig. 3).
+
+Cdc42-Palm and Dendritic Spines
+To assess the implications of this neuron-specific Cdc42 palmitoylation, we first examined effects on localization. The two isoforms show distinct dendritic localizations: while Cdc42-prenyl distributes throughout the dendrite, to dendritic spine and shaft alike, Cdc42-palm is found to be more heavily concentrated in dendritic spines, a distribution that is abolished through introduction of the palmitoylation-defective C2S mutation (Fig. 3a). Consistent with this, a neuronal membrane fractionation analysis finds that the two isoforms also show distinctive patterns of fractionation (Suppl. Fig. 4). Cdc42 activity is known to modulate signaling pathways and plasticity-related paradigms that regulate spine morphology12-16,19-21. To determine whether palmitoylation plays a role in regulating Cdc42 function at the synapse, we contrasted the effects of the Cdc42 splice variants on spine induction. Constructs expressing constitutively-active (CA) G12V mutant forms of Cdc42(CA)-palm and Cdc42(CA)-prenyl were transfected into developing cultured hippocampal neurons at seven days in culture (DIV 7) with changes in spine number being analyzed at DIV 14 (Fig. 3b). While Cdc42(CA)-prenyl is clearly active in this assay, showing a significant induction of dendritic spines, a substantially more robust spine induction is seen for Cdc42(CA)-palm (Fig. 3b). Mutation of the two palmitoyl-accepting cysteines [Cdc42(CA,C2S)] abolishes this induction. Likewise, pretreatment with the general palmitoylation inhibitor, 2-bromopalmitate (2BP) blocked spine induction by Cdc42(CA)-palm, but not induction by Cdc42(CA)-prenyl. Replication of this analysis in COS-7 cells yielded similar results: a substantially more robust filopodia induction was seen with Cdc42(CA)-palm, with the induction abolished by the C2S cysteine mutation and severely diminished by 2BP treatment (Suppl. Fig. 5).
+
+To examine the role of endogenously expressed Cdc42, plasmid-based siRNAs targeting sequences either common or unique to the two Cdc42 isoforms (Suppl. Fig. 6) were transfected into DIV 9 neurons, with spine density being analyzed on DIV 14 (Fig.3c). Consistent with a recent siRNA analysis21, a construct targeting sequences common to the two isoforms significantly inhibited spine formation (pan-siRNA; Fig. 3c). In terms of individual isoform contributions, a knockdown of Cdc42-prenyl expression showed no discernible effect on spine induction, being indistinguishable from both empty vector or scrambled siRNA controls. In contrast, the Cdc42-palm knockdowns, using either of our two Cdc42-palm-targeted siRNA plasmids, yielded striking, highly significant spine number reductions. Thus, the Cdc42-palm isoform is required for spine induction, a key step of synaptogenesis.
+
+We have used the same siRNA analysis also to examine Cdc42 isoform roles in the induction of dendritic filopodia. These filopodia are thought to be spine precursors, extending out from the dendrite to explore the local environment for potential presynaptic connections22. As we found for spines, filopodia also uniquely rely on the palmitoylated Cdc42 isoform: filopodia numbers are significantly knocked down by the Cdc42-palm-targeted siRNA, but not by the Cdc42-prenyl siRNA (Suppl. Fig. 7c). As a further siRNA specificity control, we have demonstrated that an overproduced Cdc42-palm, having silent changes in the siRNA target sequence making it siRNA-resistant, is able to fully rescue the filopodia knockdown (Suppl. Fig. 7a-c). In contrast, Cdc42-prenyl affords only a partial rescue, indicating that Cdc42-prenyl, when similarly overproduced, substitutes only poorly for depleted Cdc42-palm function. Thus, as for spines, Cdc42-palm also is the predominant isoform in the induction of dendritic filopodia.
+
+Regulatable Synaptic Palmitoylation
+The functional differences distinguishing the two Cdc42 isoforms must ultimately redound to their different lipid modifications, perhaps reflecting the differential membrane microdomain affinity of the two lipids; palmitoylated proteins typically show increased segregation into raft-like domains3, which are known to be enriched in dendritic spines23. The two forms also differ with regard to their regulatory potential, with Cdc42-palm potentially controllable by reversible palmitoylation. To examine palmitoyl-turnover, a panel of neuronal PPs, including Cdc42, were assessed for palmitate loss following a 5-h period of 2BP-instigated palmitoylation blockade in cultured neurons. In the presence of 2BP, proteins that undergo rapid, constitutive palmitoyl recycling should fail to be re-palmitoylated and should therefore be lost from the ABE-purified palmitoyl-proteome. Providing proof of principle, we see that PSD-95, which is known to undergo rapid palmitoyl-cycling5, is indeed largely lost from the 2BP-treated palmitoyl-proteome (Fig. 4a and b). The unaltered PSD-95 levels detected in the starting, unpurified protein extracts (Fig. 4a, total panels), indicates this turnover to be palmitoyl-turnover, not protein turnover. Significant palmitoyl-turnovers also were seen for Cdc42, as well as the two other G proteins, H/N-Ras and Rho-B (Figs. 4a and b). In contrast, the 2BP treatment showed little or no effect on other proteins, namely SNAP25, synaptotagmin-1, Scamp1, the GluT-1 glutamate transporter, indicating the palmitoyl-modifications of these proteins are relatively stable under basal conditions; we note that these proteins showing stable palmitoylation are largely presynaptic. The differential palmitoyl-modification stabilities for Cdc42, SNAP25, syntaxin-1B, and synaptotagmin-1, have been confirmed by [3H]-palmitate labeling pulse-chase analysis (Sup. Fig. 8). We also find that 2BP treatment results in a striking inhibition of endogenous neuronal Cdc42 activity (Suppl. Fig. 9); in addition to affecting Cdc42 palmitoylation, 2BP may also affect upstream components in this pathway, thus potentially affecting Cdc42 activity indirectly.
+
+Regulated palmitoylation may serve to modulate changes in the cytoskeleton associated with activity-driven synapse remodeling24. To gain insights into how palmitoyl-regulation might couple to synaptic activity, we have tracked our test panel of neuronal PPs for rapidly-induced palmitoylation changes in response to a 5-min treatment with 50 μM glutamate, a treatment that modulates synaptic activity and spine morphology through activation of synaptic and extrasynaptic glutamate receptors25-28. The effects on palmitoylation are surprisingly broad, with proteins showing both increases and decreases in palmitoylation (Figs. 4c; Suppl. Fig. 10a). The results for Cdc42 are particularly striking, with glutamate inducing rapid depalmitoylation. Correlated with this depalmitoylation, glutamate also results in a rapid dislocation of Cdc42 from dendritic spines (Suppl. Fig. 11). These rapidly induced changes to Cdc42 palmitoylation and localization correlate with, and may contribute to, the rapid spine collapse that accompanies such high-level glutamate treatments in neurons29. Thus, the concentration of Cdc42 in spines can be rapidly modified by neuronal activity in a palmitoylation-dependent manner, with dynamic Cdc42 palmitoylation perhaps serving to rapidly regulate synapse architecture in response to changing neuronal activity.
+
+To explore the role of palmitoylation modulation in the in vivo brain, we have monitored palmitoylation changes in response to treatment with kainic acid, a drug which enhances neuronal excitability, inducing synchronous neuronal firing, ultimately leading to seizure-like activity30,31. Animals were injected with 10 mg/kg kainic acid and tissues were harvested within 30 min of seizure activity onset. As with the glutamate-treated neurons (Fig. 4c), we again find that surprisingly broad changes in palmitoylation are induced; in this case, however, increased palmitoylation is the predominant change (Fig. 4d; Suppl. Fig. 10b). These palmitoylation increases suggest actions upon pools of non-palmitoylated proteins, with palmitoylation perhaps serving to recruit proteins to synapses. Thus, in brain, as in cultured neurons, changes in neuronal activity result in palmitoylation changes that are rapidly and broadly induced, indicating modulation of palmitoylation to be an early event elicited by changes in neuronal firing. In conclusion, our proteomic analysis has greatly expanded palmitoylation’s neuronal purview, highlighting a broad role in regulating synaptic function.
+
+METHODS SUMMARY
+Palmitoylation analysis relied in large part on the ABE purification of palmitoyl-proteins en masse either from whole rat brain, from purified rat synaptosomes, or from cultured embryonic rat neurons. This procedure which starts with denatured protein extracts is an in vitro chemical exchange of biotin for thioester-linked acyl modifications, with the resulting biotinylated protein being affinity-purified using streptavidin-agarose. Subjecting the purified to MuDPIT mass spectral analysis identified the contingent palmitoyl-proteins. These purified palmitoyl-proteomic samples also were used to follow individual protein palmitoylation levels in drug-induced neural activity paradigms, e.g. analyzing changes following a 5-min treatment of neuronal cultures with 50 μM glutamate or the induced changes in the post-seizure brain (kainic acid-induced). For such analysis, purified palmitoyl-proteomic samples from the treated and control conditions were immunoblotted with panels of antibodies specific to individual neuronal palmitoyl-proteins; proteins with increased or decreased palmitoylation showed corresponding increased or decreased abundance levels within the purified proteomic samples. Representations within the purified samples were normalized to levels in starting, total protein extracts, eliminating potential contributions from changes in protein expression or turnover. The localizaton and function of the two Cdc42 isoforms were assessed in cultured embryonic rat hippocampal neuronal cells transfected with plasmids expressing either N-terminally EGFP-tagged versions of the two Cdc42 isoforms (wildtype and mutant forms) or for the knockdown analysis, isoform-specific siRNAs expressed from a plasmid also co-expressing a cytosolic GFP marker. Transfected cells, identified through GFP immuno-detection, were analyzed for Cdc42 localization and morphology, e.g. the number of dendritic filopodia or spines.
+
+Supplementary Material
+1 Full Methods with associated references are available in the online version of the paper at www.nature.com/nature.
+
+ 2  We thank Joshua Levinson, Marie-France Lise, Cindy Jiang and Esther Yu for technical assistance. This work was supported by grants to A.E.H. from the Canadian Institutes for Health Research (CIHR) (AEH, 20R90479), the Michael Smith foundation for Health Research (AEH, 20R52464), the EJLB Foundation and Neuroscience Canada, as well as from grants from the National Institutes of Health to N.D. (GM65525), J.Y. (RR011823), and to W.G. (NS043782, DA13602 and DA019695) and the Peter F. McManus Trust. H.T. was supported by a research fellowship from the Uehara Memorial Foundation. We thanks Lynn Raymond, Yu Tian Wang, Kim Gerrow, Rochelle Hines, Margaret Prior, and Irene Papanayotou for comments on manuscript.
+
+Figure 1 Global analysis of neuronal protein palmitoylation
+a, ABE purification of palmitoyl-proteins (PPs) from cultured rat cortical embryonic neurons. Proteins purified by parallel ABE protocols, with (+) or without (-) hydroxylamine (HA) were subjected to SDS-PAGE and silver-staining. Hashmarks at left mark protein species common to both + and −HA samples, while those at right indicate proteins whose purification is HA-dependent (i.e. presumptive PPs). b, ABE/MuDPIT analysis. The 1643 different proteins identified from MuDPIT analyses of four paired + and −HA samples are each plotted by their associated averaged +HA (x-coordinate) and −HA (y-coordinate) spectral counts. The 58 proteins that were known to be palmitoylated prior to this analysis are shown as red dots. New candidate PPs co-cluster along the x-axis (region indicated) with the known PPs. c, Overlapping identification of known PPs, by the neuronal and synaptosomal proteomic analyses. d, Summary of palmitoylation testing. Results are summarized for the 21 candidate proteins that were individually tested for palmitoylation by either [3H]-palmitate metabolic labeling or by ABE methodologies (see Suppl. Fig. 2). e, Verification of palmitoylation for selected PP candidates. Proteins, ABE-purified from cultured neurons exactly as for proteomic analysis, both in the presence (+) and absence(-) of HA, were analyzed by Western blotting using the indicated specific antibodies. Palmitoylated proteins are expected to show HA-dependent detection. As a control, a portion of the starting protein sample (prior to ABE purification) also was screened (total).
+
+Figure 2 Palmitylation of a brain-specific Cdc42 splice variant
+a, C-terminal amino acid sequences of the two alternatively-spliced Cdc42 isoforms. Isoform-1 is the previously characterized prenylated form of Cdc42 (Cdc42-prenyl), while isoform-2 is variant form, shown in panel b to be palmitoylated (Cdc42-palm). The C2S mutation removes the two putative, palmitoyl-accepting cysteines from Cdc42-palm. b, Cdc42 isoform-2 (Cdc42-palm) is palmitoylated. COS-7 cells transfected by the indicated GFP-Cdc42 constructs were metabolically labeled with [3H]-palmitic acid. GFP-Cdc42 proteins were immunoprecipitated then subjected either to autoradiography to assess palmitate incorporation or Western analysis. c, Cdc42-palm expression is limited to the brain. Tissue specific expression of the two Cdc42 isoforms was analyzed by RT-PCR. RNA was analyzed from the indicated organs, brain regions [cerebellum (CB); hippocampus (HIP); cortex (CX)], as well as from developing cultured embryonic cortical neurons.
+
+Figure 3 Cdc42-palm role in dendritic spine induction
+a, Different dendritic localizations for Cdc42-palm and Cdc42-prenyl. Hippocampal neurons transfected with the indicated GFP-Cdc42 constructs on DIV 7 were analyzed on DIV 14 by anti-GFP immunofluorescent analysis. Relative distribution to dendritic shaft versus spine was analyzed with the Spine Targeting Index (STI; see Suppl. Methods). A STI of 1 indicates passive distribution; a STI of >1 indicates accumulation of the GFP-Cdc42 construct within spines. (n=10 cells). b, Differential spine induction activity for Cdc42-palm and Cdc42-prenyl. Constitutively-active (CA; G12V mutation) versions of the GFP-Cdc42 constructs were co-transfected with a DsRED expression plasmid into hippocampal neurons on DIV 7 with spine density being assessed on DIV 14. Parallel cultures were treated with 100 μM 2BP treatment for 5 h on DIV 14 to assess effects of palmitoylation inhibition. Spine numbers per 100 μm dendritc length are reported (n=14-24 cells). The inhibition of spine induction by Cdc42(CA)-C2S relative to the vector control is significant, suggesting a dominant-negative action for this mislocalized mutant. c, Cdc42-palm isoform is required for spine development. pSUPER/GFP-based siRNA expression plasmids, targeting sequences specific to either the Cdc42-prenyl or Cdc42-palm mRNAs, were transfected into hippocampal neurons on DIV 9, with spine densities assessed on DIV 14. Results for six different knockdown constructs are reported: a prenyl siRNA construct, targeting the Cdc42-prenyl isoform (41 cells analyzed); two different palm siRNA constructs (#1 and #2, 25 and 10 cells analyzed, respectively), targeting the Cdc42-palm isoform; a pan siRNA construct, targeting a sequence common to both isoforms (12 cells); a scrambled siRNA, a scrambling of a pan siRNA target sequence (31 cells); empty pSUPER/GFP vector (56 cells). Spine numbers per 100 μm dendritc length are reported. COS-7 cell testing of knockdown efficacy showed that the four knockdown constructs reduced expression of their target isoform by 65-70% (Suppl. Fig. 6). Statistical significance levels for panel a-c quantitative analysis: * P<0.05, ** P<0.01, *** P<0.001, scale bar, 5 μm. All error bars are mean ±
+s.e.m.
+
+Fig. 4 Broad modulation of palmitoylation levels in neuronal activity paradigms
+ABE/Western analysis was used to follow palmitoylation changes within selected panels of neuronal PPs in response to three treatment regimens: a,b, 5-h treatment of cortical neurons with 100 μM 2BP to assess constitutive palmitoyl-turnover; c, 5-min treatment of cortical neurons with a 50 μM glutamate excitatory stimulus; d, following kainic acid-induced seizures (10mg/kg kainic acid injected intraperitoneally with brain harvested within 30 min of the onset of seizure activity). a, Example Western blots are shown for the 2BP treatment regimen. Total PPs, ABE-purified from the 2BP-treated and parallel, untreated neuronal cultures were blotted with the indicated specific antibodies. To control for 2BP effects on test protein expression levels, the initial, unpurified protein extracts also were blotted (total). Western blot data for glutamate- and seizure-induced changes is provided in Suppl. Fig. 10. b-d, Quantification of the palmitoylation changes induced by the three treatment protocols. Protein levels measured from the purified PP samples (Palm) were normalized to levels measured from the corresponding unpurified extracts (Total). (See Suppl. Methods for the details.) Data is presented from three independent experiments as means ± s.e.m.. Significance levels are * P<0.05,** P<0.01,*** P<0.001. Note, some antibodies detect multiple paralogues and/or isoforms: the Cdc42 antibody recognizes both Cdc42-palm and Cdc42-prenyl isoforms; the Ras antibody recognizes H-, N-, and K-Ras (only H- and N-Ras are palmitoylated); the Rho A/B antibody recognizes both Rho A and Rho B (only Rho B is palmitoylated).
+==== Refs
+1 Huang K  El-Husseini A   Modulation of neuronal protein trafficking and function by palmitoylation Curr Opin Neurobiol 2005 
+Resh MD   Palmitoylation of ligands, receptors, and intracellular signaling molecules Sci STKE 2006 re14 2006 
+3 Smotrys JE  Linder ME   Palmitoylation of intracellular signaling proteins: regulation and function Ann Rev Biochem 73 559 87 2004 15189153 
+4 Linder ME  Deschenes RJ   Palmitoylation: policing protein stability and traffic Nat Rev Mol Cell Biol 8 74 84 2007 17183362 
+5 El-Husseini Ael D  Schnell E  Dakoji S    Synaptic strength regulated by palmitate cycling on PSD-95 Cell 108 849 63 2002 11955437 
+6 Roth AF  Wan J  Bailey AO    Global analysis of protein palmitoylation in yeast Cell 125 1003 13 2006 16751107 
+7 Drisdel RC  Green WN   Labeling and quantifying sites of protein palmitoylation Biotechniques 36 276 85 2004 14989092 
+8 Link AJ  Eng J  Schieltz DM    Direct analysis of protein complexes using mass spectrometry Nat Biotechnol 17 676 82 1999 10404161 
+9 Liu H  Sadygov RG  Yates JR 3rd   A model for random sampling and estimation of relative protein abundance in shotgun proteomics Anal Chem 76 4193 201 2004 15253663 
+10 Wan J  Roth AF  Bailey AO    Palmitoylated proteins: purification and identification Nat Prot 2 1573 84 2007 
+11 Hayashi T  Rumbaugh G  Huganir RL   Differential regulation of AMPA receptor subunit trafficking by palmitoylation of two distinct sites Neuron 47 709 23 2005 16129400 
+12 Nishimura T  Yamaguchi T  Tokunaga A    Role of numb in dendritic spine development with a Cdc42 GEF intersectin and EphB2 Mol Biol Cell 17 1273 85 2006 16394100 
+13 Negishi M  Katoh H   Rho family GTPases and dendrite plasticity Neuroscientist 11 187 91 2005 15911868 
+14 Choi J  Ko J  Racz B    Regulation of dendritic spine morphogenesis by insulin receptor substrate 53, a downstream effector of Rac1 and Cdc42 small GTPases J Neurosci 25 869 79 2005 15673667 
+15 Scott EK  Reuter JE  Luo L   Small GTPase Cdc42 is required for multiple aspects of dendritic morphogenesis J Neurosci 23 3118 23 2003 12716918 
+16 Nakazawa T  Watabe AM  Tezuka T    p250GAP, a novel brain-enriched GTPase-activating protein for Rho family GTPases, is involved in the N-methyl-d-aspartate receptor signaling Mol Biol Cell 14 2921 34 2003 12857875 
+17 Wilson AL  Erdman RA  Castellano F    Prenylation of Rab8 GTPase by type I and type II geranylgeranyl transferases Biochem J 333 Pt 3 497 504 1998 9677305 
+18 Marks PW  Kwiatkowski DJ   Genomic organization and chromosomal location of murine Cdc42 Genomics 38 13 8 1996 8954774 
+19 Kreis P  Thevenot E  Rousseau V    The p21-activated kinase 3 implicated in mental retardation regulates spine morphogenesis through a Cdc42-dependent pathway J Biol Chem 282 21497 506 2007 17537723 
+20 Node-Langlois R  Muller D  Boda B   Sequential implication of the mental retardation proteins ARHGEF6 and PAK3 in spine morphogenesis J Cell Sci 119 4986 93 2006 17105769 
+21 Wegner AM  Nebhan CA  Hu L    N-wasp and the arp2/3 complex are critical regulators of actin in the development of dendritic spines and synapses J Biol Chem 283 15912 20 2008 18430734 
+22 Ethell IM  Pasquale EB   Molecular mechanisms of dendritic spine development and remodeling Prog Neurobiol 75 161 205 2005 15882774 
+23 Hering H  Lin CC  Sheng M   Lipid rafts in the maintenance of synapses, dendritic spines, and surface AMPA receptor stability J Neurosci 23 3262 71 2003 12716933 
+24 Fischer M  Kaech S  Knutti D    Rapid actin-based plasticity in dendritic spines Neuron 20 847 54 1998 9620690 
+25 Ehlers MD   Activity level controls postsynaptic composition and signaling via the ubiquitin-proteasome system Nat Neurosci 6 231 42 2003 12577062 
+26 Kirov SA  Harris KM   Dendrites are more spiny on mature hippocampal neurons when synapses are inactivated Nat Neurosci 2 878 83 1999 10491607 
+27 McKinney RA  Capogna M  Durr R    Miniature synaptic events maintain dendritic spines via AMPA receptor activation Nat Neurosci 2 44 9 1999 10195179 
+28 Soriano FX  Papadia S  Hofmann F    Preconditioning doses of NMDA promote neuroprotection by enhancing neuronal excitability J Neurosci 26 4509 18 2006 16641230 
+29 Halpain S  Hipolito A  Saffer L   Regulation of F-actin stability in dendritic spines by glutamate receptors and calcineurin J Neurosci 18 9835 44 1998 9822742 
+30 Fannjiang Y  Kim CH  Huganir RL    BAK alters neuronal excitability and can switch from anti- to pro-death function during postnatal development Dev Cell 4 575 85 2003 12689595 
+31 Chen L  Toth M   Fragile X mice develop sensory hyperreactivity to auditory stimuli Neuroscience 103 1043 50 2001 11301211 
+32 Mollner S  Beck K  Pfeuffer T   Acylation of adenylyl cyclase catalyst is important for enzymic activity FEBS Lett 371 241 4 1995 7556600

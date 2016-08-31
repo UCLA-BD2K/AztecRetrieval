@@ -1,0 +1,678 @@
+{
+  "updated": 1472253564263, 
+  "doi": "10.1093/bioinformatics/btu829", 
+  "name": "3Dmoljs molecular visualization with WebGL", 
+  "links": [
+    "http://www.jmol.org", 
+    "http://biasmv.github.io/pv", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "http://creativecommons.org/licenses/by/4.0", 
+    "http://threejs.org", 
+    "http://3dmol.csb.pitt.edu.does", 
+    "http://3Dmol.csb.pitt.edu"
+  ], 
+  "title": "Structural bioinformatics 3Dmol.js: molecular visualization with WebGL", 
+  "grants": [
+    [
+      "National Institute of Health", 
+      "R01GM108340"
+    ]
+  ], 
+  "abstract": "3Dmol.js is a modern, object-oriented JavaScript library that uses the latest web technologies to provide interactive, hardware-accelerated three-dimensional representations of molecular data without the need to install browser plugins or Java. 3Dmol.js provides a full featured API for developers as well as a straightforward declarative interface that lets users easily share and embed molecular data in websites. Availability and implementation: 3Dmol.js is distributed under the permissive BSD open source license. Source code and documentation can be found at http://3Dmol.csb.", 
+  "summary": "Summary: 3Dmol.js is a modern, object-oriented JavaScript library that uses the latest web technologies to provide interactive, hardware-accelerated three-dimensional representations of molecular data without the need to install browser plugins or Java.\n3Dmol.js is a pure JavaScript, hardware-accelerated, object-oriented molecular visualization library that enables web developers and casual users to visualize and interact with molecular data in any modern desktop or mobile web browser with near native performance.\n3Dmol.js can be used to view molecular data by web application developers, HTML authors and end users.\n3Dmol.js is an high-performance interactive viewer for 3D molecular data that requires no plugins to work in modern desktop and mobile web browsers.", 
+  "toolName": "pv", 
+  "affiliations": [
+    " Department of Computational and Systems Biology University of Pittsburgh "
+  ], 
+  "citations": "10", 
+  "sourcelinks": [
+    "http://biasmv.github.io/pv", 
+    "http://3dmol.csb.pitt.edu.does", 
+    "http://3Dmol.csb.pitt.edu", 
+    "https://github.com/biasmv/pv"
+  ], 
+  "acks": " We are grateful to Takanori Nakane for creating GLmol. We would also like to thank Caleb Martin for his contributions. This work was supported by the National Institute of Health. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health. Conflict of Interest: none declared. ", 
+  "authors": [
+    " Nicholas Rego", 
+    " David Koes"
+  ], 
+  "keyWords": [
+    "dmol molecular", 
+    "data", 
+    "viewer_", 
+    "javascript", 
+    "http"
+  ], 
+  "github_data": {
+    "license": [
+      "MIT License", 
+      "https://raw.githubusercontent.com/biasmv/pv/master/LICENSE.txt"
+    ], 
+    "name": "pv", 
+    "contributors": [
+      {
+        "contributions": 766, 
+        "html_url": "https://github.com/biasmv"
+      }, 
+      {
+        "contributions": 11, 
+        "html_url": "https://github.com/ajfarkas"
+      }, 
+      {
+        "contributions": 4, 
+        "html_url": "https://github.com/wilzbach"
+      }, 
+      {
+        "contributions": 3, 
+        "html_url": "https://github.com/julianheinrich"
+      }, 
+      {
+        "contributions": 2, 
+        "html_url": "https://github.com/aschwanb"
+      }, 
+      {
+        "contributions": 2, 
+        "html_url": "https://github.com/hainm"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/aebrahim"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/andreasprlic"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/vavrusa"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/smsaladi"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/tomck"
+      }, 
+      {
+        "contributions": 1, 
+        "html_url": "https://github.com/kaulkie"
+      }
+    ], 
+    "versions": [
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.8.1", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.8.1", 
+        "name": "v1.8.1"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.8.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.8.0", 
+        "name": "v1.8.0"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.7.2", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.7.2", 
+        "name": "v1.7.2"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.7.1", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.7.1", 
+        "name": "v1.7.1"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.7.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.7.0", 
+        "name": "v1.7.0"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.5.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.5.0", 
+        "name": "v1.5.0"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.4.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.4.0", 
+        "name": "v1.4.0"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.3.1", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.3.1", 
+        "name": "v1.3.1"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.3", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.3", 
+        "name": "v1.3"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.2", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.2", 
+        "name": "v1.2"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.1", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.1", 
+        "name": "v1.1"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/v1.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/v1.0", 
+        "name": "v1.0"
+      }, 
+      {
+        "zipball_url": "https://api.github.com/repos/biasmv/pv/zipball/1.7.0", 
+        "tarball_url": "https://api.github.com/repos/biasmv/pv/tarball/1.7.0", 
+        "name": "1.7.0"
+      }
+    ], 
+    "url": "https://github.com/biasmv/pv", 
+    "created_at": "2013-02-16T11:32:05Z", 
+    "updated_at": "2016-08-22T08:34:22Z", 
+    "languages": [
+      "Python", 
+      "Shell", 
+      "JavaScript", 
+      "HTML", 
+      "CSS"
+    ], 
+    "subscribers": 29, 
+    "owner": "https://github.com/biasmv", 
+    "forks": 30, 
+    "homepage": "https://pv.readthedocs.org"
+  }, 
+  "technologies": [
+    "HTML", 
+    "JavaScript"
+  ], 
+  "dateCreated": "2014-12-14T01:33:54Z"
+}{
+  "updated": 1472253570000, 
+  "doi": "10.1093/bioinformatics/btv035", 
+  "name": "3USS a web server for detecting alternative 3UTRs from RNAseq experiments", 
+  "links": [
+    "http://www.biocomputing.it/3uss", 
+    "http://genome.ucsc.edu)expression", 
+    "http://cufflinks.cbcb.umd.edu/igenomes.html", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "http://creativecommons.org/licenses/by-nc/4.0/),which"
+  ], 
+  "title": "3USS: a web server for detecting alternative 3 0 UTRs from RNA-seq experiments", 
+  "grants": [
+    [
+      "KAUST", 
+      "KUK-I1-012-43"
+    ], 
+    [
+      "Agency not found", 
+      "20108XYHJS"
+    ]
+  ], 
+  "abstract": "Protein-coding genes with multiple alternative polyadenylation sites can generate mRNA 3 0 UTR sequences of different lengths, thereby causing the loss or gain of regulatory elements , which can affect stability, localization and translation efficiency. 3USS is a web-server developed with the aim of giving experimentalists the possibility to automatically identify alternative 3 0 UTRs (shorter or longer with respect to a reference transcriptome), an option that is not available in standard RNA-seq data analysis procedures. The tool reports as putative novel the 3 0 UTRs not annotated in available databases. Furthermore, if data from two related samples are uploaded, common and specific alternative 3 0 UTRs are identified and reported by the server.", 
+  "summary": "The alternative 30UTRs are then compared with already annotated ones in other databases [the latest available data from iGenomes (http://cufflinks.cbcb.umd.edu/igenomes.html) and Gencode (Harrow et al., 2012)] to identify putative novel (not yet annotated) 30UTRs. The most informative output files that the 3USS server produces are: a fasta file with the alternative 30UTR nucleotide sequences and other information in their headers (gene Id, coding strand, 30UTR genomic coordinates and length); a list of the transcripts with their 30UTR length difference and a list of the alternative not yet annotated 30UTRs (putative novel) in other databases as well as the annotated ones.", 
+  "toolName": "3USS: a web server for detecting alternative 3 0 UTRs from RNA-seq experiments", 
+  "affiliations": [], 
+  "citations": "0", 
+  "acks": " The authors thank the Biocomputing Unit for interesting discussions. This project was supported by KAUST ", 
+  "authors": [
+    " Loredana Le Pera", 
+    " Mariagiovanna Mazzapioda", 
+    " Anna Tramontano", 
+    " Istituto Pasteur", 
+    " \u2013 Fondazione", 
+    " Cenci Bolognetti"
+  ], 
+  "keyWords": [
+    "genomics", 
+    "genes", 
+    "differences", 
+    "utrs", 
+    "alternative", 
+    "transcripts"
+  ], 
+  "sourcelinks": [
+    "http://cufflinks.cbcb.umd.edu/igenomes.html"
+  ], 
+  "technologies": [], 
+  "dateCreated": "2015-01-24T04:27:59Z"
+}{
+  "doi": "Not found", 
+  "name": "4DGenomeacomprehensivedatabaseofchromatininteractions", 
+  "links": [
+    "http://4dgenome.intmed.uiowa.edu", 
+    "http://4dgenome.int-med.uiowa.edu"
+  ], 
+  "title": "4DGenome: a comprehensive database of chromatin interactions Equal contribution", 
+  "toolName": "4DGenome: a comprehensive database of chromatin interactions Equal contribution", 
+  "abstract": "Motivation: The 3-dimensional structure of the genome plays a critical role in regulating gene expression. Recent progress in mapping technologies for chromatin interactions has led to a rapid increase in this kind of interaction data. This trend will continue as research in this burgeoning field intensifies. Results: We describe the 4DGenome database that stores chroma-tin interaction data compiled through comprehensive literature cura-tion. The database currently covers both low and high throughput assays, including 3C, 4C-Seq, 5C, Hi-C, ChIA-PET, and Capture-C. To complement the set of interactions detected by experimental assays, we also include interactions predicted by a recently developed computational method with demonstrated high accuracy. The database currently contains ~8 million records, covering 102 cell/tissue types in 5 organisms. Records in the database are described using a standardized file format, facilitating data exchange. The vast major of the interactions were assigned a confidence score. Using the web interface, users can query and download database records via a number of annotation dimensions. Query results can be visualized along with other genomics datasets via links to the UCSC genome browser. We anticipate that 4DGenome will be a valuable resource for investigating the spatial structure-and-function relationship of genomes. Availability and Implementation: 4Dgenome is freely accessible at http://4dgenome.int-med.uiowa.edu. The database and web interface are implemented in MySQL, Apache and JavaScript with all major browsers supported.", 
+  "summary": "Curation of Chromatin Interaction Data We conducted an extensive search of primary literature in the NCBI PubMed database, dating back to the original publication of the chromosome conformation capture (3C) method in 2002 (Dekker, et al., 2002).\nEach record contains 15 tab-delimited columns (Supplemental Figure 1): columns 1-6 describe the genomic coordinates of the interacting regions; columns 7-8 describe genes (if any) that are located in the interacting regions; columns 9-10 describe the organism and cell/tissue types from which the interaction was derived; column 11-14 describe the detection method, confidence scores, and contact frequency for the observed interaction; column 15 provides the PubMed ID of the publication that reported the interaction.", 
+  "affiliations": [
+    " Interdisciplinary Graduate Program in Genetics University of Iowa Iowa City ", 
+    " Department of Internal Medicine University of Iowa Iowa City "
+  ], 
+  "grants": [
+    [
+      "National Institutes of Health", 
+      "HG006130"
+    ], 
+    [
+      "National Institutes of Health", 
+      "HL110349"
+    ]
+  ], 
+  "acks": " We thank members of the Tan lab for helpful discussion. We thank Lucas Van Tol and the University of Iowa Institute for Clinical and Translational Science for providing computing support. Health grants and to KT. ", 
+  "authors": [
+    " Li Teng", 
+    " Bing He", 
+    " Jiahui Wang", 
+    " Kai Tan"
+  ], 
+  "keyWords": [
+    "chromatin interactions", 
+    "genomics", 
+    "interaction", 
+    "methods", 
+    "databases"
+  ], 
+  "sourcelinks": [], 
+  "technologies": [
+    "C"
+  ]
+}{
+  "doi": "Not found", 
+  "name": "1433Predimprovedmethodstopredict1433bindingphosphopeptides", 
+  "links": [
+    "http://creativecommons.org/licenses/by/4.0", 
+    "http://www.r-project.org", 
+    "http://www.python.org", 
+    "http://pyml.sourceforge.net", 
+    "http://www", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "http://www.ra.cs.uni-tuebingen"
+  ], 
+  "title": "4-3-3-Pred: improved methods to predict 14-3-3-binding phosphopeptides", 
+  "toolName": "pyml", 
+  "abstract": "Motivation: The 14-3-3 family of phosphoprotein-binding proteins regulates many cellular processes by docking onto pairs of phosphorylated Ser and Thr residues in a constellation of intracellu-lar targets. Therefore, there is a pressing need to develop new prediction methods that use an updated set of 14-3-3-binding motifs for the identification of new 14-3-3 targets and to prioritize the downstream analysis of >2000 potential interactors identified in high-throughput experiments.", 
+  "summary": "The correlation between the consensus predictor and Netphorest Scansite scores, for prediction of 14-3-3-binding phosphopeptides in the human proteome (Section 3.3), is only r  0.65 (P < 0.001), indicating that a fair number of peptides produce discordant predictions by Scansite and the methods developed here.\nAlthough the methods developed here were not specifically developed to predict pairs of 14-3-3-binding sites due the limited set of proteins for which two binding sites are known, the example of the FAM122 2R-ohnologue family illustrates its use to investigate both primary and secondary 14-3-3-binding phosphosites.", 
+  "affiliations": [
+    " MRC Protein Phosphorylation Unit", 
+    " Division of Signal Transduction Therapy", 
+    " Division of Computational Biology", 
+    " Division of Cell and Developmental Biology"
+  ], 
+  "grants": [
+    [
+      "Agency not found", 
+      "WT09230"
+    ], 
+    [
+      "Agency not found", 
+      "WT083481"
+    ], 
+    [
+      "Medical Research Council", 
+      "WT097945"
+    ], 
+    [
+      "Agency not found", 
+      "G0801767"
+    ], 
+    [
+      "Agency not found", 
+      "WT09230"
+    ], 
+    [
+      "Wellcome Trust", 
+      "WT083481"
+    ], 
+    [
+      "Wellcome Trust", 
+      "WT097945"
+    ], 
+    [
+      "Agency not found", 
+      "G0801767"
+    ], 
+    [
+      "Medical Research Council", 
+      "100150/Z/12/Z"
+    ]
+  ], 
+  "acks": " We thank Dr Tom Walsh for computational support, Dr Marek Gierlin\u00b4skiGierlin\u00b4Gierlin\u00b4ski for advice on statistics and Dr Nick Schurch for help with developing the web server. This work was supported by the Wellcome Trust ", 
+  "authors": [
+    " F\u00e1 Bio Madeira", 
+    " Michele Tinti", 
+    " Gavuthami Murugesan", 
+    " Emily Berrett", 
+    " Margaret Stafford", 
+    " Rachel Toth", 
+    " Christian Cole", 
+    " Carol Mackintosh", 
+    " Geoffrey J Barton"
+  ], 
+  "keyWords": [
+    "binding", 
+    "proteins", 
+    "predictions", 
+    "sites"
+  ], 
+  "sourcelinks": [
+    "http://pyml.sourceforge.net"
+  ], 
+  "technologies": [
+    "R"
+  ], 
+  "sourceforge_data": {
+    "url": "https://sourceforge.net/p/pyml/", 
+    "languages": [
+      "Python", 
+      "C++"
+    ], 
+    "developers": [
+      {
+        "url": "https://sourceforge.net/u/userid-1033568/", 
+        "name": "abh"
+      }
+    ], 
+    "license": "GNU Library or Lesser General Public License version 2.0 (LGPLv2)"
+  }
+}{
+  "updated": 1472253651064, 
+  "doi": "10.1093/bioinformatics/btu710", 
+  "name": "A coalescentbased method for population tree inference with haplotypes", 
+  "links": [
+    "http://www.engr.uconn.edu/*ywu/STELLS.html", 
+    "http://bioinformatics.oxfordjournals.org"
+  ], 
+  "title": "A coalescent-based method for population tree inference with haplotypes", 
+  "grants": [
+    [
+      "NSF", 
+      "IIS-0953563"
+    ], 
+    [
+      "NSF", 
+      "CCF-1116175"
+    ], 
+    [
+      "NSF", 
+      "IIS-0953563"
+    ], 
+    [
+      "NSF", 
+      "CCF-1116175"
+    ], 
+    [
+      "NIH", 
+      "S10-RR027140"
+    ]
+  ], 
+  "abstract": "Motivation: Population trees represent past population divergence histories. The inference of population trees can be useful for the study of population evolution. With the size of data increases in large-scale population genetic projects, such as the 1000 Genomes Project, there are new computational challenges for ancestral population inference, including population tree inference. Existing methods for population tree inference are mainly designed for unlinked genetic variants (e.g. single nucleotide polymorphisms or SNPs). There is a potential loss of information by not considering the haplotypes. Results: In this article, we propose a new population tree inference method (called STELLS H) based on coalescent likelihood. The likelihood is for haplotypes over multiple SNPs within a non-recom-bining region, not unlinked variants. Unlike many existing ancestral inference methods, STELLS H does not use Monte Carlo approaches when computing the likelihood. For efficient computation, the likelihood model is approximated but still retains much information about population divergence history. STELLS H can find the maximum likelihood population tree based on the approximate likelihood. We show through simulation data and the 1000 Genomes Project data that STELLS H gives reasonably accurate inference results. STELLS H is reasonably efficient for data of current interest and can scale to handle whole-genome data. Availability and implementation: The population tree inference method STELLS H has been implemented as part of the STELLS program", 
+  "summary": "A coalescent-based method for population tree inference with haplotypes\nResults: In this article, we propose a new population tree inference method (called STELLSH) based on coalescent likelihood.\nThe main feature of STELLSH is its use of haplotypes rather than individual genetic variations as used in existing population tree inference methods, e.g. Bryant et al (2012) and Pickrell and Pritchard (2012).\nThe main focus of this article is demonstrating that population trees can be inferred relatively accurately and efficiently from haplotypes, and haplotypes may provide more useful information for population tree inference than individual SNPs. There are several features of our new method STELLSH that need more discussion.", 
+  "toolName": "A coalescent-based method for population tree inference with haplotypes", 
+  "affiliations": [], 
+  "citations": "3", 
+  "acks": " ", 
+  "authors": [], 
+  "keyWords": [
+    "population tree inference", 
+    "stellsh", 
+    "genetics", 
+    "populations", 
+    "modeled", 
+    "trees", 
+    "haplotypes", 
+    "data", 
+    "inferring"
+  ], 
+  "sourcelinks": [], 
+  "technologies": [], 
+  "dateCreated": "2014-10-25T03:54:31Z"
+}{
+  "updated": 1472253652130, 
+  "doi": "10.1093/bioinformatics/btu515", 
+  "name": "A method for de novo nucleic acid diagnostic target discovery", 
+  "links": [
+    "http://ucr.syn", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "http://ucr.synblex.com"
+  ], 
+  "title": "A method for de novo nucleic acid diagnostic target discovery", 
+  "grants": [], 
+  "abstract": "Motivation: A proper target or marker is essential in any diagnosis (e.g. an infection or cancer). An ideal diagnostic target should be both conserved in and unique to the pathogen. Currently, these targets can only be identified manually, which is time-consuming and usually error-prone. Because of the increasingly frequent occurrences of emerging epidemics and multidrug-resistant 'superbugs', a rapid diagnostic target identification process is needed. Results: A new method that can identify uniquely conserved regions (UCRs) as candidate diagnostic targets for a selected group of organisms solely from their genomic sequences has been developed and successfully tested. Using a sequence-indexing algorithm to identify UCRs and a k-mer integer-mapping model for computational efficiency , this method has successfully identified UCRs within the bacteria domain for 15 test groups, including pathogenic, probiotic, commensal and extremophilic bacterial species or strains. Based on the identified UCRs, new diagnostic primer sets were designed, and their specificity and efficiency were tested by polymerase chain reaction amplifications from both pure isolates and samples containing mixed cultures. Availability and implementation: The UCRs identified for the 15 bacterial species are now freely available at http://ucr.synblex.com. The source code of the programs used in this study is accessible at", 
+  "summary": "Results: A new method that can identify uniquely conserved regions (UCRs) as candidate diagnostic targets for a selected group of organisms solely from their genomic sequences has been developed and successfully tested.\nUsing a sequence-indexing algorithm to identify UCRs and a k-mer integer-mapping model for computational efficiency, this method has successfully identified UCRs within the bacteria domain for 15 test groups, including pathogenic, probiotic, commensal and extremophilic bacterial species or strains.\nIn contrast, if the background index has already been built with completed genomes, and multiple samples of a new group were sequenced, UCR k-mers could be identified directly from the raw sequencing reads with this method.", 
+  "toolName": "A method for de novo nucleic acid diagnostic target discovery", 
+  "affiliations": [], 
+  "citations": "1", 
+  "acks": " The authors sincerely thank Prof. Qi Ji (Fudan University) for discussions related to the k-mer index method. And they also thank the three anonymous reviewers for their critical and constructive comments. ", 
+  "authors": [
+    " Yeting Zhang", 
+    " Yazhou Sun", 
+    " John Hancock"
+  ], 
+  "keyWords": [
+    "genomic sequences", 
+    "primers", 
+    "ucrs", 
+    "proteins", 
+    "genomes", 
+    "groups", 
+    "sequencing"
+  ], 
+  "sourcelinks": [
+    "http://ucr.syn", 
+    "http://ucr.synblex.com"
+  ], 
+  "technologies": [], 
+  "dateCreated": "2014-08-08T05:05:20Z"
+}{
+  "updated": 1472253661613, 
+  "doi": "10.1093/bioinformatics/btu860", 
+  "name": "A haplotypebased framework for groupwise transmissiondisequilibrium tests for rare variant association analysis", 
+  "links": [
+    "https://medschool.vanderbilt.edu/cgg", 
+    "http://bioinformatics.oxfordjournals.org"
+  ], 
+  "title": "Genetic and population analysis A haplotype-based framework for group-wise transmission/disequilibrium tests for rare variant association analysis Downloaded from", 
+  "grants": [
+    [
+      "National Institute of Health", 
+      "R01HG006857"
+    ]
+  ], 
+  "abstract": "Motivation: A major focus of current sequencing studies for human genetics is to identify rare variants associated with complex diseases. Aside from reduced power of detecting associated rare variants, controlling for population stratification is particularly challenging for rare variants. Transmission/disequilibrium tests (TDT) based on family designs are robust to population stratifi-cation and admixture, and therefore provide an effective approach to rare variant association studies to eliminate spurious associations. To increase power of rare variant association analysis, gene-based collapsing methods become standard approaches for analyzing rare variants. Existing methods that extend this strategy to rare variants in families usually combine TDT statistics at individual variants and therefore lack the flexibility of incorporating other genetic models. Results: In this study, we describe a haplotype-based framework for group-wise TDT (gTDT) that is flexible to encompass a variety of genetic models such as additive, dominant and compound heterozygous (CH) (i.e. recessive) models as well as other complex interactions. Unlike existing methods, gTDT constructs haplotypes by transmission when possible and inherently takes into account the linkage disequilibrium among variants. Through extensive simulations we showed that type I error was correctly controlled for rare variants under all models investigated, and this remained true in the presence of population stratification. Under a variety of genetic models, gTDT showed increased power compared with the single marker TDT. Application of gTDT to an autism exome sequencing data of 118 trios identified potentially interesting candidate genes with CH rare variants. Availability and implementation: We implemented gTDT in C\u00fe\u00fe and the source code and the detailed usage are available on the authors' website (https://medschool.", 
+  "summary": "The collapsing approaches of rare variants originally developed for unrelated samples have been extended to gene-based TDT and show improved power over single marker TDT while controlling for population stratification/admixture (De et al., 2013; He et al., 2014; Jiang et al., 2014), providing a robust approach to rare variant analysis.\nIn this study, we describe a general framework for group-wise TDT (gTDT) for rare variants and implement a few classical genetic models in a user-friendly and computationally efficient tool.\nVariants that are heterozygous in all individuals of a trio are non-informative in single marker tests, but have impact on the type I error of haplotype-based gTDT if not phased correctly.", 
+  "toolName": "Genetic and population analysis A haplotype-based framework for group-wise transmission/disequilibrium tests for rare variant association analysis Downloaded from", 
+  "affiliations": [
+    " Department of Medicine University of Chicago ", 
+    " Quantitative Biomedical Research Center University of Texas Southwestern Medical Center ", 
+    " Department of Molecular Physiology and Biophysics Vanderbilt University ", 
+    " Department of Psychiatry University of Illinois at Chicago ", 
+    " Department of Pediatrics University of Pittsburgh ", 
+    " Department of Epidemiology and Biostatistics Case Western Reserve University ", 
+    " Center for Quantitative Sciences Vanderbilt University "
+  ], 
+  "citations": "2", 
+  "acks": " The authors thank Goncalo Abecasis in the Department of Biostatistics at the University of Michigan for sharing the C\u00fe\u00fe code for processing pedigrees. This study was supported by the National Institute of Health ", 
+  "authors": [
+    " Rui Chen", 
+    " Qiang Wei", 
+    " Xiaowei Zhan", 
+    " Xue Zhong", 
+    " James S Sutcliffe", 
+    " Nancy J Cox", 
+    " Edwin H Cook", 
+    " Chun Li", 
+    " Wei Chen", 
+    " Bingshan Li"
+  ], 
+  "keyWords": [
+    "rare variant", 
+    "modeling", 
+    "haplotyping", 
+    "genetics", 
+    "variants"
+  ], 
+  "sourcelinks": [
+    "https://medschool.vanderbilt.edu/cgg"
+  ], 
+  "technologies": [], 
+  "dateCreated": "2015-01-08T02:10:15Z"
+}{
+  "updated": 1472253662080, 
+  "doi": "10.1093/bioinformatics/btu695", 
+  "name": "A model for the expression of gap genes based on the Jeffreystype equation", 
+  "links": [
+    "http://urchin.spbcas.ru/flyex", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "https://github.com/wswgG/solver-for-the-Jeffreys-type-equations-system", 
+    "http://flyex.ams.sunysb.edu/FlyEx"
+  ], 
+  "title": "Gene expression A model for the expression of gap genes based on the Jeffreys-type equation", 
+  "grants": [
+    [
+      "Agency not found", 
+      "14-01-00034"
+    ], 
+    [
+      "Agency not found", 
+      "5-100-2020"
+    ]
+  ], 
+  "abstract": "Motivation: We propose the third-order model equation of the Jeffreys type for concentrations of gap gene proteins in order to take into account particle inertia. Gap genes are responsible for formation of body segments in Drosophila melanogaster embryo during its early development. Usually the expression of the genes is described by the model of protein transport based on conventional diffusion equation. However, the model is known to govern the Brownian (non-inertial) motion of particles; hence, it is hardly applicable to the description of protein transport. Results: Analysis of the Jeffreys-type equation results in the necessary condition for the problem to be well-posed. Application of the Jeffreys-type equation with non-linear terms to description of the dynamics of gap gene network demonstrates better fitting to experimental data than the conventional model. Availability and implementation: Implementation of solver algorithms and the software are freely available from: https://github.com/wswgG/solver-for-the-Jeffreys-type-equations-system Contact:", 
+  "summary": "Application of the Jeffreys-type equation with non-linear terms to description of the dynamics of gap gene network demonstrates better fitting to experimental data than the conventional model.\nThe results of the first set of 10 calculations demonstrate slightly better quantitative fitting to the experimental data on gap gene expression in Drosophila blastoderm as compared with the conventional model (1.1) with lowest RMS  8.502 value for the model with the Jeffreys-type equation and the Neumann boundary conditions, while for the conventional model the lowest value is RMS  8.532.", 
+  "toolName": "solver-for-the-Jeffreys-type-equations-system", 
+  "affiliations": [
+    " The Ioffe Physical Technical Institute St. Petersburg "
+  ], 
+  "citations": "1", 
+  "sourcelinks": [
+    "https://github.com/wswgG/solver-for-the-Jeffreys-type-equations-system"
+  ], 
+  "acks": " We thank V. Gursky, S. Rukolaine, K. Kozlov and M. Samsonova for helpful comments. ", 
+  "authors": [
+    " Igor A Gula", 
+    " Alexander M Samsonov"
+  ], 
+  "keyWords": [
+    "equations", 
+    "differences", 
+    "genes", 
+    "proteins", 
+    "modelling"
+  ], 
+  "github_data": {
+    "name": "solver-for-the-Jeffreys-type-equations-system", 
+    "contributors": [
+      {
+        "contributions": 5, 
+        "html_url": "https://github.com/wswgG"
+      }
+    ], 
+    "versions": [], 
+    "url": "https://github.com/wswgG/solver-for-the-Jeffreys-type-equations-system", 
+    "created_at": "2014-04-30T12:27:06Z", 
+    "updated_at": "2014-04-30T14:09:32Z", 
+    "languages": [], 
+    "subscribers": 1, 
+    "owner": "https://github.com/wswgG", 
+    "forks": 1, 
+    "homepage": ""
+  }, 
+  "technologies": [], 
+  "dateCreated": "2014-10-23T00:08:46Z"
+}{
+  "updated": 1472253682735, 
+  "doi": "10.1093/bioinformatics/btu479", 
+  "name": "A new approach for detecting riboswitches in DNA sequences", 
+  "links": [
+    "http://rfam.xfam.org", 
+    "http://drd.denison.edu", 
+    "http://bioinformatics.oxfordjournals.org"
+  ], 
+  "title": "Sequence analysis A new approach for detecting riboswitches in DNA sequences", 
+  "grants": [], 
+  "abstract": "Motivation: Riboswitches are short sequences of messenger RNA that can change their structural conformation to regulate the expression of adjacent genes. Computational prediction of putative ribos-witches can provide direction to molecular biologists studying riboswitch-mediated gene expression. Results: The Denison Riboswitch Detector (DRD) is a new computational tool with a Web interface that can quickly identify putative ribos-witches in DNA sequences on the scale of bacterial genomes. Riboswitch descriptions are easily modifiable and new ones are easily created. The underlying algorithm converts the problem to a 'heaviest path' problem on a multipartite graph, which is then solved using efficient dynamic programming. We show that DRD can achieve $88\u201399% sensitivity and 499.99% specificity on 13 riboswitch families.", 
+  "summary": "Results: The Denison Riboswitch Detector (DRD) is a new computational tool with a Web interface that can quickly identify putative riboswitches in DNA sequences on the scale of bacterial genomes.\nSecond, to measure the corresponding false-positive rate (FPR) for each family in genome-scale sequences, we randomly selected a small number of Rfam-predicted riboswitch sequences and tested DRD on the set of GenBank sequence records in which they are contained.\nThe results, displayed in Figure 3 and Table 1, show that, with the exception of the cobalamin riboswitch, we get a sensitivity of $90% or better for each riboswitch family when S1 is set to be $95% of the maximum possible motif identify score.", 
+  "toolName": "Sequence analysis A new approach for detecting riboswitches in DNA sequences", 
+  "affiliations": [
+    " Department of Biology Denison University ", 
+    " Department of Computer Science Wake Forest University ", 
+    " Department of Mathematics and Computer Science", 
+    " College of Human Medicine Michigan State University "
+  ], 
+  "citations": "6", 
+  "acks": " ", 
+  "authors": [
+    " Jessen T Havill", 
+    " Chinmoy Bhatiya", 
+    " Steven M Johnson", 
+    " Joseph D Sheets", 
+    " Jeffrey S Thompson", 
+    " John Hancock"
+  ], 
+  "keyWords": [
+    "sequences", 
+    "structures", 
+    "riboswitches", 
+    "motifs", 
+    "specificity"
+  ], 
+  "sourcelinks": [], 
+  "technologies": [
+    "PHP", 
+    "C++"
+  ], 
+  "dateCreated": "2014-07-12T03:16:15Z"
+}{
+  "updated": 1472253688543, 
+  "doi": "10.1093/bioinformatics/btu398", 
+  "name": "A multiobjective method for robust identification of bacterial small noncoding RNAs", 
+  "links": [
+    "http://m4m.ugr.es/SupInfo/sRNAOS", 
+    "http://newbio.cs.wisc.edu/sRNA", 
+    "http://bioinformatics.oxfordjournals.org", 
+    "http://blast.ncbi.nlm.nih.gov"
+  ], 
+  "title": "Sequence analysis A multiobjective method for robust identification of bacterial small non-coding RNAs", 
+  "grants": [
+    [
+      "Spanish Ministry of Science and Technology", 
+      "TIN2009-13950"
+    ], 
+    [
+      "Agency not found", 
+      "TIN2012-38805"
+    ], 
+    [
+      "Agency not found", 
+      "TIC-02788"
+    ]
+  ], 
+  "abstract": "Motivation: Small non-coding RNAs (sRNAs) have major roles in the post-transcriptional regulation in prokaryotes. The experimental validation of a relatively small number of sRNAs in few species requires developing computational algorithms capable of robustly encoding the available knowledge and using this knowledge to predict sRNAs within and across species. Results: We present a novel methodology designed to identify bacterial sRNAs by incorporating the knowledge encoded by different sRNA prediction methods and optimally aggregating them as potential pre-dictors. Because some of these methods emphasize specificity, whereas others emphasize sensitivity while detecting sRNAs, their optimal aggregation constitutes trade-off solutions between these two contradictory objectives that enhance their individual merits. Many non-redundant optimal aggregations uncovered by using multiobjec-tive optimization techniques are then combined into a multiclassifier, which ensures robustness during detection and prediction even in gen-omes with distinct nucleotide composition. By training with sRNAs in Salmonella enterica Typhimurium, we were able to successfully predict sRNAs in Sinorhizobium meliloti, as well as in multiple and poorly annotated species. The proposed methodology, like a meta-analysis approach , may begin to lay a possible foundation for developing robust predictive methods across a wide spectrum of genomic variability. Availability and implementation: Scripts created for the experimentation are available at", 
+  "summary": "Although several methods have been developed and represent a step forward in the computational detection of sRNAs, their success is limited because of (i) the excessive emphasis on specificity, which generates a high number of false-negative predictions by targeting few well-known sRNA families corresponding only to a small percentage of the available sRNAs, (ii) the use of genomic features (e.g. motifs of terminators, RNA polymerase) that are only conserved in closely related organisms [e.g. E.coli and Salmonella (Argaman et al., 2001; Vogel, 2009)] and thus cause", 
+  "toolName": "Sequence analysis A multiobjective method for robust identification of bacterial small non-coding RNAs", 
+  "affiliations": [
+    " Department of Computer Science and Artificial Intelligence Universidad de Granada "
+  ], 
+  "citations": "1", 
+  "acks": " ", 
+  "authors": [
+    " Javier Arnedo", 
+    " Roc Io Romero-Zaliz", 
+    " Igor Zwir", 
+    " Coral Del Val", 
+    " John Hancock"
+  ], 
+  "keyWords": [
+    "prediction methods", 
+    "sequencing", 
+    "genomics", 
+    "srnas", 
+    "predictions", 
+    "method"
+  ], 
+  "sourcelinks": [], 
+  "technologies": [], 
+  "dateCreated": "2014-06-24T06:29:49Z"
+}

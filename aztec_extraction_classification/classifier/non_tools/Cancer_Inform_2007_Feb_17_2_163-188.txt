@@ -1,0 +1,437 @@
+
+==== Front
+Cancer Inform101258149Cancer Informatics1176-9351Libertas Academica cin-02-163Original ResearchA mathematical model for the onset of avascular tumor growth in response to the loss of p53 function Levine Howard A. 1Smiley Michael W. 1Tucker Anna L. 1Nilsen-Hamilton Marit 121 Department of Mathematics2 Department of Biochemistry, Biophysics and Molecular Biology, Iowa State University, Ames, Iowa, 50011Correspondence: Email:
+halevine@iastate.edu; Tel: 5152948145; Fax: 5152945454.2006 17 2 2007 2 163 188 © 2006 The authors.2006This article is an open-access article distributed under the terms and conditions of the Creative Commons Attribution license (http://creativecommons.org/licenses/by/3.0/).
+
+We present a mathematical model for the formation of an avascular tumor based on the loss by gene mutation of the tumor suppressor function of p53. The wild type p53 protein regulates apoptosis, cell expression of growth factor and matrix metalloproteinase, which are regulatory functions that many mutant p53 proteins do not possess. The focus is on a description of cell movement as the transport of cell population density rather than as the movement of individual cells. In contrast to earlier works on solid tumor growth, a model is proposed for the initiation of tumor growth. The central idea, taken from the mathematical theory of dynamical systems, is to view the loss of p53 function in a few cells as a small instability in a rest state for an appropriate system of differential equations describing cell movement. This instability is shown (numerically) to lead to a second, spatially inhomogeneous, solution that can be thought of as a solid tumor whose growth is nutrient diffusion limited. In this formulation, one is led to a system of nine partial differential equations. We show computationally that there can be tumor states that coexist with benign states and that are highly unstable in the sense that a slight increase in tumor size results in the tumor occupying the sample region while a slight decrease in tumor size results in its ultimate disappearance.
+==== Body
+Introduction
+There is solid evidence for the existence of a tumor suppressor gene known as p53. The p53 protein functions at several levels to control cell growth. It can inhibit the transcriptional activity of other proteins such as Sp1 and HIF-α, both of which activate growth factor (GF) gene expression [51, 50, 57, 60, 65]. It can also inhibit cell mitosis and regulate cell apoptosis [50]. In particular, one can view p53 as a tumor growth inhibitor and Sp1 as a tumor growth stimulator. (There are other cell-generated inhibitors and stimulaters but we shall confine our attention to these two.)
+
+The purpose of this paper is to present a biochemically based model for the onset of solid tumor formation. The model describes the onset of solid tumor formation with diffusion limited growth on a scale consistent with diffusion limited avascular tumor sizes. A schematic summary of the underlying biochemical pathway is given in Figure 1. This paper does not go beyond this point to treat the onset of vascularization due to the diffusion of the carcinogenic waste products of tumor necrosis (tumor angiogenesis). This idea is not new in the sense that in [14] the authors used the kinetics of cell metabolism, to model the growth of tumor cells in the micro environment.
+
+It is not our intention to assert that this is the only way avascular tumor growth can arise from gene mutation.
+
+Among many examples are cancers such as lymphoma that are driven by an overexpressed and mutated MYC gene [7, 32]. The wild type MYC protein both inactivates the cell cycle by suppressing p21 and suppresses apoptosis by inducing BIM. The mutant forms of the MYC protein found in these cancer fail to induce BIM [see ref below]. This pathway runs in parallel with the p53 pathway, which is also activated by MYC ([32]). The mathematical modeling of this biochemical pathway is very similar to the the pathway we consider here in many respects.
+
+The goal here is to combine the loss of p53 regulatory function in benign cells with the consequent increase in the rate of benign cell loss (via mutation into tumor cells) and the effect this mutation has on the rate of formation tumor cells in order to model solid tumor growth in the micro environment. The model attempts to duplicate nature in the sense that, in the model, it is assumed that a few benign cells undergo a mutation by which they lose the ability to express the wild type p53 gene. More precisely, it is assumed that a few benign cells undergo a mutation by which there is a loss of wild type p53 expression over a small spatial region for a fixed time period. (Following the usual biochemical convention, when we refer to p53, we will only mean the wild type because the mutant type does not regulate Sp1 (and hence growth factor) for one of several reasons including (a) an incorrect protein transcribed from the mutant RNA, (b) no mutant p53 at all or (c) a mutant p53 with no suppresser capability.) This loss of tumor suppressor function will, in the model, result in excess Sp1 production. Sp1 functions as a transcription factor for, among other genes, the gene for MMP-1, a protease that is known to degrade tissue structural proteins such as collagen. This idea of genetic instability is not new (see [69]) for example. However, we think the modeling approach, as it combines fundamental biochemistry with chemotaxis and modification of classical competition dynamics, is novel.
+
+We begin with an initial state in which we have a region that consists only of benign cells and matrix. This state constitutes a stationary solution for a dynamical system based upon the biochemistry described above in the absence of loss of function. Our results show that the length of the period of mutation (the time interval over which the loss of function occurs), the spatial size (the volume over which loss of function occurs) and the intensity of the mutation (percentage of cells in which loss of function occurs) determine whether the tumor cells take over the region of interest. In biological terms, the period of the mutation refers to the period during which the tissue is exposed to a mutagen, the spatial size refers to the volume of tissue that is exposed to the mutagen, and the intensity of the mutation refers to the concentration and potency of the mutagen. For example, the frequency of p53 loss of function in the skin is influenced by the period of exposure to uv light, the area of skin exposed to the light and the intensity and spectrum of the light.
+
+Mathematically, the loss of function is modeled by the simple device of lowering the effective p53 rate constant for a specified portion of time and over a specified region in the benign cell region for a specified percentage (intensity). (See equation (2.1) and notice the modification in the coefficient kp in equation (2.2).) The mutation in cell type is then modeled by a corresponding loss of benign cell growth rate coupled with an increase in tumor cell cell growth rate whenever the concentration of p53 falls below a threshold level. (See equation (3.5) and notice the last term on the right hand side of each rate law.)
+
+In particular, the model shows that:
+When the mutation is sufficiently intense, widespread or of sufficiently long duration, the malignant cell mass that develops during the loss of function period contains sufficient malignant cell mass to take over the region under consideration.
+
+On the other hand, if the mutation is insufficiently intense, very local or of insufficient duration, the initial transfer of some cells from the benign state into the tumor state induced by the mutation is not sustainable and the small tumor perturbation dies out, with the system returning to its initial state.
+
+The model postulates that if the intensity is small enough, and the region over which the mutation occurs is fixed, the duration time can never be long enough to initiate a growing tumor.
+
+The model postulates the existence of tumor states that can coexist with benign states for very long times (i.e. form coexisting quasi-steady states.)
+
+
+
+Some comments on the mathematical literature: There is a large literature on the mathematical modeling of various aspects of solid tumor growth. See [1, 2, 3, 4, 13, 12, 15, 35, 37, 62] for some representative examples. Some of this literature reflects the controversial nature of modeling solid tumor growth. See for example [30] and the rebuttal [58]. There is also an extensive literature concerned with the spontaneous remission of solid tumor growth, i.e. tumors that disappeared without treatment of any kind. A key word search on the phrase “spontaneous remission or regression of cancer” in PubMed led to over 2200 screens of articles. Many of the articles listed were case studies of various identified cancers. A few dealt with various mathematical aspects of the problem [36, 70]. We suggest that our results demonstrate one possible mechanism for this remission.
+
+There are a number of papers dealing with competition models and Lotka-Volterra systems, as systems of ordinary differential equations and as systems of reaction diffusion equations, see for example [11, 18, 21, 22, 19, 20, 34, 38]. However we could find no papers in which these systems were combined with Keller-Segal type equations of chemotaxis. (We did a keyword search on MathSci-Net and found no matches for “competition species” AND “chemotaxis” or “competition species” AND “Keller-Segal”.) Our model does combine chemotaxis for cell movement together with the “competition species” notion for competing species. Given the dearth of literature on these combined notions, perhaps we can claim some novelty for our model. It is not only mathematically naive but also false, to draw the inference that conclusions about the dynamical behavior of solutions of a system ordinary differential equations such as the Lotka-Volterra system for competition systems, will lead to valid conclusions about analogous systems of partial differential equations when these equations are combined with diffusion terms or diffusion with chemotactic terms. Turing instability is probably the classical example of the failure of the stability properties of nonlinear ordinary differential equations to be inherited by systems of partial differential equations with the nonlinearities arising from the ode system. See also the two very nice papers [45, 63] for alternate approaches to this issue.
+
+Here is an outline of the remainder of the paper. Sections 2–8 constitute the main body of the paper.
+
+Section 2: We present the biochemical and cell biological underpinnings of the model. The details of the biochemistry are set forth in Appendix A.
+
+Section 3: We discuss the cell movement equations. Here we use the notion that cells move up or down chemical gradients (chemotaxis) together with the idea that mitosis of each cell type interferes with the mitosis of the other.
+
+Section 4: We set forth the mechanistic equations that define the notion of diffusion limited tumor growth. That is, the entire system is governed by the consumption of nutrients delivered to the tumor region via diffusion. Waste products are generated as a consequence of protein degradation and cell apotosis. Because we do not use the waste products further as sources for tumor growth, we ignore their evolution here.
+
+Section 5: We give the appropriate boundary conditions and initial conditions for the problem dynamics.
+
+Section 6: We discuss the dynamics predicted by a subsystem of ordinary differential equations.
+
+Section 7: We describe how the normalizing constants are selected in order to nondimensionalize the system and how the initial steady state is found. First the system (without mutational considerations) is modified in such a way that constant solutions of the modified system can be found explicitly. These constant values are used to non-dimensionalize the full problem. By using the constant values as initial conditions for the system (without mutational considerations) the putative non-constant, benign solution is obtained (numerically) as the time independent limit of the system.
+
+Section 8: We present the results of our simulations and our conclusions. We consider our problem with spherical symmetry to keep the computational complexity to a minimum.
+
+Appendix A: We give a brief overview of the molecular biology and the resultant chemical kinetics upon which we base our model.
+
+Appendix B: We record the numerical values of the constants we used in the simulations.
+
+The reader is warned that quite a bit of mathematics lies ahead. We do not apologize for this, since in order to use mathematics to describe a complex biochemical process, one might expect that the mathematical description itself might likewise be involved. However, to make the reader’s task somewhat more palatable, we offer the following observations. Nothing more complex than elementary enzyme kinetics, mass action and Fick’s law is involved in the description of the dynamics of the time evolution of the protein and nutrient concentrations as well as the local cell population densities. The nutrient equation controls the flow of nutrients reaching every point of the extracellular matrix.
+
+Notation and Kinetics
+We consider the interplay among the proteins p53, GF the transcription factor, Sp1, the extra-cellular structural proteins F, and the matrix metalloproteinase, MMP-1 as described in Figure 1. In this model, it is assumed that transport of subcellular species such as growth factor, p53 etc. is passive, i.e. is controlled by cell movement. We imagine a region D in two or three dimensional space. Throughout, X = (x, y) or X = (x, y, z) according to the dimension in which D lies. We use the notation in Table 1. We have eleven species, nine of which are chemical, two of which are cellular. (In the sequel the constants NB, NT denote the carrying capacity densities for benign and tumor cells respectively.) Throughout this paper we adopt the convention that the Greek μ is reserved for decay (turnover) constants while ν is reserved for equilibrium constants.
+
+We begin with p53. A relationship for the rate of formation of this transcription factor based on the number of benign cells present and level of resources is given by
+ (2.1) ∂p∂t=kpY (x,t)Kp+Y (x,t)ηB (x,t)NB−μpp (x,t). The assumption here is that only benign cells express the wild type gene, wherever they appear in the tissue. The cell density has been re-scaled so that kp now includes the maximum possible benign cell density as a factor. (In Appendix A, we give a rationale for the term 
+kpY (x,t)kp+Y (x,t)ηB (x,t)NB based on chemical kinetics.) We refer to (2.1) as the equation of p53 evolution without loss of function.
+
+In order to express the idea of evolution of p53 with loss of function, consider a subregion D' ⊂ D, a time interval (more generally, several time intervals) I = (T1, T2) and a function Ψ(x, t) with support in D' × I and having values in (0,1]. A mutation is said to occur in the region D' ⊂ D over a time interval I if there has been a loss of p53 expression in the set D' × I. That is, we replace (2.1) by
+ (2.2) ∂p∂t=kp [1−Ψ (x,t) ]Y (x,t)Kp+Y(x,t)ηB(x,t)NB   −μpp(x,t). We refer to this equation as the evolution equation for p53 with loss of function or as the mutated p53 equation. The function Ψ is called the loss of function coefficient. The intensity of the loss of function is defined as
+ (2.3) I=1VD′L(I)∫D′∫IΨ(x,t)dtdx where VD′ L(I) is the product of the volume of D′ and the length of the time interval over which the loss of function occurs. Notice that 
+0<I≤1. The strength of the mutation is defined as
+ (2.4) S=VD′L(I)I. Corresponding to such a loss of function coefficient will be a drop (pointwise) in p53 concentration. When this concentration falls below a certain level, pc say, some benign cells will become tumor cells. The model is not reversible. That is, tumor cells can only disappear via apoptosis. For the time being, it is enough to remark that each equation (2.1), (2.2) will play a role as part of a larger system. The system consisting of (2.1) and the remaining dynamics (discussed below) will be used to compute a non constant steady state in which there are no tumor cells present. This steady state will then form the initial condition for the system consisting of (2.2) and the dynamics discussed below.
+
+Remark 1. There is experimental evidence that p53 in normal tissue is much more stable than in malignant tissue. For example, in [6] it was reported that although this protein has a half life of about three hours in normal mammary epithelial cells, it was approximately 15 minutes in E5 immortalized cells, i e. cells that were immortalized by the E6 gene of HPV-16, the human papilloma virus commonly associated with cervical cancers. We have not included this observation as it is clear intuitively that its effect should drive up the expression of active Sp1 and hence the level of growth factor over what we already have computed in the regions where tumor cells are present.
+
+From the literature [51] we know that p53 inhibits the transcription factor Sp1. We assume that this occurs via the equilibrium:
+ (2.5) Tra+P⇄VesTri where 
+Tra, 
+Tri represent the active and p53 inhibited form of Sp1. We write:
+ (2.6) ∂SB∂t=ksY (x,t)Ks+Y (x,t)(ηB(x,t)NB)   −μsBSB (x,t) for Sp1 growth and decay in benign cells. In tumor cells we write
+ (2.7) ∂ST∂t=ksY(x,t)Ks+Y(x,t)(ηT(x,t)NT)   −μsTST(x,t) where μsT ≤ μsB since the decay rate (the turnover rate) for Sp1 in benign cells is larger than that for tumor cells in general. We have, in terms of the notation in Table 1, for benign cells only
+ (2.8) sBa+sBi=sB,sBi=vessBap, and hence
+ sBa = sB1+vesp. 
+
+Before proceeding further, we need some terminology. By a “switch” we mean a Heaviside function, i.e. a function H(x) which is zero if x < 0 and one if x > 0.1 In the single cell, a switch is either on or off. In a population model such as this one, the transition from “off” to “on” is actually smooth and “smooth” versions of the Heaviside function were employed in the simulations. For example, one could use H(x, K) = max{xm/(K + |x|m),0)} where K > 0 and m is an odd positive integer so that H(K1/m, K) = 1/2. Alternatively H(x,m) = max{0, 1 − exp(−mx)} and H(ln 2/m,m) = 1/2.
+
+We turn to the action of the growth factor. We consider not only the action of the transcription factor Sp1 on GF synthesis but also the degradation of growth factor during the course of the cell synthesis of MMP-1. The synthesis and degradation of growth factor is assumed to be regulated by Sp1 according to the discussion in the appendix. Thus we write:
+ (2.9) ∂v∂t=kvY(x,t)Kv+Y(x,t)(H(sBa)ηB(x,t)NB  +H(sT)ηT(x,t)NT)−μvv(x,t). 
+
+Clearly, as the concentration of p53 falls, more inhibited Sp1 in benign cells is converted to the active form. This causes an increase in growth factor production.
+
+A simplified scenario for the GF role in the production of MMP-1 might be the following: Once the cell has expressed a molecule of GF and released it to the ECM, the molecule binds to a GF receptor (R) and initiates signaling via a MAP-kinase pathway to induce transcription of the MMP-1 gene with the eventual translation to create the protease. A simplified mechanism for this is given in [44]. That mechanism, in its turn, is a bit more complicated than we need for our purposes here. Instead we use:
+ (2.10) V+R⇄koffrkonr{VR}Y+{VR}→kmrnM+V′+R where V′ denotes the products of GF degradation. Michealis-Menten kinetics for this system yields, assuming V is in excess so that the concentration of the intermediate {VR} is constant:
+ d[M]dt = nkonrkoffr[V][Y][R]koffr + kmr[Y] The number n is the cell amplification factor for MMP-1. It is thought to be fairly large and is a consequence of the amplification properties of the MAP-kinase signaling pathway and transcriptional response to growth factor. It is not constant, but depends upon the local concentration of growth factor, first increasing and then decreasing with growth factor concentration [61].
+
+Likewise, there is a corresponding loss of growth factor that follows from the kinetics (2.10), namely
+ d[V]dt = konrkoffr[V][Y][R]koffr + kmr[Y] In the mechanism (2.10), we need to distinguish carefully between the receptors on the tumor cells and the receptors on the benign cells. Relating receptor density to cell density, and taking into account the transcription of GF as well as its decay and conversion to MMP-1, we may write:
+ (2.11) ∂ν∂t=−kvY (x,t)Kv+Y(x,t)(H(sBa(x,t))ηB(x,t)NB   +H(sT(x,t))ηT(x,t)NT)−μvv(x,t)   −Kcatrv(x,t)Y(x,t)Kmr+Y(x,t)(ηB(x,t)NB+ηT(x,t)NT). In turn, growth factor induces the cellular expression of MMP-1:
+ (2.12) ∂m∂t=Y(x,t)nKcatrv(x,t)Kmr+Y(x,t)(ηB(x,t)NB  +ηT(x,t)NT)−μmm(x,t). We have neglected the diffusion of growth factor in (2.11) because its half life is short in tissues.
+
+Next we consider the rate equation for collagen/fibronectin degradation. It has been established experimentally that some tumor cell types have a limited ability to express fibronectin relative to benign cells [16, 54, 24, 64]. We assume that this rate is a small percent, ɛf, of the rate of production of benign cells. Moreover, the molar rate of production of collagen/fibronectin must not only depend upon the local cell density but also upon the local concentration of resources, up to some saturable limit. To reflect these ideas, we write2:
+ (2.13) ∂f∂t=(4/Tf)Y(x,t)Kf+Y(x,t)f(x,t)(1−f(x,t)fM   (ηB(x,t)NB+εfηT(x,t)NT)   −Kcatfm(x,t)f(x,t)Kmf+f(x,t). We have written 4/Tf as the time constant at saturation for convenience. In this form, at saturation and low concentrations of f, the doubling time for f is Tf ln 2/4. The factor of four is included since then 4x(1 − x) has a maximum value of unity.
+
+Cell Movement
+In order to track the movement of cells consider again the kinetics that follow from (2.10). The law of mass action when applied to the rate equation for the receptor density would yield ∂[R]/∂t = 0 in consequence of the Michealis-Menten hypothesis that [RV] is nearly constant. However, the issue is somewhat more complicated in this case because: (1) the receptor distribution is tied to the cell membrane movement; (2) the cell movement is dependent on the local concentrations of growth factor, enzyme and ECM protein in a chemotactic (and chemokinetic) as well as haptotactic manner rather than being completely random; and (3), the cells themselves undergo mitosis and apoptosis (programmed cell death). However, we can relate cell density to receptor concentration via the relationship [R](x, t) = cN(x, t) where the left hand side has the units of micro molarity (micro moles per liter) say while the cell density N is expressed in cells per liter so that the constant has units of micro moles per cell. Then a rate for [R] is proportional to a rate for N and we can consider cell movement rate laws in their own right coupled to the protein movement laws.
+
+Suppose, for the moment, that N is the density of one of the two cell types under consideration here. From the continuity equation in the absence of sources or sinks (mitosis and cell death)
+ (3.1) ∂tN=−∇→. J→ where 
+J→ is the local flux of cell density at (x, t).
+
+Fick’s law is then modified so that the flux of cell density will be influenced by the gradient in protease density m(x, t) (chemotaxis), and gradients in collagen density f (x, t) (haptotaxis). These notions mean that each biochemical species influences the flux of the cells through a term that is proportional to the cell density and that depends on the gradient of the species, vis:
+ (3.2) J→=D(N){−∇→N+[M(m,f)∇→m  +F(m,f)∇→f]N} where M, F are some phenomenological functions of (m, f). These functions, sometimes called the chemotactic sensitivity functions, determine the influence of the specific species on the flux of cell densities. For example, where M > 0 the gradient of protease opposes the cell density gradient while where M < 0, it assists that gradient. If one makes the assumption that the vector (M, F) = ∇[T(m, f)] where ∇ is now the gradient in the variables (m, f), for some potential function T3, writes T(m, f) ≡ exp(T(m, f)) and uses this in the resulting flux vector, then the cell movement equation (without sources and sinks) takes the form
+ (3.3) ∂N∂t=∇⋅{DN[N∇1n(N𝔗 (m,f))]}. This is perhaps a strange way to write the equation for chemotactic cell movement. However, the meaning is clear. It says that near steady state, “N should follow 𝔗(m, f)”, an observation of Hans Weinberger (private communication).
+
+The function 𝔗 (m, f) is called the probability transition function (PTF). We can understand its meaning at the intuitive level if we consider the stationary (time independent) version of the equation. Suppose N(x), m(x), f (x) are smooth functions connected by the relationship N(x) = λ 𝔗 (m(x), f (x)) for some constant λ. Then it is clear that N(·) must be a stationary solution of (3.3) and we say that “the solution N follows𝔗”.
+
+Another way of looking at (3.3) is from the point of view of “cellular free energy”. That is, one views 𝔗 as a correction factor for chemotaxis/haptotaxis in the associated “cellular potential” here corresponding to the cell density. The “cellular potential” is defined as ρ(N) = −D ln (N/N0) where N0 is the “concentration” in some reference state. Without the correction factor, using Fick’s first law, Nt = −∇ J where J = −DN ∇ ρ (N) we obtain the ordinary diffusion equation for cell density. We can think of the cellular potential in much the same way as the chemist thinks of chemical potential for the isothermal change in free energy. Then we view N/𝔗(m, f) in much the same way as a chemist thinks of fugacity (mole fraction times pressure) at zero pressure in non-ideal gas dynamics or activity (which replaces ion concentration) in ionic solutions at finite dilution. See books on chemical thermodynamics such as [68] for more information. (The authors thank James Keener for bringing to our attention this interpretation of the appearance of the logarithm in (3.3).)
+
+The choice of 𝔗(m, f) is phenomenological. Other possible dependencies for the probability transition rate function 𝔗 are certainly possible. For example, 𝔗(m, v, f) is a possibility. Any other external biochemical variable for which it is known that cells respond in a chemotactic/haptotactic manner may also be added to the argument list. For example it has been observed that endothelial cells will move up a protease gradient, but if the concentration of protease is too high, the enzyme will kill the cell, causing the cessation of movement. Likewise, EC cannot move through a matrigel bed if the density of matrigel is too high nor can they move along a surface unless there is some ECM protein such as collagen or fibronectin onto which it may attach its pseudopodia. Experimental evidence is given in [10]. These two qualitative observations suggest that this function should be biphasic in each variable (i. e. first increasing and then decreasing in each variable). The precise form we use in our simulations is described in Appendix B.
+
+When we have two cell types present whose cell densities are denoted by ηB, ηT, say, (3.3) must be replaced by a system. One question that arises naturally is how to model the preference for cells of different types to fill regions vacated by dead cells. Generally speaking, as cells move, they consume the resources that are responsible for supplying the energy for cell movement. As this energy is exhausted, cell movement slows.
+
+Additionally, the cells will behave differently under “crowding” conditions. That is, we expect the clumping of benign cells to slow their movement and push them into G0, whereas tumor cells, which do not enter G0, are more aggressive and not as influenced by the effects of crowding. In both cases, we expect movement to decrease as cell concentration rises, but we expect the rate of decrease of movement to be more rapid for benign cells than for tumor cells. Although we did not use this in our simulations, the model allows for this possibility. These ideas are much broader than we employ here [52]. Here we simply include the cell densities themselves as a part of the “chemotactic” sensitivity function and write
+ (3.4) ∂ηB∂t=∇⋅[DB(ηB,ηT)ηB∇   ln (ηB𝔗B(ηB,ηT,m,f))],∂ηT∂t=∇⋅[DT(ηB,ηT)ηT∇   ln(ηT𝔗T(ηB,ηT,m,f))]. where we have omitted mitotic and apoptotic effects for the moment.
+
+We next consider the issues of mitosis and apoptosis (sources and sinks) that must be included in both cell movement equations. These are viewed as forcing terms and are somewhat easier to explain. If we assume that the quantities of growth factor produced are close to the background rates, then cell proliferation rates may be taken to be nearly independent of growth factor. However this is not always true, especially in the case of angiogenesis. See [61] and [43] for an application of this fact.
+
+It is known that p53 is a regulator of cell mitosis and proliferation. In particular, it enhances apoptosis and inhibits mitosis [50]. We make the assumption here that the distinguishing features between tumor cells and benign cells are the following:
+A drop in p53 concentration below a critical value in benign cells results in the change of type (a mutation) of such cells to the malignant state. It is assumed that this occurs at a rate proportional to the benign cell density and is controlled by a switching mechanism. That is, the rate is proportional to H(pc −p)ηB. The proportionality constant is denoted by λtr. Here pc is a background critical value required to maintain a steady state population consisting only of benign cells in the region in question. The transfer is one way only; it allows for the growth of tumor cells at the expense of benign cells by permitting the conversion of the latter to the former through a modification in their respective growth rates.
+
+The apoptosis to mitosis ratio of benign cells is higher than the corresponding ratio for tumor cells since the latter do not express p53 and the former do. (See [59] for some simple mathematical models of tumor growth based upon differing mitotic and apoptotic rates for tumor cells versus benign cells. See also the discussion in [7, 32].)
+
+Both DB, 
+DT are constant.
+
+For * = B, T, the sensitivity functions 𝔗*(ηB, ηT, m, f) can be written as products 𝔗*(m, f) ψ*(Z) where Z = ηB/NB + ηT/NT is the volume fraction of a given region occupied by cells. From physical considerations, we have 0 ≤ Z ≤ 1. (A simple formal argument using the logistic equation for total cell growth, namely dZ/dt = cZ(1 −Z) convinces us that if 0 < Z(0) < 1, then Z(t) remains in this interval. In the general case one can argue from the maximum principle.) In reality, Z ≤ ZM < 1 where 1 − ZM is the volume fraction of the extracellular region between the cells. However, we shall ignore this volume fraction in the model.
+
+
+
+Based on the above considerations, the cell movement equations take the form:
+ (3.5) ∂ηB∂t=DB∇⋅[ηB∇ln(ηB𝔗B(m,f)ΨB(Z))]   +[H(v−vB)λBYκB+Y   (1−ηBNB−LTηTNT)−μB]ηB   −λtrH(pc−p)ηB,∂ηT∂t=D∇⋅[ηT∇In(ηT𝔗T(m,f)ΦT(Z))]   +[H(v)λTYκT+Y   (1−ηTNT−LBηBNB)−μT]ηT   +λtrH(pc−p)ηB. The factor H(v – vB) in the first of (3.5) says that when v > vB benign cells proliferate, while when the growth factor is below this level, they cannot. The factor H(v) in the second of (3.5) has a similar meaning for tumor cells (with vT = 0). These two factors reflect the fact benign cells are generally quiescent (in G0) whereas tumor cells are usually constantly passing through the cell cycle. The threshold vB is intended to model the lower proliferative response of benign cells to growth factor than that of tumor cells. Unfortunately, the number vB is unknown. Therefore, by taking vB = 0, in the model, we are giving the benign cells a greater survival advantage than they would ordinarily be expected to possess. The qualitative form of the results we give below will be unchanged by taking vB > 0. The factors λBY/(κB + Y) and λT Y/(κT + Y) are included to reflect the idea that when nutrient levels are low, cell population production is low, but, as the nutrient levels rise, the population growth rates approach a saturation level given by the constants λB, λT.
+
+The factors LT, LB are included as in [27, 28]. We refer to them as mitosis inhibition or apoptosis enhancement factors as they can be viewed as either inhibiting the former or enhancing the latter. (We have written the equations as though they inhibit the mitosis.) In general, we expect that LT ≥ LB, that is tumor cells influence the benign cell net proliferation rate much more than vice-versa. This clearly gives the proliferation advantage to tumor cells. However, it does not imply that under all circumstances, the tumor cells will take over the region of interest from the benign cells.
+
+Mass balance equations
+In this model, nutrients function directly to support cell production of p53, Sp1, GF and MMP-1. These proteins also decay and are transported out of the region D by molecular diffusion (in the absence of a vasculature). Additionally, tumor and benign cells are undergoing mitosis and apoptosis in this region while collagen/fibronectin is being generated by the cells and degraded by MMP-1.
+
+For example, in the rate equation for p53, resources are being consumed at a rate dictated by the first term on the right of (2.1) while the products of protein decay are being generated by the second term on the right of that equation. At steady state, as for example, in the healthy tissue, these two terms agree, otherwise they do not.
+
+We have the mass rate loss for the resources:
+ (4.1) ∂Y∂t=∇⋅ [DY∇Y]−Y (x,t) [kpKp+Y (x,t)+ksKs+Y (x,t)   +kvH (SBa (x,t))Kv+Y (x,t)]ηB (x,t)NB−Y(x,t) [ksKs+Y (x,t)   +kvH(sT (x,t))Kv+Y (x,t)]ηT (x,t)NT−Y (x,t) {nKcatrv (x,t)Kmr+Y (x,t)[ηB (x,t)NB   +ηT (x,t)NT]+(4 / Tf)Kf + Y (x,t)f (x,t)   (1−f (x, t)fM)[ηB (x,t)NB+εfηT (x, t)NT]   +[ℓBλBH (v)κB+Y (x,t)(1−ηBNB−LTηTNT)ηB   +ℓTλTH (v)κT+Y (x,t)(1−ηTNT−LBηBNB)ηT]}≡∇⋅[DY⋅∇ Y]−Y (x,t) 𝔖 (Y,f,sBa,sT,v,ηB,ηT) where 𝔖 is the (positive) coefficient of Y in the preceding line. The constants ℓB, ℓT are conversion factors that permit us to convert the units of cells per unit volume to molecular weight per unit volume. That is, the constants CB ≡ NB ℓB λB and CT ≡ NT ℓTλT may be regarded as the maximum velocities of resource conversion into mass. These products are expected to be quite large, in any case much larger than the other velocities at saturation such as kp, kv, ks, km etc. We have written the diffusion term, ∇·[DY ∇Y] in this generality to indicate that the diffusion factor DY need not be constant.
+
+If we prescribe the level of nutrients on the boundary of D and a given initial concentration of nutrients in D, with time, we expect the level of nutrients in the tissue to be low in regions “far” from the boundary. If the level of nutrient supply is sufficiently low, the tumor cells cannot proliferate except near the edge of the tumor. This is what is meant by “diffusion limited” tumor growth. This is the equation that controls the nutrient level in the tissue region, D.
+
+Coupled to this should be an equation that reflects the diffusion of the products of cell metabolism in the tissue. Clearly the products of collagen degradation are among these products. Likewise, we should include the degradation products of p53, Sp1, MMP-1 and GF. However, since no further biochemical use of these waste materials is made in this article, we omit a detailed discussion of them.
+
+Boundary and Initial Conditions
+We begin this section with a discussion of the boundary conditions. Since equations (2.1), (2.2), (2.6), (2.7), (2.11), (2.12), (2.13) are all ordinary differential equations in time, no boundary conditions are needed for them. On the other hand, (4.1), and (3.5) require boundary conditions. We take
+ (5.1) DBηBn⋅∇ ln (ηB𝔗B (m,f) ΨB (Z))=0,DTηTn ⋅ ∇ ln (ηT𝔗T (m,f) ΨT (Z))=0,  DYn ⋅ ∇Y+ry [Y (x,t)−Yb]=0 where Z is again the local volume fraction occupied by the cell types and where it is understood that x ε ∂ D, (the boundary of D) and where n denotes the outward directed unit normal to the boundary of D. The first two conditions say that the total flux of either cell type from the given region is zero. The flux constant ry needs to be determined from phenomenological considerations. The constant Yb is a prescribed level of nutrients on the outer wall.
+
+We turn to a discussion of the initial conditions. Recall that a mutation is said to occur in a region D' ⊂ D over at time interval I if there has been a loss of p53 expression in the set D' × I. That is, equation (2.1) is replaced by (2.2). The function Ψ is called the loss of function coefficient and the strength of the loss of function is defined in (2.3). We start such a perturbed system with a stationary solution of the system of equations for which there are no tumor cells present and no loss of function. Notice that we are not making any change in the initial values for either the proteins or the cell type densities. The only changes to be made are in the dynamics wherein the p53 equation takes the mutated form (2.2). The cell type equations are modified in that cell type change is driven only by the transfer rate λtr.
+
+Dynamics of the Modified Lotka-Volterra system
+In order to understand what might be expected from the full system, we consider the set of stationary solutions of (3.5) in the spatially homogeneous case for constant values of v, Y, f, m. When the transfer coefficient λtr = 0, we are led to consider a Lotka-Volterra competition model of the form:
+ (6.1) dxdt=λ′B (xB−x−LT y) x,dydt=λ′T (yT−y−LBx) y, when we freeze the coefficients that depend on the switches and resources.
+
+A complete discussion of the dynamical behavior of the solutions of this system to be found in [46]. One is tempted to believe that the solutions of the full system might behave like those for the system of ordinary differential equations. However there are two very good reasons why this may not be the case.
+
+First, the presence of the free energy terms (i.e. the terms involving cell movement, both random and chemotactic or haptotactic), as well as the fact that the various parameters may depend upon the other variables, does not make such an expectation a rigorous statement. (As a well known example of how partial differential operators can radically alter the behavior of solutions of systems of ordinary differential equations, we refer the reader to a discussion of Turing instability [46].) See, for other examples, [11, 18, 21, 22, 19, 20, 34, 38] where studies have been made of related systems in which the Lotka-Volterra terms (the right hand sides in (6.1)) function as reaction terms in a system of reaction diffusion equations of competition type.
+
+Secondly, the system of ordinary differential equations that corresponds to the spatially homogeneous cell equations can be reduced to the following form when we freeze the coefficients that depend on the switches:
+ (6.2) dxdt=λ′B (xB−x−LT y) x−Λ x,dydt=λ′T (yT−y−LBx) y,+Λ x. This reduces to the Lotka-Volterra system when Λ = 0.
+
+The “constants” λ′B, λ′T, xB, yT will depend upon v, Y, μB, μT, λB, λT, while Λ will depend upon λtr and p. The three relevant ordinary equations from our model take the form:
+            dpdt = kpYKp + Y ηBKB − μpp,dηBdt = (λB′ H(v)yΛB + y(1 − ηBNB − LT ηTNT) − μB)              ηB − λtrH(pc − p)ηB,dηTdt = (λT′ H(v) yΛT + y(1 − ηTNT − LBηBNB) − μT)              ηT + λtrH(pc − p)ηB. In order to understand how p affects the dynamics, we use smooth forms of the Heaviside function and consider the case of no loss of function, i.e. Ψ ≡ 0. To put this system into standard form, we freeze the values of Y, v, let Pn be some normalizing constant for p53 and set
+        x = ηBNB, y = ηTNT, z = p/Pn,λ1 = λBH(v), Kbv YΛB + Y, μ1 = μB,          k1 = LT, x0 = 1 − μ1/λ1,λ2 = λTH(v), Ktv YΛT + Y, μ2 = μT,          k2 = LB, y0 = 1 − μ2/λ2,λ3 = (kp/Pn)YKP + Y, μ3 = μp, g(z)= λtrh(z) where h(z) is a smooth approximation of H(pc/Pn −z). In terms of these quantities the system becomes
+ (6.3) x′=F (x,y,z)=λ1x (x0−x−k1y)−xg (z)y′=G (x,y,z)=λ2y (y0−y−k2x)−xg (z)z′=H (x,y,z)=λ3x−μ3z 
+
+If the transfer rate λtr = 0, so that g = 0, then the first two equations decouple from the third equation, yielding a planar system for x and y which is a Lotka-Volterra competition model with four rest points: i) (0, 0), ii) (x0, 0), iii) (0, y0) and iv) (x1, y1), the point of intersection between the lines x0 − x − k1y = 0 and y0 − y − k2x = 0. The point (x1, y1) is not always physically relevant. Depending on k1, k2 it may not be in the first octant, or it may not satisfy x1 + y1 ≤ 1. The dynamics of the system also varies with k1, k2. A thorough discussion can be found in [46]. In the case where the parameters are such that x0 = y0, k1 = k2 and k1k2 > 1, The points (x0, 0) and (0, y0) are asymptotically stable. These two, as well as a third, (x1, y1) are physically relevant (i.e. x1 > 0, y1 > 0, x1 + y1 ≤ 1). However, (x1, y1) is unstable.
+
+The rest points of the full 3-dimensional system (6.3) satisfy F = G = H = 0. Since H = 0 if and only if z = αx, where α = λ3/μ3, the 3-d system can be reduced to a planar system for x and y; namely F (x, y, αx) = G(x, y, αx) = 0. This system can be analyzed graphically by plotting the curves F (x, y, αx) = 0, G(x, y, αx) = 0 and looking for points of intersection. For the choice of parameters and smooth approximation to the Heaviside function used in the simulations, this approach leads to Figure 2.
+
+Figure 2 shows there are now 5 rest points, one of which is not phyically relevant. The solutions can be found numerically and a linear stability analysis can also be performed numerically. Table 2 gives the results of this process for the physically relevant rest points. These results show that for the reduced system (6.3) with smooth approximations to the Heaviside function, there can be an equilibrium state with co-existing benign and tumor cell densities that is unstable!
+
+Steady state solutions
+Before we can perform simulations to explore the effects of modeling mutational loss of function in p53, steady states of the system must be determined. Since we cannot expect spatially homogeneous steady states, equilibrium solutions must be determined computationally, rather than algebraically. To do this, we use a shooting strategy which relies on asymptotic stability. That is, we choose initial conditions for the system and then let the system evolve. If the initial conditions are nearby an asymptotically stable steady state, then the evolving time-dependent solution will converge to the nearby equilibrium solution. This raises the question of how to choose appropriate initial conditions, which we discussed in the first subsection. Essentially we use constant solutions of a perturbed system. These values also serve as normalizing values for some of the variables. A second question arises along the way, that of an appropriate boundary value Yb. This is discussed in the second subsection. Simulation results are also presented.
+
+Initial conditions and normalizing constants
+In this subsection we treat Ye as a parameter and seek spatially constant solutions of (2.1), (2.6), (2.7), (2.11), (2.12), (2.13), (3.5) and the following perturbation of (4.1):
+ (7.1) ∂Y∂t=∇⋅[DY∇Y]+Yr−Y (x,t)  𝔖 (Y,f,sBa,sT,v,ηB,ηT) where 𝔖 is defined implicitly in (4.1) and where Yr is to be chosen so that there is a constant stationary solution for the system (2.1), (2.6), (2.7), (2.11), (2.12), (2.13), (7.1), and (3.5).
+
+To determine this solution, we set the right hand sides of (2.1), (2.6), (2.7), (2.11), (2.12), (2.13), (3.5) to zero, assume that the variables in the resulting equations are constants, set all the Heaviside switches to unity except that we set H(pc − p) = 0 in order to indicate that there is no transfer of cells from the benign state to the malignant state at p = pe > pc where pe is an equilibrium value to be determined as explained below.
+
+We use the underlying assumption that 
+ηBe > 0 and 
+ηTe =0. Therefore 
+sTe = 0. For the benign variable we obtain a normalized solution, 
+ηBe / NB, as
+ (7.2) NBe=ηBeNB=1−μBYBe,(YBe=λBYeKB+Ye). 
+
+In order to have 
+NBe > 0 we need μB < 
+YBe This is an inequality in Ye that is equivalent to Ye > μB λ;B/(λB – μB) ≡ YB) It is also clear that 
+NBe → 0+, as Ye → 
+YB+.
+
+From the remaining equations we obtain:
+ (7.3) pe=YpeNBeμp,(Ype=kpYeKp+Y),se≡sBe=YseNBeμsB,(Yse=ksYeKs+Ye),sea=se1+νespe. Let
+ Yve = kvYeKv + Ye and Yre = KcatrYeKmr + Ye. 
+
+Then for ve and me, it follows that
+ (7.4) ve=YveNBeμv+YreNBe, and me−ηmveYreNBeμm. 
+
+To determine a constant solution fe > 0 of (2.13), we set Fe = fe/fM, 
+K˜catf=Kcatf me / fM, and 
+K˜mf=Kmf / fM. Depending on parameter values there may or may not be a positive solution of the stationary equation for (2.13). If we set x = Fe, 
+α=YfeNBe, 
+β=K˜catf, and 
+γ=K˜mf. It can be shown that if γ ≥ 1, there will be a positive solution if and only γ > β/α. It turns out that the stationary equation will have distinct real zeros if and only if β/α < (γ + 1)2/4. In this case, the larger one is given by 
+x=12(1−γ+(γ+1)2−4(β/α)). If γ < l this root is positive. Since γ ≤ (γ + 1)2/4, it follows that the weaker requirement β/α < (γ + 1)2/4 is necessary and sufficient for x > 0 when γ<1. If the constant Yr is now determined by setting Yr = Ye𝔖(Ye, fe, se, 0, ve, 
+ηBe,0), then the above values give the desired constant solutions of (2.1), (2.6), (2.7), (2.11), (2.12), (2.13), (7.1), (3.5).
+
+Remark 2. Notice that Pe, …, 
+ηBe depend only upon the kinetic constants, the proliferation and apoptosis rates and Ye, the level of resources.
+
+The boundary value Yb
+The constant values found above are not steady states of the original system in which (4.1) appears rather than (7.1). In fact constant solutions are not possible. Clearly the distribution of resources cannot be spatially homogeneous, since Ys = Y𝔖 (Y, f, v, 
+sBa, sT, ηB, η T) > 0, unless all variables are zero. However, there are spatially inhomogeneous equilibrium solutions of the system that are close to these constant values, provided that the flux of nutrients at the boundary diffuses through the region resulting in a distribution of resources approximating the distribution determined by Yr. The key issue is to determine the proper boundary value for Yb. This can be done analytically as follows.
+
+Suppose that Y0 (x) is the resource component of an equilibrium solution of the model system (with Yr = 0) in which there are no tumor cells present. Then Y0 (x) satisfies
+ (7.1) 0=∇⋅(DY∇Y)−Ys (Y,f,v,sB,a0,ηB,0),x∈D,0=DY∂Y∂v+ry (Y−Yb),x∈∂D, where D is the region of interest, 
+∂Y∂v denotes the outward normal derivative and 
+sBa, v, f, Y, ηB are the corresponding steady states of the full system. If Y0(x) ≈ Ye throughout D then we would expect their average values to be approximately the same. We use this observation to determine Yb, and hence the flux at the boundary, by requiring
+ 1|D|∫DY0(x)dx = Ye,   (|D| = ∫D1 dx.) 
+
+Suppose that &Ycirc; (x) is the solution of (7.1) satisfying the homogeneous boundary condition 
+DY∂Y∂v+ryY=0, x ε ∂D. Since the equations (7.1) are linear and Yb is constant, the principle of superposition yields Y0 (x) = Ŷ (x) + Yb. Therefore 
+Yb=1|D|∫D (Y0 (x)−Y^ (x)) dx=Ye−1|D|∫DY^ (x) dx. Thus, to determine Yb, it is sufficient to determine the mean value of Ŷ(x). If the values of 
+sBa, v, f, Y, ηB are approximately the same as the normalizing values se, ve, fe, Ye, 
+ηBe then we should have Ŷ (x) ≈ Ŷe(x), where Ŷ(x) satisfies 0 = ∇·(DY ∇ Y) − 
+Yse, x ε D, 
+DY∂Y∂V+ryY=0, x ε ∂D, where 
+Yse=Ye 𝔖(Ye,fe,se,0,ve,ηBe,0) is a constant. Clearly 
+Yse=Yr by the choice of Yr that was made to obtain the normalizing constants.
+
+In the case that 
+D={x∈R3:‖x‖<R} is the ball of radius R centered at the origin, then Ŷe(x) can be explicitly computed to be 
+Y^e(r)=−rse3(Rry+R2−r22Dr). Integration yields 
+D∫Y^e(x)dx=−Yse3(Rry4πR33+4πR515DY), and hence 
+Yb=Ye+Yse3(Rry+R25DY) as an appropriate resource level at the boundary.
+
+Evolution to Equilibrium
+All our computations were done with the system in non-dimensionalized form. The non-dimensionalization of the variables is given in Table 3. To computationally determine steady states we used a shooting strategy. We were able to determine an asymptotically stable steady state of the system, as predicted by the reduced system, that has a nearly constant benign cell population with no tumor cells present. It was possible to use the constant states found in section 7.1 as initial values and successfully evolve to this steady state. In terms of the non-dimensional variables many of the initial values were equal to one. However, a set of initial values that lies closer to this steady state is obtained if the values of p, ηB and ηT are chosen instead to be the (constant) solutions of the reduced system, with v = ve, Y = Ye fixed that are given in Table 5.
+
+Figure 3 shows the evolution of the benign cell density, starting with the initial values of sB, sT, v, m, f and Y chosen as the constants from section 7.1 and the initial values of p, ηB and ηT chosen as the solutions of the reduced system (with all values non-dimensionalized). Spatial profiles at increments of 100 hours are superimposed in this plot. After a fairly rapid initial transient the profiles gradually approach an equilibrium. All other variables in the system were observed to approach their equilibrium profiles much more rapidly than the benign cell density. The equilibrium states of the full system are shown in Figure 4.
+
+Results and Conclusions
+It is clear that the system of equations and boundary conditions is quite involved. It is perhaps worth taking a paragraph or two to explain what one might expect from the replacement of (2.1) by (2.2). The implementation of the loss of function is through equation (2.2) and is controlled by the loss of function coefficient. Suppose that the level of p53 falls below the critical level. Then there will be a small gain in tumor cell density. This will drive, through the equation for tumor induced Sp1, an increase in growth factor production and hence an increase in MMP-1 production as one sees from the first term in (2.12). This in turn leads to a degradation of matrix collagen/fibronectin as is indicated by the sink term in (2.13). If there are no tumor cells initially present, this small gain in tumor cell density will drive the production of tumor expressed Sp1. The tumor expressed Sp1 is not under the regulation of p53 and hence can induce an increase in the rate of growth factor production. The induced concentration gradients in these two proteins in turn stimulate the chemotactic movement of the two cell types.
+
+As presented in (2.2), the loss of function is modeled by the expression 1 – Ψ(x, t). Suppose that Ψ(x, t) = 
+I φ (x)Ψ(t) where: i) φ(x) = 1 for x ε D' and is zero elsewhere, ii) Ψ(t) = 1 for t0 < t < t0 + T and is zero elsewhere (for some t0), and iii) 
+I∈[0,1] is an amplitude factor. Then T is the duration of the loss of function event, and 
+I is the intensity of the loss of function, with 
+I=0 corresponding to no loss of function and 
+I=1 being complete loss of function. The domain D′ can also be manipulated, but we will focus more on duration and intensity. For example, suppose D′ = B(r0) is the ball about zero of a fixed radius r0 < R. Then S = 
+4Tπr03T/3 is the strength of the loss of function. When 
+S=0=I there is no loss of function while when 
+S=4Tπr03 / 3, the loss of function is complete on B(r0) × [t0, t0 + T].
+
+The simulations were done using a spherical domain D, with the origin of the coordinate system at the point where loss of function occurs. Radial symmetry was assumed, so that all functions depended only on r = |x|, the distance to the origin. The domain was non-dimensionalized to the ball bounded by the sphere of radius R = 1. The domain D′ was taken to be a ball with a smaller radius. As with the other step functions appearing in the model description, smoothed versions of the functions φ(x) and ψ(t) defining Ψ(x, t) were used in the 1 simulations. In particular. we chose 
+φ(r)=12(1+cos((r−r0+δ)π/(2δ)), for |r – r0| ≤ δ, with φ(r) = 1 to the left of this interval and φ(r) = 0 to the right. Thus, D′ was a ball of radius r0 + δ.
+
+Basic Simulations
+The model will demonstrate that the loss of p53 function can lead to the uncontrolled growth of a malignant avascular tumor if the loss is sufficiently strong, occurs for a sufficiently long time or involves a sufficiently large number of cells (as measured by the product of cell density times volume). On the other hand if any one of these three factors is sufficiently small, regardless of the intensity of the others, the loss of function will be harmless in the sense that any initial tumor formation will decay. The loss of function is manifested in the model by a decline in the mitosis rate for benign cells together with an increase in the mitosis rate for tumor cells, both rates having the same (maximum) magnitude λtrηB where ηB is the local density of benign cells.
+
+In particular, the model demonstrates the existence of a critical intensity, 
+Ic such that if the intensity is below this number, any tumor formed during the time period during which loss of function is experienced will decay once the loss of function is no longer being experienced. On the other hand, if the intensity is larger than this critical intensity, then there is a critical time duration, 
+TI, such that if the loss of function is experienced for any finite time longer than this critical time, the formed tumor will grow and take over the entire region. (Recall that this region is only one or two mm in diameter and that we are dealing only with solid tumor growth.) If the loss of function occurs only for a time duration smaller than this critical time, the solid tumor will eventually decay.
+
+In this case, the model suggests the existence of an unstable tumor cell region coexisting with the benign cell region which will form if the loss of function is experienced for the critical duration. From a practical point of view, one can view the formation of such a tumor cell region as occurring if the duration time is only close enough to the critical time. For example if the doubling time (when T > 
+TI) or half life (when (T < 
+TI) is much larger than the remaining life expectancy of the individual, we can view the tumor to be in a quasi steady state with its surroundings.
+
+Figures 4–6 show the result of a loss of function event that does not result in tumor growth. Figures 7–9 show the result of a loss of function event that does result in tumor growth. Both simulations were started with the system in equilibrium and allowed to evolve, maintaining equilibrium, for 100 hours. The equilibrium state is shown in Figure 4. After a very brief one hour transition the loss of function event begins. The intensity of the event is the same in both cases, 
+I=0.5; that is a 50% loss of function. The parameters determining φ(r) were also the same in both cases: r0 = 0.1, δ = 0.05. After T hours, another brief one hour transition to a system with no loss of function is made. These times are recorded in the figures, with the one hour transitions ignored. The durations were T = 200 hours in the first case and T = 400 hours in the second case.
+
+Threshold and Critical Values
+Given a level of intensity 
+I for a loss of function event, there may be a critical value 
+TI of the time of duration such that if 
+T>TI then the event results in tumor growth, while if 
+T>TI then the event does not result in tumor growth. The simulation results presented in the previous subsection clearly suggest this is the case when 
+I=0.05. It is also intuitively clear that if the intensity is extremely small then no significant tumor growth will occur, regardless of the duration of the loss of function event. In other words, there should be a threshold of intensity that must be exceeded before significant tumor growth can occur after a sufficiently long loss of function event.
+
+The roles of 
+I and T can be reversed and one can ask, for a given time of duration T, whether or not there is a critical intensity 
+Ic. From this point on view, one would expect a threshold for the time of duration that must be exceeded for significant tumor growth to occur even when the intensity is as large as possible.
+
+Threshold values for both 
+I and T are predicted by the model. In the model, a loss of function event results in a decrease in the production of p53. If the amount being produced does not fall below the critical value pc then the transfer term, λtr H(pc – p)ηB, appearing in the cell equations (3.5) will remain zero and no change in the dynamics should be expected. (However, there will be a subtle change in the growth factor and resource level that can change production levels slightly.) In order to have the level of p53 fall below the critical value, the loss of function event must have a sufficient intensity, and this results in thresholds for both 
+I and T.
+
+The graph in Figure 10 shows the functional dependence of the critical time 
+TI of duration on the intensity for loss of function events as predicted by the model. It also shows the threshold value for T at maximum intensity 
+I=1. The threshold for 
+I is indicated by the vertical asymptote. The curve also depends on the size of the region D′ where the loss of function occurs. For the plotted curve, the same function φ(r) described above was used, with the parameters determining φ (r) being r0 = 0.10, λ = 0.05. To determine points on the curve, a bisection technique was used. For example, for a given value of 
+I, two bracketing values T0 < T1 of the time of duration were found such that the system returned to equilibrium if the time of duration was T0, or experience overwhelming tumor growth if the time of duration was T1. Then the average of these times Tm = (T0 + T1 )/2 was used as the duration for the loss of function event in a simulation experiment. If the system returned to equilibrium then T0 was replaced by Tm, otherwise T1 was replaced by Tm. Then the experiment was repeated.
+
+When the domain D′ over which the loss of function takes place increases in size the intensity or duration of the event is diminished. In Figure 11 two curves of critical points are plotted. The lower curve was determined using a domain D′ and function φ(r) determine by the parameters r0 = 0.5, δ = 0.05, while the upper curve corresponds to r0 = 0.10, δ = 0.05 as in Figure 10. Because mutations in one location are very rare, the domain of a single the loss of function event is expected to have roughly the volume of a single cell or two.
+
+1 The Heaviside function is only defined “almost everywhere”. Typically, one splits the difference and sets H(0) = 1/2.
+
+2 The chemical mechanism for collagen degradation is M + F ⇄ {MF} → M + F′ where F′ denotes the products of matrix degradation. The Michealis-Menten hypothesis yields the second term in (2.13). The logistic type term f (1–f/fM) must be modified to reflect cellular expression of matrix protein and hence the inclusion of the normalized cell concentrations. This can be made rigorous using kinetics but limitations of length preclude us doing so here.
+
+3 If 
+curl→ [(M,F)]=0→, such a function exists. In particular if M depends only on m and F only upon f this is always true.
+
+Appendix A. Biochemistry
+In this section, using a kinetic approach to the molecular events involved in transcription and translation, we derive equations (2.1), (2.6), (2.7), (2.11), and (2.12). Because the actual events are quite complex, we take an overall approach to them. Our purpose is to give some justification for the simple relationship used in these equations from a kinetic point of view.
+
+The sources of the nucleotides and amino acids involved in the assembly of the mRNA and proteins must ultimately be the blood and tissue.
+
+For our purposes, a cell consists of two regions, the nucleus and the cytoplasm separated by a membrane. The transcription of a gene into RNA and its maturation into mRNA takes place in the former. The mRNA is transferred from the nucleus across the nuclear membrane into the cytoplasm. There the ribosome translates it, via the genetic code, into a protein. This protein may stay associated with the cell or it may be secreted into the extra cellular matrix (ECM) where it may perform several functions. For example, it might be a protease that degrades the ECM or a growth factor that binds to a receptor on the same or another cell (that need not be of the same type as the parent cell) to initiate the expression of other genes via some signal transduction pathway.
+
+Clearly, the sequence of events involved in transcription and translation will involve biochemical mechanisms and processes that may be only incompletely understood quantitatively as well as qualitatively. In order to obtain the “starting” material from the ECM and plasma, one has to transfer these molecules across the cell membrane and, in the case of the nucleotides, across the nuclear membrane. This is typically accomplished by diffusion. There are transmembrane proteins that permit the transfer of such small molecules.
+
+We take the point of view in all of this that the rate limiting step is the translation step in the cytoplasm: That is, the ribosome (Rb), the cytoplasmic mRNA (cRn) and the tRNA (not shown) work to assemble the protein from the amino acids in the cytoplasm:
+ (A.1) cRn+Rb⇄koffkoncRnRb,Y+c RnRb→kRb+cN+n cPG (Here n represents the number of molecules of the protein that are assembled during the life time of the mRNA.)
+
+However, if we assume that the second of equations (A.1) is rate limiting and we apply the Law of Mass Action to this chemical equation we should expect that if Y is in excess,
+ d[PG]dt = KH([TG])(t)[mRNA(PG)](t)                  −μ[PG](t). where [mRNA(PG)] is the cytoplasmic concentration of mRNA that codes for PG and where we have included an additional decay term μ[PG] on the right of this last equation. The Heaviside factor H([TG](t)) reflects the fact that it is the transcription factor, TG, that initiates the mRNA(PG) production. (The factor n is included in the constant K in this last equation.)
+
+Because the available mRNA for each gene is proportional to the number of cells whose genes express it, we can write, for some constants kG, μG
+ (A.2) d [PG]dt=kGH ([TG]) (t) N (t)    −μG [PG] (t). Depending on other underlying processes within the cell, this rate equation may be subject to further modification. For example, one might have two proteins, one of which functions as an enzyme for the degradation of the other. For example, if protein PG1 functions as a regulator for protein PG with Kcat, Km as kinetic constants, then the equation that replaces (A.2) will be
+ (A.3) d[PG]dt=kGH ([TG] (t)) N (t)−μG[PG] (t)    −Kcat [PG] (t) [PG1] (t)Km+[PG] (t) 
+
+Remark 3. In (A.2), (A.3) the assumption was that the concentration of cell nutrients [Y] is in excess. This need not be the case, especially in situations that lead to tumor cell necrosis. Therefore, one may need to modify (A.2), (A.3) by replacing kG by kg Y/(Km + Y), which would then reflect the fact that the rate of transcription is also proportional to the level of resources available:
+ (A.4) d [PG]dt=kgH ([TG]) Y (t)Km+Y (t)N (t)    −μG [pG] (t) or
+ (A.5) d[PG]dt=kgH ([TG] Y (t)Km+Y (t)N (t)    −μG[PG](t)    −Kcat[PG](t)[PG 1](t)Km+[PG](t). 
+
+The rate law for nutrient consumption must also be introduced. It will take the form:
+ (A.6) d[Y]dt=−∑G[H([TG](t))kG[Y](t)KG+Y(t)(t)]  N(t)+Sr. where the sum is taken over all genes that are expressed as proteins. The term Sr includes both tissue sources of nutrients and diffusive effects. For example, if the distribution of nutrients is not spatially homogeneous, then
+ (A.7) Sr=DYΔ [Y]+Yr (x,y,t). where Δ denotes the Laplace (diffusion) operator (Δ[Y] = div(grad [Y ]). The term Yr (x, y, t) includes any tissue generated nutrients that contribute to the cellular events described above. Boundary conditions for (A.7) will include capillary supplied nutrients that move from the vasculature into the ECM.
+
+Appendix B. Parameter values and Normalizing Constants
+The determination of appropriate biological constants from the literature is notoriously difficult. Not only are in vivo values often different from in vitro values, but very likely the former are unknown. When the constants for a given protein are known, the protein itself may function entirely differently in vivo than in vitro. That is to say, different cell types can respond to the same growth factors in different ways, and the response of a single cell type can be influenced by its environment, including the cells that surround it. Thus, the responses to a growth factor observed in vitro of a particular cell type grown as a mono culture are not necessarily the same as for the same cell type in tissues in vivo where its neighbors are not of the same cell type [40]. Thus, the task to find good values for the model is daunting, to say the least. We took a pragmatic approach, using available literature values where possible and trial values, when no values were available to us.
+
+Notes on Parameter Values
+In the simulations, the spatial domain D was assumed to be a sphere of radius R centered at the origin, and all variables were assumed to spatially depend only on the radial variable, r, the distance to the origin. Table 4 contains a list of the model parameters that were used in the simulations. The basic units of measurement are millimeters (1 mm = 10−3 meters), hours (h), and micromoles per liter (1 μM = 10−6 moles/L). Cell densities have the units of cells per liter. Although many of the values are based on data reported in the literature, it was not possible to find literature supporting all of the values. The values in the table with no supporting data are described as simulated values. Several of the parameter values were taken from [43], where supporting references can be found.
+
+Unit conversions were used to determine some of the parameters from available data. To convert molecules per unit volume to micro moles per liter, we used the fact that one milliliter equals one cubic centimeter. Thus 1L equates to a volume of 1015 μm3. Hence N molecules per μm3 equates to N × 1015 molecules per liter. Dividing by Avogadro’s number gives (N/6.02) × 10−8 moles/L = (N/6.02) × 10−2μM. Similarly, to convert molecules per cell to μM, we estimated that the volume of a typical cell is 103μm. This value is consistent with the available data for endothelial cells (cf. [43]). Using this value, N molecules per cell translates to N × 10−3 molecules per μm3, or (N/6.02) × 10−5μM.
+
+The kinetic rate constants for p53, Sp1 and GF were computed from translation rates of mRNA and the number of amino acids in each protein. Assuming 10 amino acids are translated per second and there are M amino acids in the protein, a cell containing N mRNA’s would produce 10N/M protein molecules per second, or (3.6 × 104)N/M molecules per cell per hour. Using one of the unit conversions described above, this results in (3.6/6.02) × N/M × 10−1 μM/h. Estimating that there are 750 mRNA’s per cell of p53, that contains 393 amino acids, this calculation gives a rate kp = 0.114h−1. The amino acid counts: 696 for Sp1, 191 for GF; and the estimates: 750 mRNA’s per cell for Sp1, 1000 mRNA’s per cell for GF, yield the entries for ks, kv in the table.
+
+Estimates of half-lives τ were used to determine decay rates μ = ln 2/τ. The half-life of p53 was estimated to be 30 minutes, yielding μp = 1.4/h. The half-life of GF is on the order of 20 minutes so that μv = 2.08/h. In [23], a half-life of VEGF in blood was reported as 33.3 ± 13min.
+
+The carrying capacity for fibronectin was obtained from extrapolation and unit conversion from data taken from [5] and [67]. According to both, the maximum density of a single layer of fibronectin molecules is 3 × 103μm2. Extrapolating, by using a molecular width of 35 angstroms, yields 8.57 × 105 molecules per μm3, which converts to 1.4 × 103μM. The kinetic rate constant is the same as in [43].
+
+The carrying capacities for the cell densities obtained from extrapolation and unit conversion were based on the estimate of 103 μm3 for the from data taken from [5] and [67]. According to volume of a typical cell. Since 1L = 1015 μm3, this estimate yields a carrying capacity of 1012 cells per liter. DB and DT were assumed constant, with values the same as those used in [43]. Both cell types were assumed to divide once every 48–60 hours (cell doubling time) in response to growth factor. A value of 56 hours was used as a doubling time to determine λB, λT. The apoptosis rates used are similar to those used in [43], and determine normalized constants that are near the carrying capacities.
+
+Sensitivity Functions
+For the simulations, we chose to define the sensitivity functions rather than the probability transition functions. The flux terms were taken as
+ J→B = DN [−∂ηB∂r +(ξ1(m)∂m∂r           + ξ2(f)∂f∂r + ξ3(Z)∂Z∂r)ηB]J→T = DN[−∂ηT∂r + (ξ1(m)∂m∂r          +ξ3∂Z∂rηT)] The sensitivity functions were defined by
+ ξ1(m) = −α(m − me(r)),ξ2(f) = −β(f − fe(r)),ξ3(Z) = −γZ, with α = 1.25 × 10+1, β = 7.5 × 10+1, and γ = 2.5 × 10+1.
+
+The sensitivity functions having the form ξ(c) = –α(c – c0) correspond to movement up the gradient when the concentration c is below the level c0, and down the gradient when the concentration c is above the level c0. Implicitly, c0 is a desirable level of the concentration. Assuming c0 is a constant, the corresponding probability transition function is τ(c) = exp(–α(c –c0)2/2), a Gaussian with mean c0 and variance σ2 = 1/α. In the simulations, we chose to let the desirable levels be determined by the computed equilibrium values, so that they depended on location.
+==== Refs
+References
+[1] Adam JA  Mathematical models of prevascular spheroid development and catastrophe-theoretic description of rapid metastatic growth/tumor remission Invasion Metastasis 16 4–5 247 67 1996 9311389 
+[2] Adam JA  Mathematical models of tumor growth: from empirical description to biological mechanism Adv. Exp. Med. Biol 537 287 300 2003 14995043 
+[3] Adam JA Maggelakis SA  Mathematical models of tumor growth. IV. Effects of a necrotic core Math Biosci 97 1 121 36 1989 2520203 
+[4] Araujo RP McElwain DLS  A history of the study of solid tumour growth: the contribution of mathematical modelling Bulletin of Mathematical Biology 66 5 1039 1091 2004 15294418 
+[5] Asthagiri AR Nelson CM Horwitz AF Lauffenburger DA  Quantitative relationship among integrin-ligand binding, adhesion, and signaling via focal adhesion kinase and extracellular signal-regulated kinase 2 J. Biol. Chem 274 27119 27 1999 10480927 
+[6] Band V Dalal S Delmolino L Androphy EJ  Enhanced degradation of p53 protein in HPV-t and BPV-1 E6 immortalized human mammary epithelial cells EMBO J 12 5 1847 52 1993 8387914 
+[7] Berns A  Cancer: Two in one Nature 436—11 August:787 789 2005 
+[8] Berthelot K Muldoon M rjkowitsch L Hughes J McCarthy JEG  Dynamics and porcessivity of 40S ribosome scanning on mRNA in yeast Molec. Biol 51 4 987 1001 2004 
+[9] Bertsch M Gurtin ME Hilhorst D Peletier LA  On interacting populations that disperse to avoid crowding: The effect of a sedentary colony J. Math. Biol. 19 1 12 1984 
+[10] Bowersox JC Sorgente N  Chemotaxis of aortic endot helial cells in response to fibronectin Cancer Res 4 2547 2551 1982 7083147 
+[11] Burton TA Hutson V  Permanence for nonautonomous predator-prey systems Differential Integral Equations 4 6 1269 1280 1991 
+[12] Byrne HM Chaplain MA  Growth of nonnecrotic tumors in the presence and absence of inhibitors Math Biosci. 130 2 51 81 1995 7579902 
+[13] Calderon CP Kwembe TA  Modeling tumor growth Math Biosci 103 1 97 114 1991 1804444 
+[14] Casciari JJ Sotirchos SV Sutherland RM  Mathematical modelling of microenvironment and growth in EMT6/Ro multicellular tumour spheroids Cell Prolif 25 1 1 22 1992 1540680 
+[15] Chen CY Byrne HM King JR  The influence of growth-induced stress from the surrounding medium on the development of multicell spheroids J. Math. Biol 43 3 191 220 2001 11681526 
+[16] Cizdziel PE Hosoi J Montgomery JC Wiseman RW Barrett JC  Loss of a tumor suppressor gene function is correlated with downregulation of chondrocyte-specific collagen expression in Syrian hamster embrio cells Mol. Carcinog 4 1 14 24 1991 2009131 
+[17] Chaplain MA Sleeman BD  A mathematical model for the growth and classification of a solid tumor: a new approach via nonlinear elasticity theory using strain-energy functions Math. Biosci 111 2 169 215 1992 1515743 
+[18] Cantrell RS Cosner C Lou Y  Multiple reversals of competitive dominance in ecological reserves via external habitat degradation J. Dynam. Differential Equations 16 4 973 1010 2004 
+[19] Cantrell RS Cosner C Hutson V  Ecological models, permanence and spatial heterogeneity Rocky Mountain J. Math 26 1 1 35 1996 
+[20] Cantrell RS Cosner C Hutson V  Permanence in ecological systems with spatial heterogeneity Proc Roy Soc. Edinburgh Sect. A 123 3 533 559 1993 
+[21] Cantrell RS Cosner C  On the uniqueness and stability of positive solutions in the Lotka-Volterra competition model with diffusion Houston J. Math 15 3 341 361 1989 
+[22] Cantrell RS Cosner C  On the effects of spatial heterogeneity on the persistence of interacting species J. Math. Biol 37 2 103 145 1998 
+[23] Eppler SM Combs DL Henry TD Lopez JJ Ellis SG Yi J Annex BH McCluskey ER Zioncheck TF  A target-mediated model to describe the pharmacokinetics an hemodynamic effects of recombinant human vascular endothelial growth factor in humans Cli. Pharm. Ther 72 20 32 2002 
+[24] Fenhalls G Geyp M Dent DM Parker MI  Brest tumour cell induced down-regulation of type I collagen mRNA in fibroblasts Brit. J. Cancer 81 7 1142 1149 1999 10584874 
+[25] Filippini G Griffin S Uhr M Eppenberger H Bonilla J Cavalli F Soldati G  A novel flow cytometric method for the quantification of p53 gene expression Cytometry 31 180 6 1998 9515717 
+[26] Gammack D Byrne HM Lewis CE  Estimating the selective advantage of mutant p53 tumour cells to repeated rounds of hypoxia Bull. Math. Biol 63 1 135 66 2001 11146880 
+[27] Gatenby RA Gawlinski ET  A reaction-diffusion model of cancer invasion Cancer Research 56 5745 5753 1996 8971186 
+[28] Gatenby RA Gawlinski ET  The glycolytic phenotype in carcinogenesis and tumor invasion:insights through mathematical models Cancer Research 63 3847 3854 2003 12873971 
+[29] Gatenby RA  Models of tumor-host interaction as competing populations: implications for tumor biology and treatment J. Theor. Biol 176 4 447 55 1995 8551743 
+[30] Guiot C Degiorgis PG Delsanto PP Gabriele P Deisboeck TS  Does tumor growth follow a “universal law”? J. Theor. Biol 225 2 147 51 2003 14575649 
+[31] Hanahan D Folkman J  Patterns and emerging mechanisms of the angiogenic switch during tumorigenesis Cell 86 353 364 1996 8756718 
+[32] Hermann MT Brick A Teruya-Feldstein J Herbst A Nilsson JA Cordon-Cardo C Cleveland JL Tansey WP Lowe SW  Evasion of the p53 tumour surveillance network by tumour-derived MYC mutants Nature 463 11 807 811 2005 
+[33] Hervagault JF Ortoleva PJ Ross J  A plausible model for reversal. of neoplastic transformations in plants based on multiple steady states Proc. Natl. Acad. Sci. U S A 88 23 10797 800 1988 1961748 
+[34] Hutson V Law R  Permanent coexistence in general models of three interacting species J. Math. Biol 21 3 285 298 1985 4031695 
+[35] Jackson TL Byrne HM  A mathematical model to study the effects of drug resistance and vasculature on the response of solid tumors to chemotherapy Math. Biosci 164 1 17 38 2000 10704636 
+[36] Jagers P  The proportions of individuals of different kinds in two-type populations. A branching process problem arising in biology J. Appl. Probability 6 249 260 1969 
+[37] Jones AF Byrne HM Gibson JS Dold JW  A mathematical model of the stress induced during avascular tumour growth J. Math Biol 40 6 473 99 2000 10945645 
+[38] Kelley W  Coexistence in reaction-diffusion systems with mutualist or predatorprey interactions Methods Appl.Anal 3 1 1 11 1996 
+[39] King R  Cancer Biology 2nd Ed Prentice Hall London 2000 
+[40] Kuwano M Ushiro S Ryuto M Samoto K Izumi H Ito K Abe T Nakamura T Ono M Kohno K  Regulation of angiogenesis by growth factors GANN Monograph on Cancer Research 42 113 125 1994 
+[41] Levine HA Sleeman BD Nilsen-Hamilton M  Mathematical modeling of the onset of capillary formation initiating angiogenesis J. Math. Biol 42 3 195 238 2001 11315313 
+[42] Levine HA Sleeman BD Nilsen-Hamilton M  A Mathematical model for the roles of pericytes and macrophages in the onset of angiogenesis: I. The role of protease inhibitors in preventing angiogenesis Math. Biosci 168 77 115 2000 11121821 
+[43] Levine HA Pamuk S Sleeman BD Nilsen-Hamilton M  Mathematical Modeling of Capillary Formation and Development in Tumor Angiogenesis: Penetration into the Stroma Bull. Math. Biol 63 5 801 863 2001 11565406 
+[44] Levine HA Tucker AL Nilsen-Hamilton M  A mathematical model for the role of cell signaling and transduction in the initiation of angiogenesis Growth Factors 20 155 176 2002 12708793 
+[45] Mizoguchi N Ninomiya H Yanagida E  Diffusion-induced blowup in a nonlinear parabolic system J. Dynam. Diff. Eq 10 4 619 638 1998 
+[46] Murray JD  Mathematical Biology Springer-Verlag Berlin 1989 
+[47] Niakan B  Steady tumor growth and the spontaneous disappearance of cancer J. Natl. Cancer Inst 85 1 1993 68 9 8416260 
+[48] Niakan B  Hypothesis on the biochemistry of spontaneous remissions of cancer: coupling of oxidative phosphorylation and the remission of cancer Cancer Biother Radiopharm 14 4 297 8 1999 10850315 
+[49] Niakan B  A mechanism of the spontaneous remission and regression of cancer Cancer Biotherapy Radiopharm 13 3 209 10 1998 
+[50] Oren M  Regulation of the p53 tumor suppressor protein J. Biol. Chem 274 36031 36034 1999 10593882 
+[51] Pal S Datta K Mukhopadhyay D  Central role of p53 on regulation of vascular permeability factor/vascular endothelial growth factor (VPF/VEGF) expression in mammary carcinoma Cancer Res 61 18 6952 7 2001 11559575 
+[52] Painter KJ Hillen T  Volume-filling and quorum sensing in models for chemosensitive movement Can. J. Appl. Math 10 4 501 544 2003 
+[53] Patt S Gries H Giraldo M Cervos-Navarro J Martin H Janisch W Brockmoller J  p53 gene mutations in human astrocytic brain tumors including pilocytic astrocytomas Hum Pathol 27 6 586 9 1996 8666369 
+[54] Parikka M Kainulainen T Tasanen K V ’a’an ’anen A Bruckner Tuderman L Salo T  Alterations of collagen XVIII during transformation of oral epithelium to dysplasia and carcinoma J. Histochem. Cytochem 51 7 921 929 2003 12810842 
+[55] Pavolov MY Ehernberge M  Rate of translation of natrual mRNAs in an optimized in vitro system, Arch Biochem. Biophys 328 1 9 16 1996 
+[56] Pescarmona GP Scalerandi M Delsanto PP Condat CA  Nonlinear model of cancer growth and metastasis: a limiting nutrient as a major determinant of tumor shape and diffusion Med. Hypotheses 53 6 497 503 1999 10687891 
+[57] Ravi R Mookerjee B Bhujwalla ZM Sutter CH Artemov D Zeng Q Dillehay LE Madan A Semenza GL Bedi A  Regulation of tumor angiogenesis by p53-induced degradation of hypoxia inducible factor1α Genes Dev 14 1 34 44 2000 10640274 
+[58] Retsky M  Universal law of tumor growth J. Theor. Biol 229 3 289 2004 15234197 
+[59] Tomlinson IP Bodmer WF  Failure of programmed cell death and differentiation as causes of tumors: some simple mathematical models Proc. Natl. Acad. Sci. USA 92 24 11130 4 1995 7479951 
+[60] Tsuzuki Y Fukumura D Oosthuyse B Koike C Carmeliet P Jain RK  Vascular endothelial growth factor (VEGF) modulation by targeting hypoxia-inducible factor-1alpha–¿ hypoxia response element–¿ VEGF cascade differentially regulates vascular response and growth rate in tumors Cancer Res 60 22 6248 52 2000 11103778 
+[61] Unemori EN Ferrara N Bauer EA Amento EP  Vascular endothelial growth factor induces interstitial collagenase expression in human endothelial cells J. Cell Physiol 153 3 557 62 1992 1447317 
+[62] Ward JP King JR  Mathematical modelling of avascular-tumour growth IMA J. Math. Appl. Med. Biol 14 1 1997 39 69 9080687 
+[63] Weinberger HF  An example of blowup produced by equal diffusions J. Differential Equations 154 225 237 1999 
+[64] Werbajh SE Urtreger AJ Puricelli LI de Lustig ES Bal de Kier Joff e E Kornblihtt AR  Downregulation of fibronectin transcription in highly metastatic adenocarcinoma cells FEBS Let 440 277 281 1998 9872386 
+[65] Zagzag D Zhong H Scalzitti JM Laughner E Simons JW Semenza GL  Expression of hypoxia-inducible factor 1α in brain tumors: association with angiogenesis, invasion, and progression Cancer 88 11 260 618 2000 
+[66] Schirle M Keilholz W Weber B Gouttefangeas C Dumrese T Becker HD Stevanovic S Rammensee HG  Identification of tumor-associated MHC class I ligands by a novel T cell-independent approach Eur. J. Immunol 30 2216 25 2000 10940913 
+[67] Thoumine O Kocian P Kottelat A Meister JJ  Short-term binding of fibroblasts to fibronectin: optical tweezers experiments and probabilistic analysis Eur. Biophys. J 29 398 408 2000 11081401 
+[68] Wall FT  Chemical Thermodynamics 2nd Ed Freeman San Francisco and London 1958 
+[69] Wodarz D Krakauer DC  Genetic instability and the evolution of angiogenic tumor cell lines Oncol. Rep 8 6 1195 201 2001 11605033 
+[70] Yakovlev A Boucher K DiSario J  Modeling insight into spontaneous regression of tumors Math Biosci 155 1 45 60 1999 10024834
