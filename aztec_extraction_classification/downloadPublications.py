@@ -59,7 +59,7 @@ def renew_connection():
     conn = TorCtl.connect(
         controlAddr="127.0.0.1",
         controlPort=9051,
-        passphrase="9971517234")
+        passphrase="downloader")
     conn.send_signal("NEWNYM")
     conn.close()
     new_ip = get_ip_address()
@@ -416,16 +416,16 @@ def main(filename, directory=None):
     global docs
     docs = [doc for doc in docs if doc.doi is not None]
 
-    update_name(directory)   # Fetch names and remove files from doc which already exist in directory
+    update_name(directory)
 
-    save_doi_data()         # Save DOI records, to be used later
+    save_doi_data()
 
     # update_url(args.directory)  # Update urls using libgen as default
     # database
 
     # for doc in docs:
     #     libgen_check(doc, args.directory)
-    renew_connection()          # Change ip before starting
+    renew_connection()
     for doc in docs:
         extract_url(doc)
         if extract_failed:

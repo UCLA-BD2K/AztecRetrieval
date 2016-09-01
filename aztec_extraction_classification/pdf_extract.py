@@ -5,6 +5,7 @@ from os.path import isfile, join
 from threading import Thread
 import Queue
 import time
+import os
 # README.md:
 # At this point, the script assumes that the Journal pdf for the correct publication DOI (previously determined using CrossRef) has been downloaded to a Folder.
 # All PDFs within the folder are read and parsed through Grobid (which has pretrained CRF models in it) to extract the text in the PDF into an annotated XML.
@@ -13,8 +14,10 @@ import time
 
 # requires pdftotext, brew install homebrew/x11/xpdf
 
+# GROBID has a bug which sometimes leads to internal server error when num_threads is more than 1. Set to one if conversion of every single document is a must.
+
 port = "8080"      # port number where the local grobid instance is running
-num_threads = 1
+num_threads = 2
 
 
 class grobid_multi(Thread):
@@ -64,25 +67,37 @@ def getAllFiles(path):
 
 
 def getXMLFromPDF(inFilename, outFilename):
-    subprocess.call(["curl",
-                     "-v",
-                     "-include",
-                     "--form",
-                     "input=@" + inFilename,
-                     "localhost:" + port + "/processFulltextDocument",
-                     "-o",
-                     outFilename])
+    try:
+        subprocess.call(["curl",
+                         "-v",
+                         "-include",
+                         "--form",
+                         "input=@" + inFilename,
+                         "localhost:" + port + "/processFulltextDocument",
+                         "-o",
+                         outFilename])
+    except Exception as e:
+        print e
+        print "PDF to xml failed, continuing"
 
 
 def convertXMLToTEI(outFilename):
-    lines = open(outFilename).readlines()
-    # Remove HTTP status message from XMLs and append TEI.
-    open(outFilename, 'w').writelines(lines[7:-1])
-    open(outFilename, 'a').writelines("</TEI>")
+    try:
+        lines = open(outFilename).readlines()
+        # Remove HTTP status message from XMLs and append TEI.
+        open(outFilename, 'w').writelines(lines[7:-1])
+        open(outFilename, 'a').writelines("</TEI>")
+    except Exception as e:
+        print e
+        print "XML to TEI failed, continuing"
 
 
 def getRawText(inFilename, outFilename):
-    subprocess.call(["pdftotext", inFilename, outFilename])
+    try:
+        subprocess.call(["pdftotext", inFilename, outFilename])
+    except Exception as e:
+        print e
+        print "PDF to Text failed"
 
 
 def start_grobid(files, pdfpath, xmlpath):
@@ -127,8 +142,6 @@ def convert_text(files, pdfpath, textPath):
         inFilename = pdfpath + file
         file = file.replace(".pdf", '')
         outFilename = textPath + file + ".txt"
-        if 'Design' in outFilename:
-            print inFilename
         queue.put((inFilename, outFilename))
 
     queue.join()
@@ -156,6 +169,10 @@ def main():
     args.pdfpath = args.pdfpath + '/' if args.pdfpath[-1] is not '/' else args.pdfpath
     args.outpathXML = args.pdfpath + '/' if args.outpathXML[-1] is not '/' else args.outpathXML
     args.outpathText = args.outpathText + '/' if args.outpathText[-1] is not '/' else args.outpathText
+    if not os.path.isdir(args.outpathText):
+        os.makedirs(args.outpathText)
+    if not os.path.isdir(args.outpathXML):
+        os.makedirs(args.outpathXML)
 
     # Get all files in path:
     files = getAllFiles(args.pdfpath)
@@ -165,7 +182,7 @@ def main():
     convert_xml(files, args.outpathXML)
 
     # Make command line calls to extract raw text (NOT annotated):
-    convert_text(files, args.pdfpath, args.outpathText)
+    # convert_text(files, args.pdfpath, args.outpathText)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
