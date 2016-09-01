@@ -62,7 +62,7 @@ class PDFToText(Thread):
 def getAllFiles(path):
     mypath = path
     files = [f for f in listdir(mypath) if isfile(
-        join(mypath, f)) and f != ".DS_Store" and f != "README.md"]
+        join(mypath, f)) and f.endswith(".pdf")]
     return files
 
 
@@ -147,44 +147,22 @@ def convert_text(files, pdfpath, textPath):
     queue.join()
 
 
-def main():
+def main(pdfpath, outpathXML, outpathText):
     start_time = time.time()
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-pdfpath',
-        help='Location of journal pdf to extract metadata/fields from.',
-        type=str,
-        required=True)
-    parser.add_argument(
-        '-outpathXML',
-        help='Location/Folder to write the XML extraction of pdf to. (TEI format)',
-        type=str,
-        required=True)
-    parser.add_argument(
-        '-outpathText',
-        help='Location/Folder to write the Text extraction of pdf to.',
-        type=str,
-        required=True)
-    args = parser.parse_args()
-    args.pdfpath = args.pdfpath + '/' if args.pdfpath[-1] is not '/' else args.pdfpath
-    args.outpathXML = args.pdfpath + '/' if args.outpathXML[-1] is not '/' else args.outpathXML
-    args.outpathText = args.outpathText + '/' if args.outpathText[-1] is not '/' else args.outpathText
-    if not os.path.isdir(args.outpathText):
-        os.makedirs(args.outpathText)
-    if not os.path.isdir(args.outpathXML):
-        os.makedirs(args.outpathXML)
+    if not os.path.isdir(outpathText):
+        os.makedirs(outpathText)
+    if not os.path.isdir(outpathXML):
+        os.makedirs(outpathXML)
 
     # Get all files in path:
-    files = getAllFiles(args.pdfpath)
+    files = getAllFiles(pdfpath)
 
-    start_grobid(files, args.pdfpath, args.outpathXML)
-    #
-    convert_xml(files, args.outpathXML)
+    start_grobid(files, pdfpath, outpathXML)
+
+    convert_xml(files, outpathXML)
 
     # Make command line calls to extract raw text (NOT annotated):
-    # convert_text(files, args.pdfpath, args.outpathText)
+    convert_text(files, pdfpath, outpathText)
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print(" Grobid extraction:    --- %s seconds ---" % (time.time() - start_time))
 
-if __name__ == '__main__':
-    main()

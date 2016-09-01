@@ -91,15 +91,8 @@ def push_to_solr(output):
             output])
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-data',
-        help='json data of extracted documents',
-        type=str,
-        required=True)
-    args = parser.parse_args()
-    with open(args.data, 'rU') as f:
+def main(data):
+    with open(data, 'rU') as f:
         for obj in json_parse(f):
             output = dict()
             s = Suppressor(Exception, obj, output)
@@ -139,6 +132,3 @@ def main():
 
             output = json.dumps(output)
             push_to_solr(output)
-
-if __name__ == '__main__':
-    main()

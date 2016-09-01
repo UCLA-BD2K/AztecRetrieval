@@ -301,7 +301,7 @@ def get_abstract(record, pub):
 
 
 def get_word_sentence(word, paragraph):
-    sentences = sent_tokenize(paragraph)
+    sentences = sent_tokenize(paragraph.decode('utf-8'))
     sentence_hits = [sent for sent in sentences if word in sent]
     return sentence_hits
 
@@ -830,45 +830,19 @@ def get_agencies():
                 agencies.add(alias)
 
 
-def main():
+def main(XMLFiles, textFiles, correctDOIRecords, outfile):
     start_time = time.time()
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-XMLFiles',
-        help='Folder containing the tool XML files to be parsed to extract the metadata.',
-        type=str,
-        required=True)
-    parser.add_argument(
-        '-textFiles',
-        help='Folder containing the tool text files to be parsed to extract all links.',
-        type=str,
-        required=True)
-    parser.add_argument(
-        '-correctDOIRecords',
-        help='text file containing DOI records in json as key:name and value:doi pairs',
-        type=str,
-        required=True)
-    parser.add_argument(
-        '-outfile',
-        help='File to write ALL extracted metadata to after extraction form the tool XMLs.',
-        type=str,
-        required=True)
-    args = parser.parse_args()
 
     global textPath
     global xmlpath
-    textPath = args.textFiles
-    xmlpath = args.XMLFiles
-    xmlpath = xmlpath + '/' if xmlpath[-1] is not '/' else xmlpath
-    textPath = textPath + '/' if textPath[-1] is not '/' else textPath
+    textPath = textFiles
+    xmlpath = XMLFiles
 
     files = get_all_files(xmlpath)
     get_agencies()
-    read_doi_records(args.correctDOIRecords)
+    read_doi_records(correctDOIRecords)
     start_parsing(files)
 
-    write_records(args.outfile)
-    print("--- %s seconds ---" % (time.time() - start_time))
+    write_records(outfile)
+    print("Parsing grobid data:    --- %s seconds ---" % (time.time() - start_time))
 
-if __name__ == '__main__':
-    main()
