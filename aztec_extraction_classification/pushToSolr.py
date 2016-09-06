@@ -1,11 +1,14 @@
-import argparse
 import json
 import subprocess
 from json import JSONDecoder
 from functools import partial
+import sys
+from pysolr import Solr
 
 port = 8983
-
+counter = 1
+to_insert = []
+solr = Solr("http://localhost:8983/solr/")
 
 class Suppressor:
 
@@ -77,6 +80,7 @@ def add_sourceforge_data(s):
 
 
 def push_to_solr(output):
+    output = json.dumps(output)
     subprocess.call(
         [
             "curl",
@@ -86,7 +90,7 @@ def push_to_solr(output):
             "Content-Type: application/json",
             "http://localhost:" +
             str(port) +
-            "/solr/BD2K/update/json/docs?commit=true",
+            "/solr/BD2K/update/json/docs/?commit=true",
             "--data-binary",
             output])
 
@@ -97,6 +101,7 @@ def main(data):
             output = dict()
             s = Suppressor(Exception, obj, output)
 
+            s.__call__('self.output["id"] = counter')
             s.__call__('self.output["name"] = self.obj["toolName"]')
             s.__call__('self.output["publicationDOI"] = self.obj["doi"]')
             s.__call__(
@@ -130,5 +135,13 @@ def main(data):
                 s.__call__(
                     'self.output["dateCreated"] = self.obj["dateCreated"]')
 
-            output = json.dumps(output)
-            push_to_solr(output)
+            to_insert.append(output)
+            global counter
+            counter += 1
+    print "total size is " + str(len(to_insert))
+    for obj in to_insert:
+        print "Inserting document number " + str(obj['id'])
+        push_to_solr(obj)
+
+if __name__ == '__main__':
+    main(sys.argv[1])
