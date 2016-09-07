@@ -1,4 +1,3 @@
-import argparse
 import codecs
 import json
 import re
@@ -16,20 +15,19 @@ import Queue
 import urllib2
 import xml.etree.ElementTree as ET
 from inspect import currentframe
-# README.md:
-# This script interacts with the XML and text extracts of the Journal pdf to extract:
-# authors, author affiliations, title,
-# links, some predictions of possible source links, abstract, conclusions/results,
-# the keywords from the journal, keywords from the
-# DOI (CrossRef record), acknowledgements and possible grant information.
 
-# Not working great --> Technologies, ToolName same as pub title unless github link found
+# This script interacts with the XML and text extracts of the Journal pdf to extract:
+# authors, author affiliations, title, technologies, github/sourceforge data, institutions,
+# links, some predictions of possible source links, abstract, conclusions/results,
+# the keywords from the journal, acknowledgements, summary and possible grant information.
+
 
 # Dummy Github account to get more API calls
 user = "TestAccount2K"
 password = "testpassword1"
+
 publications = []
-num_threads = 4
+num_threads = 4  # Threads to use for crossref and pubmed API's
 dois = None
 xmlpath = None
 textPath = None
@@ -37,11 +35,19 @@ agencies = set()
 
 
 def get_linenumber():
+    '''
+    Useful for analyzing where exceptions occur
+    :return:
+    '''
     cf = currentframe()
     return str(cf.f_back.f_lineno)
 
 
 class MasterClass(Thread):
+    '''
+    Thread class which calls all functions on a publication and appends final
+    publication object to the publications list.
+    '''
     def __init__(self, queue):
         Thread.__init__(self)
         self.queue = queue
@@ -76,19 +82,23 @@ class Publication(object):
         self.keyWords = None
         self.summary = None
         self.technologies = None
-        self.name = None
+        self.name = None  # This is the file name
         self.doi = None
         self.dateCreated = None
-        self.toolName = None
+        self.toolName = None  # This is the tool name if github/sourceforge info is found
         self.github_data = None
         self.sourceforge_data = None
         self.acks = None
         self.citations = None
         self.updated = None
-        self.data = dict()
+        self.data = dict()  # Dict to hold all data as key value pairs
 
 
 def push_to_dict(pub):
+    '''
+    Convert all other fields and their values to a dict and store it in data field,
+    this is written to the ouput file
+    '''
     try:
         for attr, value in pub.__dict__.iteritems():
             if value is not None and str(attr) is not "data":
@@ -100,6 +110,13 @@ def push_to_dict(pub):
 
 
 def start_tasks(dictionary, text, publication):
+    '''
+    Start all those tasks which only need xml and text data
+    :param dictionary: xml data
+    :param text:
+    :param publication:
+    :return:
+    '''
     get_title(dictionary, publication)
     get_authors(dictionary, publication)
     get_affiliations(dictionary, publication)
@@ -110,10 +127,17 @@ def start_tasks(dictionary, text, publication):
     summarize(text, publication)
     get_keywords(text, publication)
     get_technologies(text, publication)
+
+    # Use all links to find source code links
     find_source_links(publication.links, text, publication)
 
 
 def get_citations(doi):
+    '''
+    Get citations using crossref's api
+    :param doi:
+    :return: number of citations
+    '''
     if "10." not in str(doi):
         "Invalid Doi number"
         return 0
@@ -134,6 +158,15 @@ def get_citations(doi):
 
 
 def update_info(pub, text):
+    '''
+    Update information using doi and source links
+    :param pub:
+    :param text:
+    :return:
+    '''
+
+    # Fetch date and citations of publication using doi.
+    # Set updated field to record time when citations were updated.
     try:
         if dois is not None:
             doi = dois[pub.name] if pub.name in dois else "Not found"
@@ -148,6 +181,7 @@ def update_info(pub, text):
         print "Line number " + get_linenumber()
         print e
 
+    # Try to get github/sourceforge data, and update toolName
     try:
         repo = find_code_source(pub.sourcelinks, text)
         if repo is not None:
@@ -168,6 +202,11 @@ def update_info(pub, text):
 
 
 def is_candidate(text, words):
+    '''
+    Return true if any word in words exists in text
+    :param text:
+    :param words:
+    '''
     if text:
         for index in range(len(words)):
             if words[index].lower() in text.lower():
@@ -265,6 +304,10 @@ def get_technologies(text, pub):
         "package"]
     valid = [" ", ".", ",", ":", ";", "-"]
     found = []
+    '''
+    Find programming languages in text and analyze character before and after
+    the language to determine if text is actually talking about the programming language
+    '''
     with open('languages.txt', 'rU') as f:
         for line in f:
             line = line.rstrip()
@@ -301,12 +344,22 @@ def get_abstract(record, pub):
 
 
 def get_word_sentence(word, paragraph):
+    '''
+    :param word:
+    :param paragraph:
+    :return: sentence which contains word
+    '''
     sentences = sent_tokenize(paragraph.decode('utf-8'))
     sentence_hits = [sent for sent in sentences if word in sent]
     return sentence_hits
 
 
 def is_number(noun):
+    '''
+    Check if noun is a grant number or not
+    :param noun:
+    :return: grant number if found else False
+    '''
     checker = re.findall('[\d]', noun)
     if len(checker) < 5:
         return False
@@ -321,16 +374,15 @@ def is_agency(noun):
         return True
     return False
 
-# Get all sentences with grant information.
+
 def get_all_grants(textRecord, pub):
     words = [
         "funds",
         "grant",
         "sponsor",
-        "NIH",
-        "NSF",
         "funding",
         "Funding",
+        "funded",
         "Sponsor",
         "Grant"]
     sentences = []
@@ -340,6 +392,16 @@ def get_all_grants(textRecord, pub):
     result = []
     grant_stack = []
     agency_stack = []
+    '''
+    Algorithm: Find relevant sentences
+    if agency/grant: append to appropriate stack
+    else try all combinations to check if that combination is an agency
+    This is more efficient than seeing if any agency exists in sentence as
+    agency set is very large
+    Store as tuple with index
+    Assign the correct grants to the agencies by giving them indices and setting a
+    minimum threshold as all agencies are not in the list
+    '''
     for sentence in sentences:
         words = sentence.split()
         words = [word.replace('.', '') for word in words]
@@ -424,6 +486,14 @@ def get_acks(record, pub):
 
 
 def get_unique_words(words, threshold):
+    '''
+    Filter out same looking words such as gene, genes, genetic etc
+    Choose longest word and eliminate duplicates having threshold
+    number of same consecutive characters
+    :param words:
+    :param threshold:
+    :return:
+    '''
     ignore_words = []
     length = len(words)
     for i in range(0, length):
@@ -470,6 +540,11 @@ def summarize(sentences, pub):
 
 
 def chop_behind(string):
+    '''
+    Get rid of non alphanumeric characters at the end of a string
+    :param string:
+    :return:
+    '''
     while True:
         if string[-1:].isalpha() or string[-1:].isdigit():
             break
@@ -498,7 +573,10 @@ def find_source_links(linksRecord, textRecord, pub):
         "git",
         "github",
         "sourceforge",
-        "programming language",
+        "programming",
+        "program",
+        "available",
+        "implementation"
         "software"]
     # Remove new lines.
     textRecord = textRecord.replace('\n', '')
@@ -519,7 +597,7 @@ def write_records(filename):
     print "Writing extracted data for " + str(len(publications)) + " publications"
     with open(filename, 'w') as outfile:
         for pub in publications:
-            outfile.write(json.dumps(pub.data, indent=2))
+            outfile.write(json.dumps(pub.data, indent=4))
 
 
 def get_all_files(path):
@@ -529,9 +607,12 @@ def get_all_files(path):
     return files
 
 
-# Return all info such as users, languages, contributors, last updated etc
-# as a dict object
 def extract_git_json(git_json):
+    '''
+    Return all relevant information from github api as a dict object
+    :param git_json:
+    :return:
+    '''
     # Basic info
     result = dict()
     try:
@@ -635,8 +716,12 @@ def extract_git_json(git_json):
     return result
 
 
-# Return info about the repository object as a json object
 def get_git_info(repo):
+    '''
+    Query github API with the repository name
+    :param repo:
+    :return:
+    '''
     url = "https://api.github.com/search/repositories?q="
     try:
         r = requests.get(str(url) + str(repo), auth=(user, password))
@@ -651,6 +736,11 @@ def get_git_info(repo):
 
 
 def extract_sourceforge_repo(link):
+    '''
+    Extract repo name from a sourceforge url
+    :param link:
+    :return:
+    '''
     link = str(link)
     list = link.split('/')
     try:
@@ -674,8 +764,13 @@ def extract_sourceforge_repo(link):
         print "Invalid sourceforge url"
 
 
-# Finds github or sourceforge links in the source links
 def find_code_source(sourcelinks, text):
+    '''
+    Find github or sourceforge links in the source links
+    :param sourcelinks:
+    :param text:
+    :return:
+    '''
     possibleGitRepos = []
     possibleSFRepos = []
     for link in sourcelinks:
@@ -714,6 +809,11 @@ def find_code_source(sourcelinks, text):
 
 
 def get_sourceforge_info(repo):
+    '''
+    Return all relevant info from sourceforge api as a dict object
+    :param repo:
+    :return:
+    '''
     url = "https://sourceforge.net/rest/p/" + str(repo)
     r = requests.get(url)
     json_info = json.loads(r.text)
@@ -762,6 +862,11 @@ def get_sourceforge_info(repo):
 
 
 def get_date(doi):
+    '''
+    Get the date of the publication from crossref
+    :param doi:
+    :return:
+    '''
     url = "http://api.crossref.org/works/"+str(doi)
     response = str(urllib.urlopen(url).read())
     parsed_json = json.loads(response)

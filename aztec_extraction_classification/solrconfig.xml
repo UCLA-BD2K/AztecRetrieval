@@ -455,7 +455,7 @@
        queries across multiple shards
     -->
   <updateRequestProcessorChain name="dedupe">
-
+    <!--
     <processor class="solr.processor.SignatureUpdateProcessorFactory">
          <bool name="enabled">true</bool>
          <str name="signatureField">signatureField</str>
@@ -463,6 +463,7 @@
          <str name="fields">name</str>
          <str name="signatureClass">solr.processor.TextProfileSignature</str>
     </processor>
+    -->
     <processor class="solr.UUIDUpdateProcessorFactory">
     <str name="fieldName">id</str>
     </processor>
@@ -475,8 +476,6 @@
     <lst name="defaults">
   <str name="defType">edismax</str>
 	<str name="echoParams">explicit</str>
-	<!-- <str name="bq">(*:* -source:elixir)^999 (*:* -source:galaxy)^999</str> elixir and galaxy should be at the bottom -->
-	<!-- <str name="defType">AutoPhrasingQParserPlugin</str> -->
 	<str name="bq">(citations:*)^2.0 (linkUrls:*)^1.5 (tags:*)^1.5 (institutions:*)^1.5 (*:* -source:elixir)^999 (*:* -source:galaxy)^999</str>
      <!--  <int name="rows">30</int> -->
      </lst>

@@ -1,4 +1,3 @@
-import argparse
 import subprocess
 from os import listdir
 from os.path import isfile, join
@@ -6,21 +5,20 @@ from threading import Thread
 import Queue
 import time
 import os
-# README.md:
-# At this point, the script assumes that the Journal pdf for the correct publication DOI (previously determined using CrossRef) has been downloaded to a Folder.
-# All PDFs within the folder are read and parsed through Grobid (which has pretrained CRF models in it) to extract the text in the PDF into an annotated XML.
-# The XML is in TEI format. Additionally, the raw text from the PDF is
-# also extract to a different folder.
 
-# requires pdftotext, brew install homebrew/x11/xpdf
+# This script extracts grobid xml data from downloaded pdf's
 
-# GROBID has a bug which sometimes leads to internal server error when num_threads is more than 1. Set to one if conversion of every single document is a must.
+# GROBID has a bug which leads to internal server error when num_threads is more than 1.
+# Set to one if conversion of every single document is a must, accuracy decreases as threads increase.
 
 port = "8080"      # port number where the local grobid instance is running
 num_threads = 2
 
 
 class grobid_multi(Thread):
+    '''
+    Thread class to get XML from PDF
+    '''
     def __init__(self, queue):
         Thread.__init__(self)
         self.queue = queue
@@ -34,6 +32,9 @@ class grobid_multi(Thread):
 
 
 class XMLToTEIMulti(Thread):
+    '''
+    Thread class to convert XML to TEI format
+    '''
     def __init__(self, queue):
         Thread.__init__(self)
         self.queue = queue
@@ -47,6 +48,9 @@ class XMLToTEIMulti(Thread):
 
 
 class PDFToText(Thread):
+    '''
+    Thread class to convert pdfs to text
+    '''
     def __init__(self, queue):
         Thread.__init__(self)
         self.queue = queue
@@ -67,6 +71,12 @@ def getAllFiles(path):
 
 
 def getXMLFromPDF(inFilename, outFilename):
+    '''
+    Grobid call to generate xml data file from pdf
+    :param inFilename:
+    :param outFilename:
+    :return:
+    '''
     try:
         subprocess.call(["curl",
                          "-v",

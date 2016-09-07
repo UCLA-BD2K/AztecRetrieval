@@ -5,8 +5,11 @@ from classifier import main as classify
 from pdf_extract import main as grobid_extraction
 from parse_extracts import main as parse_extracts
 from pushToSolr import main as pushToSolr
+import time
+
 
 def main():
+    start_time = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-directory',
@@ -47,6 +50,8 @@ def main():
     # Push to Solr if needed
     if args.pushToSolr == 1:
         pushToSolr(output_file)
+
+    print(" Total time taken:    --- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
     sys.exit(main())

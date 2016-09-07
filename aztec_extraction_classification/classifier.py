@@ -395,42 +395,42 @@ def main(directory, tools_directory, non_tools_dir):
 
     print "Classification:    Seconds taken: " + str(time.time() - start)
 
-            # input_files, y = fetch_data()
-            # x = extract_text(input_files)
-            # x = [filter_text(doc) for doc in x]
-            # store_data(x,y)
-            # X_train, X_test, y_train, y_test = train_test_split(
-            #     x, y, test_size=0.2)
-            # X_train, X_test = normalize_scale(X_train, X_test)
-            # for i in range(len(classifier_list)):
-            #     classifier_list[i].fit(X_train, y_train)
-            #     y_pred = classifier_list[i].predict(X_test)
-            #     print classifier_list[i].score(X_test, y_test)
-            #     print classification_report(y_test, y_pred)
-            #     print confusion_matrix(y_test, y_pred)
-            #     precison_list.append(precision_score(y_test, y_pred))
-            #     recall_list.append(recall_score(y_test, y_pred))
-            #     print y_test
-            #     print y_pred
-            # plot_curve()
-            # clf = GridSearchCV(pipeline, param_grid=sgd_tuned_parameters, cv=5, verbose=5)
-            # clf.fit(X_train, y_train)
-            # print "Best parameters set found on development set:"
-            # print '\n'
-            # print clf.best_params_
-            # print'\n'
-            # print "Grid scores on development set:"
-            # print '\n'
-            # for params, mean_score, scores in clf.grid_scores_:
-            #     print "%0.3f (+/-%0.03f) for %r" % (mean_score, scores.std() * 2, params)
-            # print '\n'
-            #
-            # print("Detailed classification report:")
-            # print '\n'
-            # print "The model is trained on the full development set."
-            # print "The scores are computed on the full evaluation set."
-            # print '\n'
-            # y_true, y_pred = y_test, clf.predict(X_test)
-            # print classification_report(y_true, y_pred)
-            # print confusion_matrix(y_true, y_pred)
-            # print '\n'
+    # input_files, y = fetch_data()
+    # x = extract_text(input_files)
+    # x = [filter_text(doc) for doc in x]
+    # store_data(x,y)
+    # X_train, X_test, y_train, y_test = train_test_split(
+    #     x, y, test_size=0.2)
+    # X_train, X_test = normalize_scale(X_train, X_test)
+    # for i in range(len(classifier_list)):
+    #     classifier_list[i].fit(X_train, y_train)
+    #     y_pred = classifier_list[i].predict(X_test)
+    #     print classifier_list[i].score(X_test, y_test)
+    #     print classification_report(y_test, y_pred)
+    #     print confusion_matrix(y_test, y_pred)
+    #     precison_list.append(precision_score(y_test, y_pred))
+    #     recall_list.append(recall_score(y_test, y_pred))
+    #     print y_test
+    #     print y_pred
+    # plot_curve()
+    # clf = GridSearchCV(pipeline, param_grid=sgd_tuned_parameters, cv=5, verbose=5)
+    # clf.fit(X_train, y_train)
+    # print "Best parameters set found on development set:"
+    # print '\n'
+    # print clf.best_params_
+    # print'\n'
+    # print "Grid scores on development set:"
+    # print '\n'
+    # for params, mean_score, scores in clf.grid_scores_:
+    #     print "%0.3f (+/-%0.03f) for %r" % (mean_score, scores.std() * 2, params)
+    # print '\n'
+    #
+    # print("Detailed classification report:")
+    # print '\n'
+    # print "The model is trained on the full development set."
+    # print "The scores are computed on the full evaluation set."
+    # print '\n'
+    # y_true, y_pred = y_test, clf.predict(X_test)
+    # print classification_report(y_true, y_pred)
+    # print confusion_matrix(y_true, y_pred)
+    # print '\n'

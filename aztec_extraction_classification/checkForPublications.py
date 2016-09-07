@@ -3,7 +3,7 @@ import sys
 import urllib2
 import xml.etree.ElementTree as ET
 from downloadPublications import pmid_doi
-# Journals supported --> Nature, Bioinformatics (Oxford) and BMC Bioinformatics
+# Journals supported --> Nature, Bioinformatics (Oxford) and BMC Bioinformatics, can add more from journals.txt
 journal_dict = {'nature': 0410462, 'bioinformatics_oxford': 9808944, 'bmc_bioinformatics': 100965194}
 dois = []
 max_results = "100000"
