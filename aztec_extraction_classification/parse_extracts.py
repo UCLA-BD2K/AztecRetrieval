@@ -555,7 +555,7 @@ def chop_behind(string):
 
 def get_all_links(textRecord, pub):
     # Remove new lines.
-    textRecord = textRecord.replace('\n', '')
+    textRecord = textRecord.replace('\n', ' ')
     # Remove multi-character spaces.
     textRecord = ' '.join(textRecord.split())
     # Extract all URLs.
@@ -579,7 +579,7 @@ def find_source_links(linksRecord, textRecord, pub):
         "implementation"
         "software"]
     # Remove new lines.
-    textRecord = textRecord.replace('\n', '')
+    textRecord = textRecord.replace('\n', ' ')
     # Remove multi-character spaces.
     textRecord = ' '.join(textRecord.split())
     # Get sentences with link
