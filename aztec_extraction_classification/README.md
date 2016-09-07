@@ -1,18 +1,40 @@
-updateCitations.py - This script is used to update the documents in the solr database, is different from the other 3 scripts.
+PYTHON SCRIPTS FOR METADATA EXTRACTION
 
-The following 3 scripts must be run in the given order:
+1. checkForPublications.py --> Queries pubmed with n days as a parameter to find new publications which have come out in the past n days. Targets specific journals, list can be expanded using journals.txt.
 
-1. downloadPublications.py ===> Get all publications as pdf, open script to modify storage directory
-    Use pip to install the following:
-        bs4 (BeautifulSoup)
-        TorCtl
-        pycurl
-    Set up tor and privoxy on your machine, following 2 links are helpful for Linux/OS X:
-        http://sacharya.com/crawling-anonymously-with-tor-in-python/   (Ignore script part)
-        http://www.andrewwatters.com/privoxy/
-        
-    Run via python downloadPublications.py -directory pdfDir/ -pubmedFile pmid.txt
+2. downloadPublications.py --> Downloads publications as pdfs to a folder, takes as input a txt file containing doi numbers or pmids.
 
-2. pdf_extract.py ==> Extract pdf to xml and plain text data
+3. main_top_level.py --> All-in-one script that extracts metadata from PDF using GROBID, enriches using APIs, and inserts into Solr. Each component is modularized (1. Get papers from Journal (Download PDFs if needed) 2. Classify publication 3. Extract metadata from PDF & enrich 4. Insert metadata into Solr)
+	
+	Calls the following scripts in order:
+	classifier.py (Still in progress, current accuracy ~80%)
+	pdf_extract.py
+	parse_extracts.py
+	pushToSolr.py
 
-3. parse_extracts.py ==> Parse the xml and plain text data into a single output file containing all the metadata
+	Dependencies ==>
+
+	Solr instance running at localhost:8983 (if pushing to Solr)
+
+	GROBID (https://github.com/kermitt2/grobid) running on localhost:8080
+
+	Tor and Privoxy for downloading/web scraping (Follow instructions on these pages for Linux and OS X respectively:
+	http://sacharya.com/crawling-anonymously-with-tor-in-python/ and http://www.andrewwatters.com/privoxy/)
+	Tor control port is 9051, please set password as 'downloader' in torrc file
+	Privoxy running on port 8118
+
+	pdftotext
+
+	sudo pip install bs4
+	sudo pip install TorCtl
+	sudo pip install pycurl
+	sudo pip install xmltodict
+	sudo pip install summa
+	sudo pip install -U nltk (download nltk.tokenize)
+
+	Scipy
+	NumPy
+	Scikit 0.18 dev version
+
+4. schema.xml and solrconfig.xml --> Configure your local solr server with these files to run the above scripts.
+
