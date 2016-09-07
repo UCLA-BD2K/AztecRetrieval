@@ -1,10 +1,16 @@
-PYTHON SCRIPTS FOR METADATA EXTRACTION
+PYTHON (2.7) SCRIPTS FOR METADATA EXTRACTION
 
 1. checkForPublications.py --> Queries pubmed with n days as a parameter to find new publications which have come out in the past n days. Targets specific journals, list can be expanded using journals.txt.
 
 2. downloadPublications.py --> Downloads publications as pdfs to a folder, takes as input a txt file containing doi numbers or pmids.
 
+	Usage: python downloadPublications.py file.txt directoryToSaveFilesIn/ (optional)
+
 3. main_top_level.py --> All-in-one script that extracts metadata from PDF using GROBID, enriches using APIs, and inserts into Solr. Each component is modularized (1. Get papers from Journal (Download PDFs if needed) 2. Classify publication 3. Extract metadata from PDF & enrich 4. Insert metadata into Solr)
+
+	Usage: python main_top_level.py -directory pdfDir/ -pushToSolr 1/0 -doiRecords dois.json
+
+	dois.json is obtained automatically from using downloadPublications.py
 	
 	Calls the following scripts in order:
 	classifier.py (Still in progress, current accuracy ~80%)
