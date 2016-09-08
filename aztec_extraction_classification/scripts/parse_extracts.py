@@ -308,7 +308,7 @@ def get_technologies(text, pub):
     Find programming languages in text and analyze character before and after
     the language to determine if text is actually talking about the programming language
     '''
-    with open('languages.txt', 'rU') as f:
+    with open('../util/languages.txt', 'rU') as f:
         for line in f:
             line = line.rstrip()
             matches = get_word_sentence(line, text)
@@ -927,7 +927,7 @@ def read_text_from_file(file):
 
 
 def get_agencies():
-    with open("funding.json", "r") as file:
+    with open("../util/funding.json", "r") as file:
         parsed_json = json.load(file)
         for obj in parsed_json:
             agencies.add(obj['name'])
