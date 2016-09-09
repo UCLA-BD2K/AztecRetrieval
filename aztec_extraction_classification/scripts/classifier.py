@@ -313,7 +313,7 @@ def normalize_scale(X_train, X_test):
 
 
 def store_data(x, y):
-    with open("/util/data.json", "w") as output:
+    with open("util/data.json", "w") as output:
         for doc, category in zip(x, y):
             dictionary = dict()
             dictionary['class'] = category
@@ -324,7 +324,7 @@ def store_data(x, y):
 def fetch_from_file():
     x = []
     y = []
-    with open("/util/data.json", "r") as input_file:
+    with open("util/data.json", "r") as input_file:
         for obj in json_parse(input_file):
             x.append(obj['text'])
             y.append(obj['class'])
