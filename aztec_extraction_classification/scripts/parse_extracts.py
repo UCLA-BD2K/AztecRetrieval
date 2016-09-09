@@ -32,6 +32,7 @@ dois = None
 xmlpath = None
 textPath = None
 agencies = set()
+extract_doi = False
 
 
 def get_linenumber():
@@ -63,6 +64,8 @@ class MasterClass(Thread):
             else:
                 pub = Publication()
                 pub.name = str(inputFile).replace('.xml', '')
+                if extract_doi:
+                    extract_doi_grobid(dictionary, pub)
                 start_tasks(dictionary, text, pub)
                 update_info(pub, text)
                 push_to_dict(pub)
@@ -92,6 +95,18 @@ class Publication(object):
         self.citations = None
         self.updated = None
         self.data = dict()  # Dict to hold all data as key value pairs
+
+
+def extract_doi_grobid(xml, pub):
+    global dois
+    try:
+        id = xml["TEI"]["teiHeader"][
+        "fileDesc"]["sourceDesc"]["biblStruct"]['idno']
+        if id["@type"] == "DOI":
+            dois[pub.name] = id["#text"]
+    except Exception as e:
+        print get_linenumber()
+        print e
 
 
 def push_to_dict(pub):
@@ -893,12 +908,14 @@ def start_parsing(files):
 
 def read_doi_records(records):
     global dois
+    global extract_doi
     try:
         with open(records, 'rU') as file:
             dois = json.loads(file.read())
     except Exception as e:
         print "Line number " + get_linenumber()
         print e
+        extract_doi = True
 
 
 def read_xml_from_file(file):

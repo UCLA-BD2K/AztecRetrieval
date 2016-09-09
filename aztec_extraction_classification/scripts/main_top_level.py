@@ -25,7 +25,7 @@ def main():
         '-doiRecords',
         help='JSON file containing name:doi key value pairs for downloaded documents',
         type=str,
-        required=True)
+        required=False)
     args = parser.parse_args()
     directory = args.directory + '/' if args.directory[-1] is not '/' else args.directory
     if not os.path.isdir(directory):
