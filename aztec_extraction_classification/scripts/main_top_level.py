@@ -18,12 +18,17 @@ def main():
         required=True)
     parser.add_argument(
         '-pushToSolr',
-        help='1 if metadata should be pushed to localhost solr running on port 8983, defaults to 0',
+        help='1 if metadata should be pushed to localhost solr running on port 8983, else 0. Defaults to 0',
         type=int,
         required=False)
     parser.add_argument(
         '-doiRecords',
         help='JSON file containing name:doi key value pairs for downloaded documents',
+        type=str,
+        required=False)
+    parser.add_argument(
+        '-classify',
+        help='1 if publications should be classified first to filter out tools, else 0. Defaults to 1',
         type=str,
         required=False)
     args = parser.parse_args()
@@ -39,7 +44,10 @@ def main():
     output_file = 'output.json'
 
     # Classify
-    classify(directory, tools_dir, non_tools_dir)
+    if args.classify is not 0:
+        classify(directory, tools_dir, non_tools_dir)
+    else:
+        tools_dir = directory
 
     # Grobid extraction
     grobid_extraction(tools_dir, tools_xml_dir, tools_txt_dir)
@@ -48,7 +56,7 @@ def main():
     parse_extracts(tools_xml_dir, tools_txt_dir, args.doiRecords, output_file)
 
     # Push to Solr if needed
-    if args.pushToSolr == 1:
+    if args.pushToSolr is not None and args.pushToSolr == 1:
         pushToSolr(output_file)
 
     print(" Total time taken:    --- %s seconds ---" % (time.time() - start_time))
