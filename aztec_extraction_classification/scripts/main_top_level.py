@@ -29,7 +29,7 @@ def main():
     parser.add_argument(
         '-classify',
         help='1 if publications should be classified first to filter out tools, else 0. Defaults to 1',
-        type=str,
+        type=int,
         required=False)
     args = parser.parse_args()
     directory = args.directory + '/' if args.directory[-1] is not '/' else args.directory
