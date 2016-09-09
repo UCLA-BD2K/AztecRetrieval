@@ -5,6 +5,7 @@ from threading import Thread
 import Queue
 import time
 import os
+import sys
 
 # This script extracts grobid xml data from downloaded pdf's
 
@@ -175,4 +176,7 @@ def main(pdfpath, outpathXML, outpathText):
     convert_text(files, pdfpath, outpathText)
 
     print(" Grobid extraction:    --- %s seconds ---" % (time.time() - start_time))
+
+if __name__ == '__main__':
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
 

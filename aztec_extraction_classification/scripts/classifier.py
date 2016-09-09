@@ -81,6 +81,7 @@ classifier_list = [SVC(gamma=0.1, kernel='rbf', C=10, class_weight='balanced'),
                    SGDClassifier(n_jobs=-1, n_iter=500, penalty='elasticnet', alpha=0.001,
                                  loss='log', shuffle=True, class_weight='balanced'),
                    ]
+path = None
 
 
 # Returns list of abstracts
@@ -313,7 +314,7 @@ def normalize_scale(X_train, X_test):
 
 
 def store_data(x, y):
-    with open("util/data.json", "w") as output:
+    with open(path+"/util/data.json", "w") as output:
         for doc, category in zip(x, y):
             dictionary = dict()
             dictionary['class'] = category
@@ -324,7 +325,7 @@ def store_data(x, y):
 def fetch_from_file():
     x = []
     y = []
-    with open("util/data.json", "r") as input_file:
+    with open(path+"/util/data.json", "r") as input_file:
         for obj in json_parse(input_file):
             x.append(obj['text'])
             y.append(obj['class'])
@@ -365,6 +366,8 @@ def get_test_set(directory):
 
 
 def main(directory, tools_directory, non_tools_dir):
+    global path
+    path = sys.path[0]
     start = time.time()
     if directory is None or not os.path.isdir(directory):
         print "Please input directory containing pdf publications to classify"
@@ -434,3 +437,6 @@ def main(directory, tools_directory, non_tools_dir):
     # print classification_report(y_true, y_pred)
     # print confusion_matrix(y_true, y_pred)
     # print '\n'
+
+if __name__ == '__main__':
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

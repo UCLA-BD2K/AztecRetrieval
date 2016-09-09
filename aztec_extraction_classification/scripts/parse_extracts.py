@@ -15,6 +15,7 @@ import Queue
 import urllib2
 import xml.etree.ElementTree as ET
 from inspect import currentframe
+import sys
 
 # This script interacts with the XML and text extracts of the Journal pdf to extract:
 # authors, author affiliations, title, technologies, github/sourceforge data, institutions,
@@ -33,6 +34,7 @@ xmlpath = None
 textPath = None
 agencies = set()
 extract_doi = False
+path = None
 
 
 def get_linenumber():
@@ -323,7 +325,7 @@ def get_technologies(text, pub):
     Find programming languages in text and analyze character before and after
     the language to determine if text is actually talking about the programming language
     '''
-    with open('util/languages.txt', 'rU') as f:
+    with open(path+'/util/languages.txt', 'rU') as f:
         for line in f:
             line = line.rstrip()
             matches = get_word_sentence(line, text)
@@ -944,7 +946,7 @@ def read_text_from_file(file):
 
 
 def get_agencies():
-    with open("util/funding.json", "r") as file:
+    with open(path+"/util/funding.json", "r") as file:
         parsed_json = json.load(file)
         for obj in parsed_json:
             agencies.add(obj['name'])
@@ -953,6 +955,8 @@ def get_agencies():
 
 
 def main(XMLFiles, textFiles, correctDOIRecords, outfile):
+    global path
+    path = sys.path[0]
     start_time = time.time()
 
     global textPath
@@ -967,4 +971,7 @@ def main(XMLFiles, textFiles, correctDOIRecords, outfile):
 
     write_records(outfile)
     print("Parsing grobid data:    --- %s seconds ---" % (time.time() - start_time))
+
+if __name__ == '__main__':
+    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
