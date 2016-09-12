@@ -31,6 +31,11 @@ def main():
         help='1 if publications should be classified first to filter out tools, else 0. Defaults to 1',
         type=int,
         required=False)
+    parser.add_argument(
+        '-doi',
+        help='DOI number if only extracting one document not downloaded using downloadPublications.py',
+        type=str,
+        required=False)
     args = parser.parse_args()
     directory = args.directory + '/' if args.directory[-1] is not '/' else args.directory
     if not os.path.isdir(directory):
@@ -53,7 +58,7 @@ def main():
     grobid_extraction(tools_dir, tools_xml_dir, tools_txt_dir)
 
     # Parse grobid data into output file
-    parse_extracts(tools_xml_dir, tools_txt_dir, args.doiRecords, output_file)
+    parse_extracts(tools_xml_dir, tools_txt_dir, args.doiRecords, output_file, args.doi)
 
     # Push to Solr if needed
     if args.pushToSolr is not None and args.pushToSolr == 1:

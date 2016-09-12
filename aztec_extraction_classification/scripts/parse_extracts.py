@@ -954,7 +954,21 @@ def get_agencies():
                 agencies.add(alias)
 
 
-def main(XMLFiles, textFiles, correctDOIRecords, outfile):
+def single_document_case(files, doi):
+    '''
+    Try grobid extraction over user input as it is more reliable. If grobid fails the user doi input value
+    is still retained
+    :param files:
+    :param doi:
+    :return:
+    '''
+    name = str(files[0]).replace('.xml', '')
+    dois[name] = doi
+    global extract_doi
+    extract_doi = True
+
+
+def main(XMLFiles, textFiles, correctDOIRecords, outfile, doi):
     global path
     path = sys.path[0]
     start_time = time.time()
@@ -966,12 +980,22 @@ def main(XMLFiles, textFiles, correctDOIRecords, outfile):
 
     files = get_all_files(xmlpath)
     get_agencies()
-    read_doi_records(correctDOIRecords)
+    if correctDOIRecords is not None:
+        read_doi_records(correctDOIRecords)
+    elif doi is not None:
+        single_document_case(files, doi)
+    else:
+        print "Please pass in doiRecords if multiple documents or doi if single document"
+        sys.exit(1)
     start_parsing(files)
 
     write_records(outfile)
     print("Parsing grobid data:    --- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    '''
+    Default behaviour for web app since upload is always single file, pass in None as doiRecords
+    4th parameter will be doi.
+    '''
+    main(sys.argv[1], sys.argv[2], None, sys.argv[3], sys.argv[4])
 
