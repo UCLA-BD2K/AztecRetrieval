@@ -29,7 +29,7 @@ password = "testpassword1"
 
 publications = []
 num_threads = 4  # Threads to use for crossref and pubmed API's
-dois = None
+dois = dict()
 xmlpath = None
 textPath = None
 agencies = set()
