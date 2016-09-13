@@ -35,6 +35,7 @@ textPath = None
 agencies = set()
 extract_doi = False
 path = None
+single_case_doi = None
 
 
 def get_linenumber():
@@ -66,6 +67,8 @@ class MasterClass(Thread):
             else:
                 pub = Publication()
                 pub.name = str(inputFile).replace('.xml', '')
+                if single_case_doi is not None:
+                    pub.doi = single_case_doi
                 if extract_doi:
                     extract_doi_grobid(dictionary, pub)
                 start_tasks(dictionary, text, pub)
@@ -100,12 +103,11 @@ class Publication(object):
 
 
 def extract_doi_grobid(xml, pub):
-    global dois
     try:
         id = xml["TEI"]["teiHeader"][
         "fileDesc"]["sourceDesc"]["biblStruct"]['idno']
         if id["@type"] == "DOI":
-            dois[pub.name] = id["#text"]
+            pub.doi = id["#text"]
     except Exception as e:
         print get_linenumber()
         print e
@@ -174,6 +176,14 @@ def get_citations(doi):
         return 0
 
 
+def fetch_crossref_info(pub):
+    date = get_date(pub.doi)
+    if date is not None:
+        pub.dateCreated = date
+    pub.citations = get_citations(pub.doi)
+    pub.updated = long(round(time.time() * 1000))
+
+
 def update_info(pub, text):
     '''
     Update information using doi and source links
@@ -185,15 +195,13 @@ def update_info(pub, text):
     # Fetch date and citations of publication using doi.
     # Set updated field to record time when citations were updated.
     try:
-        if dois is not None:
+        if pub.doi:
+            fetch_crossref_info(pub)
+        elif dois is not None:
             doi = dois[pub.name] if pub.name in dois else "Not found"
             pub.doi = doi
             if doi is not "Not found":
-                date = get_date(doi)
-                if date is not None:
-                    pub.dateCreated = date
-                pub.citations = get_citations(pub.doi)
-                pub.updated = long(round(time.time() * 1000))
+                fetch_crossref_info(pub)
     except Exception as e:
         print "Line number " + get_linenumber()
         print e
@@ -954,7 +962,7 @@ def get_agencies():
                 agencies.add(alias)
 
 
-def single_document_case(files, doi):
+def single_document_case(doi):
     '''
     Try grobid extraction over user input as it is more reliable. If grobid fails the user doi input value
     is still retained
@@ -962,10 +970,10 @@ def single_document_case(files, doi):
     :param doi:
     :return:
     '''
-    name = str(files[0]).replace('.xml', '')
-    dois[name] = doi
+    global single_case_doi
     global extract_doi
     extract_doi = True
+    single_case_doi = doi
 
 
 def main(XMLFiles, textFiles, correctDOIRecords, outfile, doi):
@@ -983,7 +991,7 @@ def main(XMLFiles, textFiles, correctDOIRecords, outfile, doi):
     if correctDOIRecords is not None:
         read_doi_records(correctDOIRecords)
     elif doi is not None:
-        single_document_case(files, doi)
+        single_document_case(doi)
     else:
         print "Please pass in doiRecords if multiple documents or doi if single document"
         sys.exit(1)
