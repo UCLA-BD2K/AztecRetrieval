@@ -454,22 +454,22 @@
        of SearchComponents (see below) and supports distributed
        queries across multiple shards
     -->
-  <updateRequestProcessorChain name="dedupe">
-    <!--
+  <!-- <updateRequestProcessorChain name="dedupe">
     <processor class="solr.processor.SignatureUpdateProcessorFactory">
          <bool name="enabled">true</bool>
          <str name="signatureField">signatureField</str>
          <bool name="overwriteDupes">true</bool>
-         <str name="fields">name</str>
+         <str name="fields">publicationDOI</str>
          <str name="signatureClass">solr.processor.TextProfileSignature</str>
-    </processor>
-    -->
-    <processor class="solr.UUIDUpdateProcessorFactory">
-    <str name="fieldName">id</str>
     </processor>
     <processor class="solr.LogUpdateProcessorFactory" />
     <processor class="solr.RunUpdateProcessorFactory" />
-  </updateRequestProcessorChain> 
+    
+    <processor class="solr.UUIDUpdateProcessorFactory">
+    <str name="fieldName">id</str>
+    </processor>
+    
+  </updateRequestProcessorChain> -->
 
   <requestHandler name="/select" class="solr.SearchHandler">
 
@@ -531,8 +531,8 @@
 
   <requestHandler name="/update/json/docs" class="solr.UpdateRequestHandler" >
   <lst name="defaults">
-    <str name="update.chain">dedupe</str>
-  </lst>
+<!--     <str name="update.chain">dedupe</str>
+ -->  </lst>
   </requestHandler>
 
 

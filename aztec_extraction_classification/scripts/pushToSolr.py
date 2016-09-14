@@ -3,9 +3,11 @@ import subprocess
 from json import JSONDecoder
 from functools import partial
 import sys
-
+from pysolr4 import Solr
 port = 8983
 to_insert = []
+to_fetch = 100000000 # all documents in Solr database
+id_doi = dict()
 
 
 class Suppressor:
@@ -13,10 +15,11 @@ class Suppressor:
     Suppress exceptions, better than wrapping every single statement in a try catch block
     '''
 
-    def __init__(self, exception_type, obj, output):
+    def __init__(self, exception_type, obj, output, id):
         self._exception_type = exception_type
         self.obj = obj
         self.output = output
+        self.id = id
 
     def __call__(self, expression):
         try:
@@ -97,11 +100,37 @@ def push_to_solr(output):
         ])
 
 
+def get_starting_id():
+    solr = Solr('http://localhost:8983/solr/BD2K')
+    result = solr.select(('q', '*:*'), ('rows', str(to_fetch)), ('wt', 'json'),
+                         ('fl', 'id, publicationDOI'))
+    for doc in result.docs:
+        if 'id' in doc and 'publicationDOI' in doc:
+            id_doi[doc['publicationDOI']] = doc['id']
+
+    return len(result.docs)+1
+
+
+def get_id_from_solr(doi):
+    if doi in id_doi:
+        return id_doi[doi]
+    return None
+
+
 def main(data):
+    start_id = get_starting_id()
+    cur_id = start_id
     with open(data, 'rU') as f:
         for obj in json_parse(f):
             output = dict()
-            s = Suppressor(Exception, obj, output)
+            id = get_id_from_solr(obj['doi'])
+            if id is None:
+                id = cur_id
+                increment = True
+            else:
+                increment = False
+            s = Suppressor(Exception, obj, output, str(id))
+            s.__call__('self.output["id"] = self.id')
 
             s.__call__('self.output["name"] = self.obj["toolName"]')
             s.__call__('self.output["publicationDOI"] = self.obj["doi"]')
@@ -126,17 +155,19 @@ def main(data):
                     'self.output["language"] = self.obj["technologies"]')
 
             s.__call__('self.output["tags"] = self.obj["keyWords"]')
+            s.__call__('self.output["citations"] = self.obj["citations"]')
             s.__call__('self.output["description"] = self.obj["abstract"]')
             s.__call__('self.output["summary"] = self.obj["summary"]')
             s.__call__(
                 'self.output["acknowledgements"] = self.obj["acks"]')
             s.__call__(
                 'self.output["institutions"] = self.obj["affiliations"]')
-            if 'dateCreated' in obj:
-                s.__call__(
+            s.__call__(
                     'self.output["dateCreated"] = self.obj["dateCreated"]')
 
             to_insert.append(output)
+            if increment:
+                cur_id += 1
 
     print "Total size is " + str(len(to_insert))
     for obj in to_insert:
