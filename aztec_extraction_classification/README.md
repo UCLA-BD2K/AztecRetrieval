@@ -26,13 +26,14 @@ PYTHON (2.7) SCRIPTS FOR METADATA EXTRACTION
 
 	Tor and Privoxy for downloading/web scraping (Follow instructions on these pages for Linux and OS X respectively:
 	http://sacharya.com/crawling-anonymously-with-tor-in-python/ and http://www.andrewwatters.com/privoxy/)
-	Tor control port is 9051, please set password as 'downloader' in torrc file
+	Tor control port is 9051, set password as 'downloader' in torrc file. If you want to set a different password, please change the python file.
 	Privoxy running on port 8118
 
 	pdftotext
 
 	sudo pip install bs4
-	sudo pip install TorCtl
+	git clone git://github.com/aaronsw/pytorctl.git
+	pip install pytorctl/
 	sudo pip install pycurl
 	sudo pip install xmltodict
 	sudo pip install summa
