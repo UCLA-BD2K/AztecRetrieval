@@ -426,6 +426,7 @@ def pmid_or_doi(line):
 
 
 def main(filename, directory=None):
+    start_time = time.time()
     # Check filename and directory, create directory if needed
 
     if not filename:
@@ -478,6 +479,8 @@ def main(filename, directory=None):
             if extract_failed:
                 renew_connection()
                 download(directory, doc)
+
+    print(" Downloading time taken:    --- %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':

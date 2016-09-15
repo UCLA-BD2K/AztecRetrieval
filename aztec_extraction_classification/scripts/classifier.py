@@ -306,7 +306,7 @@ def normalize_scale(X_train, X_test):
     vectorizer = TfidfVectorizer(ngram_range=(2, 2), max_df=0.25, min_df=2, use_idf=True)
     X_train = vectorizer.fit_transform(X_train)
     X_test = vectorizer.transform(X_test)
-    svd = TruncatedSVD(100)
+    svd = TruncatedSVD(100, algorithm='arpack')
     lsa = make_pipeline(svd, Normalizer(copy=False))
     X_train = lsa.fit_transform(X_train)
     X_test = lsa.transform(X_test)
@@ -355,7 +355,7 @@ def get_test_set(directory):
     test_files = []
     for file in files:
         out_filename = text_dir + file.replace('.pdf', '.txt')
-        subprocess.call(['pdftotext', directory + file, out_filename])
+        subprocess.call(['pdftotext', '-enc', 'UTF-8', directory + file, out_filename])
         test_files.append(file)
     x_test = []
     for file in os.listdir(text_dir):
@@ -374,12 +374,11 @@ def main(directory, tools_directory, non_tools_dir):
         sys.exit(1)
     x_train, y_train = fetch_from_file()
     x_test, test_files = get_test_set(directory)
-
     # Just for testing, update machine learning part later
 
-    index = 0
     x_train, x_test = normalize_scale(x_train, x_test)
-    classifier = VotingClassifier([('first', classifier_list[0]), ('second', classifier_list[1]), ('second', classifier_list[2])])
+    classifier = VotingClassifier([('first', classifier_list[0]), ('second', classifier_list[1]),
+                                   ('second', classifier_list[2])])
     classifier.fit(x_train, y_train)
     y_pred = classifier.predict(x_test)
     if os.path.isdir(tools_directory):
