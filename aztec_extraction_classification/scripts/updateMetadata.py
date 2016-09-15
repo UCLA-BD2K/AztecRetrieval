@@ -9,11 +9,14 @@ import requests
 #  and updates the metadata of every publication.
 
 to_fetch = 100000
-# number of milliseconds in 3 weeks, do not update if time difference less
+# number of milliseconds in 3 weeks, do not update publication if time difference less
 # than this
 threshold = 21 * 24 * 3600 * 1000
 millis = long(round(time.time() * 1000))
 delimiters = [' ', ',', '   ', ';', ':']
+
+# TODO:
+# Find a solr client which makes it easier to update fields in documents
 
 
 class Document(object):

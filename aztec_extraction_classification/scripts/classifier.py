@@ -46,6 +46,9 @@ import subprocess
 import shutil
 import time
 
+# Still under lot of experimentation. Currently uses full text, uses tf-idf with Truncated SVD
+# Hard voting classifier on NN, Logistic regression and SVM.
+
 repo_list = ['github', 'github.com', 'sourceforge', 'sourceforge.net', 'bioconductor', 'bioconductor.org']
 
 # List of parameters to test when running Grid Search to find best pair of values

@@ -99,6 +99,10 @@ def push_to_solr(output):
             output
         ])
 
+'''
+ID system: Id's should be consecutive positive integers. Uniqueness is based off of DOI number.
+'''
+
 
 def get_starting_id():
     solr = Solr('http://localhost:8983/solr/BD2K')

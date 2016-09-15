@@ -37,9 +37,11 @@ def main():
         type=str,
         required=False)
     args = parser.parse_args()
+
     if args.doi is None and args.doiRecords is None:
         print "Please either pass in doiRecords or single doi"
         sys.exit(1)
+
     directory = args.directory + '/' if args.directory[-1] is not '/' else args.directory
     if not os.path.isdir(directory):
         print args.directory + " is not a directory, creating it and continuing..."
@@ -52,7 +54,7 @@ def main():
     output_file = 'output.json'
 
     # Classify
-    if args.classify is not 0:
+    if args.classify != 0:
         classify(directory, tools_dir, non_tools_dir)
     else:
         tools_dir = directory
