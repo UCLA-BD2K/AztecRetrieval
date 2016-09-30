@@ -4,6 +4,8 @@ import sys
 import time
 from parse_extracts import get_citations, get_git_info, get_sourceforge_info
 import requests
+import json
+import subprocess
 # README.md:
 # This script connects to the local solr database running on port 8983
 #  and updates the metadata of every publication.
@@ -14,6 +16,7 @@ to_fetch = 100000
 threshold = 21 * 24 * 3600 * 1000
 millis = long(round(time.time() * 1000))
 delimiters = [' ', ',', '   ', ';', ':']
+solr = None
 
 # TODO:
 # Find a solr client which makes it easier to update fields in documents
@@ -71,9 +74,8 @@ def get_documents(result):
 
 
 def push_to_solr(data):
-    url = 'http://localhost:8983/solr/BD2K/update?commit=true'
-    r = requests.post(url, json=data)
-    print r.content
+    print data
+    solr.update(data).commit()
 
 
 def parse_github_data(result, doc):
@@ -88,20 +90,20 @@ def parse_github_data(result, doc):
     except Exception as e:
         print e
 
-    data = '[{"id":"' + str(doc.id) + '", "citations":{"set":' + str(doc.citations) + '},"lastUpdatedMilliseconds":{"set":' + str(
+    data = '{"id":"' + str(doc.id) + '", "citations":{"set":' + str(doc.citations) + '},"lastUpdatedMilliseconds":{"set":' + str(
         millis) + '},"prev_version":{"set":' + doc.prev + '},"latest_version":{"set":' + doc.latest_version + '} \
         ,"subscribers":{"set":' + result["subsribers"] + '},"forks":{"set":' + result["forks"] + '}, \
-        "dateUpdated":{"set":' + result["updated_at"] + '}}]'
+        "dateUpdated":{"set":' + result["updated_at"] + '}}'
 
-    push_to_solr(data)
+    push_to_solr(json.loads(data))
 
 
 def parse_sourceforge_data(result, doc):
-    data = '[{"id":"' + str(doc.id) + '", "citations":{"set":' + str(
+    data = '{"id":"' + str(doc.id) + '", "citations":{"set":' + str(
         doc.citations) + '},"lastUpdatedMilliseconds":{"set":' + str(
-        millis) + '},"latest_version":{"set":' + result["Development Status"] + '}}]'
+        millis) + '},"latest_version":{"set":' + result["Development Status"] + '}}'
 
-    push_to_solr(data)
+    push_to_solr(json.loads(data))
 
 
 def update_metadata(doc):
@@ -114,27 +116,49 @@ def update_metadata(doc):
         parse_sourceforge_data(result, doc)
 
 
-def main():
-    solr = Solr('http://localhost:8983/solr/BD2K')
-    result = solr.select(('q', '*:*'), ('rows', str(to_fetch)), ('wt', 'json'),
-                         ('fl', 'id,publicationDOI,lastUpdatedMilliseconds,repo,toolName'))
-    get_documents(result)
-    for doc in documents:
-        if doc.doiNumber is not None and doc.shouldUpdate:
-            doc.citations = get_citations(doc.doiNumber)
-            print "Unformatted DOI is " + doc.uDoi
-            print "Extracted DOI is " + doc.doiNumber
-            print "Citations found are " + doc.citations
-            if doc.repo is not None:
-                update_metadata(doc)
-            else:
-                data = '[{"id":"' + str(doc.id) + '", "citations":{"set":' + str(
-                    doc.citations) + '},"lastUpdatedMilliseconds":{"set":' + str(
-                    millis) + '}}]'
-                push_to_solr(data)
+# Given an array of ints, shift all non zero values to the left. Doesn't matter what's on the right.
+# Write operations are expensive, minimize them. Constant space, linear time.
 
-    return 0
+def main(json_data=None):
+    global solr
+    solr = Solr('http://localhost:8983/solr/BD2K')
+    if not json_data:
+        # Update the usual stuff for all documents in the database
+        result = solr.select(('q', '*:*'), ('rows', str(to_fetch)), ('wt', 'json'),
+                             ('fl', 'id,publicationDOI,lastUpdatedMilliseconds,repo,toolName'))
+        get_documents(result)
+        for doc in documents:
+            if doc.doiNumber is not None and doc.shouldUpdate:
+                doc.citations = get_citations(doc.doiNumber)
+                print "Unformatted DOI is " + doc.uDoi
+                print "Extracted DOI is " + doc.doiNumber
+                print "Citations found are " + doc.citations
+                if doc.repo is not None:
+                    update_metadata(doc)
+                else:
+                    data = '{"id":"' + str(doc.id) + '", "citations":{"set":' + str(
+                        doc.citations) + '},"lastUpdatedMilliseconds":{"set":' + str(
+                        millis) + '}}'
+                    push_to_solr(json.loads(data))
+    else:
+        json_data = json.loads(json_data)
+        result = solr.select(('q', 'id:'+json_data['id']), ('wt', 'json'))
+        doc = result.docs[0]
+        solr_data = dict()
+        for key, value in doc.iteritems():
+            if 'suggest' in key:
+                # These fields are automatically set based on others
+                continue
+            solr_data[key] = value
+        for key, value in json_data.iteritems():
+            if key == 'id':
+                continue
+            solr_data[key] = {"set": value}
+        push_to_solr(solr_data)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    if len(sys.argv) == 2:
+        sys.exit(main(sys.argv[1]))
+    else:
+        sys.exit(main())
