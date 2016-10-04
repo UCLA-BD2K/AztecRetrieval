@@ -119,7 +119,7 @@ def update_metadata(doc):
 # Given an array of ints, shift all non zero values to the left. Doesn't matter what's on the right.
 # Write operations are expensive, minimize them. Constant space, linear time.
 
-def main(json_data=None):
+def main(json_data):
     global solr
     solr = Solr('http://localhost:8983/solr/BD2K')
     if not json_data:
@@ -161,4 +161,4 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         sys.exit(main(sys.argv[1]))
     else:
-        sys.exit(main())
+        sys.exit(main(None))
