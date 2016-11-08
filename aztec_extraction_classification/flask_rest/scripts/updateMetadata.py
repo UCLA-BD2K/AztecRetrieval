@@ -116,9 +116,6 @@ def update_metadata(doc):
         parse_sourceforge_data(result, doc)
 
 
-# Given an array of ints, shift all non zero values to the left. Doesn't matter what's on the right.
-# Write operations are expensive, minimize them. Constant space, linear time.
-
 def main(json_data):
     global solr
     solr = Solr('http://localhost:8983/solr/BD2K')

@@ -16,6 +16,7 @@ import urllib2
 import xml.etree.ElementTree as ET
 from inspect import currentframe
 import sys
+import profile
 
 # This script interacts with the XML and text extracts of the Journal pdf to extract:
 # authors, author affiliations, title, technologies, github/sourceforge data, institutions,
@@ -475,7 +476,7 @@ def get_all_grants(textRecord, pub):
         if agency not in result_agencies:
             result.append((agency, grant))
 
-    pub.grants = result
+    pub.grants = list(set(result))
 
 
 def get_acks(record, pub):
@@ -1088,6 +1089,7 @@ def single_document_case(doi):
 
 
 def main(XMLFiles, textFiles, correctDOIRecords, outfile, doi):
+    print "Length of publications before starting is " + str(len(publications))
     global path
     path = sys.path[0]
     start_time = time.time()
@@ -1109,6 +1111,8 @@ def main(XMLFiles, textFiles, correctDOIRecords, outfile, doi):
     start_parsing(files)
 
     write_records(outfile)
+    print "Length of publications before ending is " + str(len(publications))
+    del publications[:]
     print("Parsing grobid data:    --- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
@@ -1116,5 +1120,5 @@ if __name__ == '__main__':
     Default behaviour for web app since upload is always single file, pass in None as doiRecords
     4th parameter will be doi.
     '''
-    main(sys.argv[1], sys.argv[2], None, sys.argv[3], sys.argv[4])
+    profile.run(main(sys.argv[1], sys.argv[2], None, sys.argv[3], sys.argv[4]))
 
